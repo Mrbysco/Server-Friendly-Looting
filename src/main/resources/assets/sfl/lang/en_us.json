@@ -1,0 +1,7 @@
+{
+  "item.sfl.mimic_spawn_egg": "Mimic Spawn Egg",
+  "entity.sfl:mimic.name": "Mimic",
+  "sfl:subtitles.mimic.ambient": "Mimic noises",
+  "sfl:subtitles.mimic.death": "Mimic dies",
+  "sfl:subtitles.mimic.hurt": "Mimic hurts"
+}
