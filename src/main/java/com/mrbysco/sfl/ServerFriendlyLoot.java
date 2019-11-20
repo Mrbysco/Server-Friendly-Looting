@@ -25,8 +25,6 @@ public class ServerFriendlyLoot {
 
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
 
-//        MinecraftForge.EVENT_BUS.register(this);
-
         DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> {
             MinecraftForge.EVENT_BUS.addListener(ClientHandler::registerRenders);
             FMLJavaModLoadingContext.get().getModEventBus().addListener(ClientHandler::registerRenders);

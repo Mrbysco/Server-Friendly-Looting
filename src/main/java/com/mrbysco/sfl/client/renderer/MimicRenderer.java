@@ -9,7 +9,7 @@ import net.minecraft.util.ResourceLocation;
 
 import javax.annotation.Nullable;
 
-public class MimicRenderer extends MobRenderer<MimicEntity, MimicModel> {
+public class MimicRenderer extends MobRenderer<MimicEntity, MimicModel<MimicEntity>> {
     private static final ResourceLocation OAK = new ResourceLocation(ServerFriendlyLoot.MOD_ID, "textures/entity/mimic_oak.png");
     private static final ResourceLocation SPRUCE = new ResourceLocation(ServerFriendlyLoot.MOD_ID, "textures/entity/mimic_spruce.png");
     private static final ResourceLocation BIRCH = new ResourceLocation(ServerFriendlyLoot.MOD_ID, "textures/entity/mimic_birch.png");
@@ -25,7 +25,6 @@ public class MimicRenderer extends MobRenderer<MimicEntity, MimicModel> {
     @Override
     protected ResourceLocation getEntityTexture(MimicEntity entity) {
         switch(entity.getMimicType()) {
-            case 0:
             default:
                 return OAK;
             case 1:

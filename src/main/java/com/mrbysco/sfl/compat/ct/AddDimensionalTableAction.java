@@ -1,10 +1,10 @@
 package com.mrbysco.sfl.compat.ct;
 
-import com.blamejared.crafttweaker.api.actions.IAction;
-import com.mrbysco.sfl.entity.MimicLootHandler;
+import com.blamejared.crafttweaker.api.actions.IUndoableAction;
+import com.mrbysco.sfl.init.MimicLootHandler;
 import net.minecraft.util.ResourceLocation;
 
-public class AddDimensionalTableAction implements IAction {
+public class AddDimensionalTableAction implements IUndoableAction {
     public final int dimension;
     public final ResourceLocation lootTable;
 
@@ -21,5 +21,15 @@ public class AddDimensionalTableAction implements IAction {
     @Override
     public String describe() {
         return String.format("Loot table: " + lootTable.toString() + " has been added to dimension " + dimension + " of the Mimic loot list");
+    }
+
+    @Override
+    public void undo() {
+        MimicLootHandler.removeDimensionalTable(dimension, lootTable);
+    }
+
+    @Override
+    public String describeUndo() {
+        return String.format("Undid change to Mimic Loot list, Loot table: " + lootTable.toString() + " has been removed from dimension " + dimension + " again");
     }
 }

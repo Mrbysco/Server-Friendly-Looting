@@ -1,12 +1,12 @@
 package com.mrbysco.sfl.client.model;
 
-import com.mrbysco.sfl.entity.MimicEntity;
+import com.mrbysco.sfl.entity.AbstractMimicEntity;
 import net.minecraft.client.renderer.entity.model.EntityModel;
 import net.minecraft.client.renderer.entity.model.RendererModel;
 import net.minecraft.client.renderer.model.ModelBox;
 import net.minecraft.util.math.MathHelper;
 
-public class MimicModel extends EntityModel<MimicEntity> {
+public class MimicModel<T extends AbstractMimicEntity> extends EntityModel<T> {
 	private final RendererModel Mimic;
 	private final RendererModel TopHalf;
 	private final RendererModel BottomHalf;
@@ -144,7 +144,7 @@ public class MimicModel extends EntityModel<MimicEntity> {
 	}
 
 	@Override
-	public void render(MimicEntity entity, float f, float f1, float f2, float f3, float f4, float f5) {
+	public void render(T entity, float f, float f1, float f2, float f3, float f4, float f5) {
 		Mimic.render(f5);
 	}
 
@@ -155,7 +155,7 @@ public class MimicModel extends EntityModel<MimicEntity> {
 	}
 
 	@Override
-	public void setRotationAngles(MimicEntity entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor) {
+	public void setRotationAngles(T entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor) {
 		super.setRotationAngles(entityIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor);
 
 		TopHalf.rotateAngleX = Math.min(0, MathHelper.cos(limbSwing * 0.6662F) * 1.4F * limbSwingAmount);

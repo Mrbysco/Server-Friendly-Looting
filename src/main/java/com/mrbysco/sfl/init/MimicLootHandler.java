@@ -1,4 +1,4 @@
-package com.mrbysco.sfl.entity;
+package com.mrbysco.sfl.init;
 
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.dimension.DimensionType;
@@ -8,7 +8,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class MimicLootHandler {
-    private static final HashMap<DimensionType, ArrayList<ResourceLocation>> DIMENSIONAL_TABLES = new HashMap<>();
+    private static HashMap<DimensionType, ArrayList<ResourceLocation>> DIMENSIONAL_TABLES = new HashMap<>();
+    private static ArrayList<ResourceLocation> WATER_LOOT_TABLES = new ArrayList<>();
 
     static {
         DIMENSIONAL_TABLES.put(DimensionType.THE_NETHER, new ArrayList<ResourceLocation>());
@@ -48,13 +49,29 @@ public class MimicLootHandler {
         addDimensionalTable(DimensionType.OVERWORLD, LootTables.CHESTS_JUNGLE_TEMPLE_DISPENSER);
         addDimensionalTable(DimensionType.OVERWORLD, LootTables.CHESTS_IGLOO_CHEST);
         addDimensionalTable(DimensionType.OVERWORLD, LootTables.CHESTS_WOODLAND_MANSION);
-        addDimensionalTable(DimensionType.OVERWORLD, LootTables.CHESTS_UNDERWATER_RUIN_SMALL);
-        addDimensionalTable(DimensionType.OVERWORLD, LootTables.CHESTS_UNDERWATER_RUIN_BIG);
-        addDimensionalTable(DimensionType.OVERWORLD, LootTables.CHESTS_BURIED_TREASURE);
-        addDimensionalTable(DimensionType.OVERWORLD, LootTables.CHESTS_SHIPWRECK_MAP);
-        addDimensionalTable(DimensionType.OVERWORLD, LootTables.CHESTS_SHIPWRECK_SUPPLY);
-        addDimensionalTable(DimensionType.OVERWORLD, LootTables.CHESTS_SHIPWRECK_TREASURE);
-        addDimensionalTable(DimensionType.OVERWORLD, LootTables.CHESTS_PILLAGER_OUTPOST);
+
+
+        addWaterTable(LootTables.CHESTS_UNDERWATER_RUIN_SMALL);
+        addWaterTable(LootTables.CHESTS_UNDERWATER_RUIN_BIG);
+        addWaterTable(LootTables.CHESTS_BURIED_TREASURE);
+        addWaterTable(LootTables.CHESTS_SHIPWRECK_MAP);
+        addWaterTable(LootTables.CHESTS_SHIPWRECK_SUPPLY);
+        addWaterTable(LootTables.CHESTS_SHIPWRECK_TREASURE);
+        addWaterTable(LootTables.CHESTS_PILLAGER_OUTPOST);
+    }
+
+    public static void addWaterTable(ResourceLocation lootTable)
+    {
+        if(!WATER_LOOT_TABLES.contains(lootTable)) {
+            WATER_LOOT_TABLES.add(lootTable);
+        }
+    }
+
+    public static void removeWaterTable(ResourceLocation lootTable)
+    {
+        if(WATER_LOOT_TABLES.contains(lootTable)) {
+            WATER_LOOT_TABLES.remove(lootTable);
+        }
     }
 
     public static void addDimensionalTable(DimensionType dimType, ResourceLocation lootTable)
@@ -98,7 +115,6 @@ public class MimicLootHandler {
     }
 
     public static ArrayList<ResourceLocation> getDimensionTables(DimensionType type) {
-        ArrayList<String> stringTables = new ArrayList<>();
         if(DIMENSIONAL_TABLES.containsKey(type)) {
             return DIMENSIONAL_TABLES.get(type);
         }
@@ -108,7 +124,7 @@ public class MimicLootHandler {
     public static ArrayList<String> getStringDimensionTables(DimensionType type) {
         ArrayList<String> stringTables = new ArrayList<>();
         if(DIMENSIONAL_TABLES.containsKey(type)) {
-            ArrayList<ResourceLocation> tables = DIMENSIONAL_TABLES.get(type);
+            ArrayList<ResourceLocation> tables = new ArrayList<>(DIMENSIONAL_TABLES.get(type));
             for(ResourceLocation table : tables) {
                 stringTables.add(table.toString());
             }
@@ -120,5 +136,15 @@ public class MimicLootHandler {
 
     public static ArrayList<String> getStringDimensionTables(int dim) {
         return getStringDimensionTables(DimensionType.getById(dim));
+    }
+
+
+    public static ArrayList<String> getStringWaterTables() {
+        ArrayList<String> stringTables = new ArrayList<>();
+        ArrayList<ResourceLocation> tables = new ArrayList<>(WATER_LOOT_TABLES);
+        for(ResourceLocation table : tables) {
+            stringTables.add(table.toString());
+        }
+        return stringTables;
     }
 }

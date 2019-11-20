@@ -1,12 +1,12 @@
 modLoader="javafml"
 loaderVersion="[28,)"
-#issueTrackerURL="https://github.com/mrbysco/Server-Friendly-Looting/issues"
+issueTrackerURL="https://github.com/mrbysco/Server-Friendly-Looting/issues"
 
 [[mods]]
 modId="sfl"
 version="${file.jarVersion}"
 displayName="Server Friendly Looting"
-#displayURL="https://www.curseforge.com/minecraft/mc-mods/Server-Friendly-Looting"
+displayURL="https://www.curseforge.com/minecraft/mc-mods/Server-Friendly-Looting"
 authors="ShyNieke, Mrbysco"
 description='''Adds more server friendly ways of getting loot'''
 

@@ -17,23 +17,24 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.Difficulty;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
 
 import javax.annotation.Nullable;
+import java.util.Random;
 
-public class MimicEntity extends AbstractMimicEntity {
-    private static final DataParameter<Integer> MIMIC_TYPE = EntityDataManager.createKey(MimicEntity.class, DataSerializers.VARINT);
+public class NetherMimicEntity extends AbstractMimicEntity {
+    private static final DataParameter<Integer> MIMIC_TYPE = EntityDataManager.createKey(NetherMimicEntity.class, DataSerializers.VARINT);
 
-    public MimicEntity(EntityType<? extends MimicEntity> type, World worldIn) {
+    public NetherMimicEntity(EntityType<? extends NetherMimicEntity> type, World worldIn) {
         super(type, worldIn);
     }
 
-    public MimicEntity(World worldIn)
+    public NetherMimicEntity(World worldIn)
     {
-        super(ModEntities.MIMIC, worldIn);
+        super(ModEntities.NETHER_MIMIC, worldIn);
     }
 
     @Override
@@ -94,14 +95,14 @@ public class MimicEntity extends AbstractMimicEntity {
     }
 
     private int getRandomMimicType(IWorld world) {
-        Biome biome = world.getBiome(new BlockPos(this));
-        int i = this.rand.nextInt(6);
-        if (biome.getPrecipitation() == Biome.RainType.SNOW) {
-            return this.rand.nextBoolean() ? 1 : i;
-        } else if (biome.getCategory() == Biome.Category.DESERT) {
-            return this.rand.nextBoolean() ? 4 : i;
+        if(rand.nextBoolean()) {
+            return 0;
         } else {
-            return i;
+            return 1;
         }
+    }
+
+    public static boolean spawnPredicate(EntityType<? extends AbstractMimicEntity> typeIn, IWorld worldIn, SpawnReason reason, BlockPos pos, Random randomIn) {
+        return worldIn.getDifficulty() != Difficulty.PEACEFUL;
     }
 }
