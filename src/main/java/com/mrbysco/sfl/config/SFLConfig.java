@@ -1,10 +1,14 @@
 package com.mrbysco.sfl.config;
 
+import com.google.common.collect.Lists;
 import com.mrbysco.sfl.ServerFriendlyLoot;
 import net.minecraftforge.common.ForgeConfigSpec;
+import net.minecraftforge.common.ForgeConfigSpec.ConfigValue;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.config.ModConfig;
 import org.apache.commons.lang3.tuple.Pair;
+
+import java.util.List;
 
 public class SFLConfig {
     public static class Spawn {
@@ -24,7 +28,18 @@ public class SFLConfig {
         public final ForgeConfigSpec.IntValue endMaxGroup;
         public final ForgeConfigSpec.IntValue endWeight;
 
+        public final ConfigValue<List<String>> dimension_blacklist;
+
         Spawn(ForgeConfigSpec.Builder builder) {
+            builder.push("General settings")
+                    .comment("Configure General Mimic settings");
+
+            dimension_blacklist = builder
+                    .comment("Dimensions in which the mimic's can't spawn")
+                    .define("dimensionBlacklist", Lists.newArrayList(""));
+
+            builder.pop();
+
             builder.push("Spawn settings")
                     .comment("Configure spawning rate of regular Mimic");
 
@@ -38,7 +53,7 @@ public class SFLConfig {
 
             weight = builder
                     .comment("Spawn weight [Default: 1]")
-                    .defineInRange("minGroup", 1, 0, 100);
+                    .defineInRange("weight", 1, 0, 100);
 
             builder.pop();
             builder.push("Water Spawn Settings")

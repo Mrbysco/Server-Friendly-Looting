@@ -142,6 +142,6 @@ public abstract class AbstractMimicEntity extends CreatureEntity {
     }
 
     public static boolean spawnPredicate(EntityType<? extends AbstractMimicEntity> typeIn, IWorld worldIn, SpawnReason reason, BlockPos pos, Random randomIn) {
-        return worldIn.getDifficulty() != Difficulty.PEACEFUL && func_223315_a(typeIn, worldIn, reason, pos, randomIn);
+        return worldIn.getDifficulty() != Difficulty.PEACEFUL && canSpawnOn(typeIn, worldIn, reason, pos, randomIn);
     }
 }

@@ -37,7 +37,7 @@ public class ModEntities {
             .setTrackingRange(80).setUpdateInterval(3).setShouldReceiveVelocityUpdates(true));
 
     public static <T extends Entity> EntityType<T> register(String id, EntityType.Builder<T> builder) {
-        EntityType<T> entityType = builder.build("");
+        EntityType<T> entityType = builder.build(id);
         ResourceLocation name = new ResourceLocation(ServerFriendlyLoot.MOD_ID, id);
 
         entityType.setRegistryName(name);
