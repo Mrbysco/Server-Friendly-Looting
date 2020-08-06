@@ -1,6 +1,6 @@
 package com.mrbysco.sfl.entity;
 
-import com.mrbysco.sfl.init.ModEntities;
+import com.mrbysco.sfl.init.MimicRegistry;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ILivingEntityData;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -34,7 +34,7 @@ public class NetherMimicEntity extends AbstractMimicEntity {
 
     public NetherMimicEntity(World worldIn)
     {
-        super(ModEntities.NETHER_MIMIC, worldIn);
+        super(MimicRegistry.NETHER_MIMIC.get(), worldIn);
     }
 
     @Override

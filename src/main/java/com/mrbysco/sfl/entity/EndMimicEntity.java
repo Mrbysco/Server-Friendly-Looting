@@ -1,6 +1,6 @@
 package com.mrbysco.sfl.entity;
 
-import com.mrbysco.sfl.init.ModEntities;
+import com.mrbysco.sfl.init.MimicRegistry;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -36,7 +36,7 @@ public class EndMimicEntity extends AbstractMimicEntity {
 
     public EndMimicEntity(World worldIn)
     {
-        super(ModEntities.END_MIMIC, worldIn);
+        super(MimicRegistry.END_MIMIC.get(), worldIn);
     }
 
     @Override
@@ -61,7 +61,7 @@ public class EndMimicEntity extends AbstractMimicEntity {
     protected void updateAITasks() {
         if (this.world.isDaytime() && this.ticksExisted >= this.targetChangeTime + 600) {
             float f = this.getBrightness();
-            if (f > 0.5F && this.world.isSkyLightMax(new BlockPos(this)) && this.rand.nextFloat() * 30.0F < (f - 0.4F) * 2.0F) {
+            if (f > 0.5F && this.world.canSeeSky(new BlockPos(this)) && this.rand.nextFloat() * 30.0F < (f - 0.4F) * 2.0F) {
                 this.setAttackTarget((LivingEntity)null);
                 this.teleportRandomly();
             }
@@ -71,14 +71,14 @@ public class EndMimicEntity extends AbstractMimicEntity {
     }
 
     protected boolean teleportRandomly() {
-        double d0 = this.posX + (this.rand.nextDouble() - 0.5D) * 64.0D;
-        double d1 = this.posY + (double)(this.rand.nextInt(64) - 32);
-        double d2 = this.posZ + (this.rand.nextDouble() - 0.5D) * 64.0D;
+        double d0 = this.getPosX() + (this.rand.nextDouble() - 0.5D) * 64.0D;
+        double d1 = this.getPosY() + (double)(this.rand.nextInt(64) - 32);
+        double d2 = this.getPosZ() + (this.rand.nextDouble() - 0.5D) * 64.0D;
         return this.teleportTo(d0, d1, d2);
     }
 
     private boolean teleportTo(double x, double y, double z) {
-        BlockPos.MutableBlockPos blockpos$mutableblockpos = new BlockPos.MutableBlockPos(x, y, z);
+        BlockPos.Mutable blockpos$mutableblockpos = new BlockPos.Mutable(x, y, z);
 
         while(blockpos$mutableblockpos.getY() > 0 && !this.world.getBlockState(blockpos$mutableblockpos).getMaterial().blocksMovement()) {
             blockpos$mutableblockpos.move(Direction.DOWN);
@@ -117,7 +117,7 @@ public class EndMimicEntity extends AbstractMimicEntity {
     public void livingTick() {
         if (this.world.isRemote) {
             for(int i = 0; i < 2; ++i) {
-                this.world.addParticle(ParticleTypes.PORTAL, this.posX + (this.rand.nextDouble() - 0.5D) * (double)this.getWidth(), this.posY + this.rand.nextDouble() * (double)this.getHeight() - 0.25D, this.posZ + (this.rand.nextDouble() - 0.5D) * (double)this.getWidth(), (this.rand.nextDouble() - 0.5D) * 2.0D, -this.rand.nextDouble(), (this.rand.nextDouble() - 0.5D) * 2.0D);
+                this.world.addParticle(ParticleTypes.PORTAL, this.getPosX() + (this.rand.nextDouble() - 0.5D) * (double)this.getWidth(), this.getPosY() + this.rand.nextDouble() * (double)this.getHeight() - 0.25D, this.getPosZ() + (this.rand.nextDouble() - 0.5D) * (double)this.getWidth(), (this.rand.nextDouble() - 0.5D) * 2.0D, -this.rand.nextDouble(), (this.rand.nextDouble() - 0.5D) * 2.0D);
             }
         }
 

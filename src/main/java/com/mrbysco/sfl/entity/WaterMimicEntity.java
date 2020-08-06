@@ -1,6 +1,6 @@
 package com.mrbysco.sfl.entity;
 
-import com.mrbysco.sfl.init.ModEntities;
+import com.mrbysco.sfl.init.MimicRegistry;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.CreatureEntity;
 import net.minecraft.entity.EntityType;
@@ -52,7 +52,7 @@ public class WaterMimicEntity extends AbstractMimicEntity {
 
     public WaterMimicEntity(World worldIn)
     {
-        super(ModEntities.NETHER_MIMIC, worldIn);
+        super(MimicRegistry.NETHER_MIMIC.get(), worldIn);
         this.moveController = new WaterMimicEntity.MoveHelperController(this);
         this.setPathPriority(PathNodeType.WATER, 0.0F);
         this.waterNavigator = new SwimmerPathNavigator(this, worldIn);
@@ -129,11 +129,11 @@ public class WaterMimicEntity extends AbstractMimicEntity {
     }
 
     protected boolean isCloseToPathTarget() {
-        Path lvt_1_1_ = this.getNavigator().getPath();
-        if (lvt_1_1_ != null) {
-            BlockPos lvt_2_1_ = lvt_1_1_.func_224770_k();
-            if (lvt_2_1_ != null) {
-                double lvt_3_1_ = this.getDistanceSq((double)lvt_2_1_.getX(), (double)lvt_2_1_.getY(), (double)lvt_2_1_.getZ());
+        Path path = this.getNavigator().getPath();
+        if (path != null) {
+            BlockPos targetPos = path.getTarget();
+            if (targetPos != null) {
+                double lvt_3_1_ = this.getDistanceSq((double)targetPos.getX(), (double)targetPos.getY(), (double)targetPos.getZ());
                 if (lvt_3_1_ < 4.0D) {
                     return true;
                 }
@@ -177,7 +177,7 @@ public class WaterMimicEntity extends AbstractMimicEntity {
         public void tick() {
             LivingEntity lvt_1_1_ = this.mimic.getAttackTarget();
             if (this.mimic.func_204715_dF() && this.mimic.isInWater()) {
-                if (lvt_1_1_ != null && lvt_1_1_.posY > this.mimic.posY || this.mimic.swimmingUp) {
+                if (lvt_1_1_ != null && lvt_1_1_.getPosY() > this.mimic.getPosY() || this.mimic.swimmingUp) {
                     this.mimic.setMotion(this.mimic.getMotion().add(0.0D, 0.002D, 0.0D));
                 }
 
@@ -186,9 +186,9 @@ public class WaterMimicEntity extends AbstractMimicEntity {
                     return;
                 }
 
-                double lvt_2_1_ = this.posX - this.mimic.posX;
-                double lvt_4_1_ = this.posY - this.mimic.posY;
-                double lvt_6_1_ = this.posZ - this.mimic.posZ;
+                double lvt_2_1_ = this.posX - this.mimic.getPosX();
+                double lvt_4_1_ = this.posY - this.mimic.getPosY();
+                double lvt_6_1_ = this.posZ - this.mimic.getPosZ();
                 double lvt_8_1_ = (double) MathHelper.sqrt(lvt_2_1_ * lvt_2_1_ + lvt_4_1_ * lvt_4_1_ + lvt_6_1_ * lvt_6_1_);
                 lvt_4_1_ /= lvt_8_1_;
                 float lvt_10_1_ = (float)(MathHelper.atan2(lvt_6_1_, lvt_2_1_) * 57.2957763671875D) - 90.0F;
@@ -253,7 +253,7 @@ public class WaterMimicEntity extends AbstractMimicEntity {
         @Nullable
         private Vec3d func_204729_f() {
             Random lvt_1_1_ = this.field_204730_a.getRNG();
-            BlockPos lvt_2_1_ = new BlockPos(this.field_204730_a.posX, this.field_204730_a.getBoundingBox().minY, this.field_204730_a.posZ);
+            BlockPos lvt_2_1_ = new BlockPos(this.field_204730_a.getPosX(), this.field_204730_a.getBoundingBox().minY, this.field_204730_a.getPosZ());
 
             for(int lvt_3_1_ = 0; lvt_3_1_ < 10; ++lvt_3_1_) {
                 BlockPos lvt_4_1_ = lvt_2_1_.add(lvt_1_1_.nextInt(20) - 10, 2 - lvt_1_1_.nextInt(8), lvt_1_1_.nextInt(20) - 10);
@@ -279,7 +279,7 @@ public class WaterMimicEntity extends AbstractMimicEntity {
         }
 
         public boolean shouldExecute() {
-            return !this.field_204736_a.world.isDaytime() && this.field_204736_a.isInWater() && this.field_204736_a.posY < (double)(this.targetY - 2);
+            return !this.field_204736_a.world.isDaytime() && this.field_204736_a.isInWater() && this.field_204736_a.getPosY() < (double)(this.targetY - 2);
         }
 
         public boolean shouldContinueExecuting() {
@@ -287,8 +287,8 @@ public class WaterMimicEntity extends AbstractMimicEntity {
         }
 
         public void tick() {
-            if (this.field_204736_a.posY < (double)(this.targetY - 1) && (this.field_204736_a.getNavigator().noPath() || this.field_204736_a.isCloseToPathTarget())) {
-                Vec3d lvt_1_1_ = RandomPositionGenerator.findRandomTargetBlockTowards(this.field_204736_a, 4, 8, new Vec3d(this.field_204736_a.posX, (double)(this.targetY - 1), this.field_204736_a.posZ));
+            if (this.field_204736_a.getPosY() < (double)(this.targetY - 1) && (this.field_204736_a.getNavigator().noPath() || this.field_204736_a.isCloseToPathTarget())) {
+                Vec3d lvt_1_1_ = RandomPositionGenerator.findRandomTargetBlockTowards(this.field_204736_a, 4, 8, new Vec3d(this.field_204736_a.getPosX(), (double)(this.targetY - 1), this.field_204736_a.getPosZ()));
                 if (lvt_1_1_ == null) {
                     this.obstructed = true;
                     return;

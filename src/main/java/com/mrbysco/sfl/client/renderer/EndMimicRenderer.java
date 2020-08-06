@@ -18,7 +18,7 @@ public class EndMimicRenderer extends MobRenderer<EndMimicEntity, MimicModel<End
 
     @Nullable
     @Override
-    protected ResourceLocation getEntityTexture(EndMimicEntity entity) {
+    public ResourceLocation getEntityTexture(EndMimicEntity entity) {
         return TEXTURES;
     }
 }

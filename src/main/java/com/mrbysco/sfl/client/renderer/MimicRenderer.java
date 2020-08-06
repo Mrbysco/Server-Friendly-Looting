@@ -23,7 +23,7 @@ public class MimicRenderer extends MobRenderer<MimicEntity, MimicModel<MimicEnti
 
     @Nullable
     @Override
-    protected ResourceLocation getEntityTexture(MimicEntity entity) {
+    public ResourceLocation getEntityTexture(MimicEntity entity) {
         switch(entity.getMimicType()) {
             default:
                 return OAK;

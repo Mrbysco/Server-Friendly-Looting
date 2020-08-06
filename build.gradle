@@ -11,14 +11,14 @@ buildscript {
 apply plugin: 'net.minecraftforge.gradle'
 // Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
 
-version = '1.1.1'
+version = "${version}"
 group = 'com.mrbysco.sfl' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = 'ServerFriendlyLooting'
+archivesBaseName = "ServerFriendlyLooting-${mc_version}"
 
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
 
 minecraft {
-    mappings channel: 'snapshot', version: '20191230-1.14.3'
+    mappings  channel: "${mcp_channel}", version: "${mcp_mappings}"
     // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
     
     // accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
@@ -92,16 +92,13 @@ repositories {
         name = "ModMaven"
         url = "https://modmaven.k-4u.nl"
     }
-	maven { 
-		url "http://tehnut.info/maven" 
-	}
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.14.4-28.1.109'
+    minecraft "net.minecraftforge:forge:${mc_version}-${forge_version}"
 
-    compile fg.deobf("mezz.jei:jei-1.14.4:6.0.0.+")
-    compile fg.deobf("com.blamejared.crafttweaker:CraftTweaker-1.14.4:5.0.1.+")
+    compile fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}")
+    compile fg.deobf("com.blamejared.crafttweaker:CraftTweaker-${mc_version}:${crafttweaker_version}")
 	
 }
 

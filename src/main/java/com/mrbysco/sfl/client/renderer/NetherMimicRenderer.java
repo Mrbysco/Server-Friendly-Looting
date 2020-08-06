@@ -19,7 +19,7 @@ public class NetherMimicRenderer extends MobRenderer<NetherMimicEntity, MimicMod
 
     @Nullable
     @Override
-    protected ResourceLocation getEntityTexture(NetherMimicEntity entity) {
+    public ResourceLocation getEntityTexture(NetherMimicEntity entity) {
         switch(entity.getMimicType()) {
             default:
                 return NETHER1;

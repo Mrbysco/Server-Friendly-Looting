@@ -12,9 +12,9 @@ public class MimicLootHandler {
     private static ArrayList<ResourceLocation> WATER_LOOT_TABLES = new ArrayList<>();
 
     static {
-        DIMENSIONAL_TABLES.put(DimensionType.THE_NETHER, new ArrayList<ResourceLocation>());
-        DIMENSIONAL_TABLES.put(DimensionType.THE_END, new ArrayList<ResourceLocation>());
-        DIMENSIONAL_TABLES.put(DimensionType.OVERWORLD, new ArrayList<ResourceLocation>());
+        DIMENSIONAL_TABLES.put(DimensionType.THE_NETHER, new ArrayList<>());
+        DIMENSIONAL_TABLES.put(DimensionType.THE_END, new ArrayList<>());
+        DIMENSIONAL_TABLES.put(DimensionType.OVERWORLD, new ArrayList<>());
 
         //Nether
         addDimensionalTable(DimensionType.THE_NETHER, LootTables.CHESTS_NETHER_BRIDGE);
@@ -69,9 +69,7 @@ public class MimicLootHandler {
 
     public static void removeWaterTable(ResourceLocation lootTable)
     {
-        if(WATER_LOOT_TABLES.contains(lootTable)) {
-            WATER_LOOT_TABLES.remove(lootTable);
-        }
+        WATER_LOOT_TABLES.remove(lootTable);
     }
 
     public static void addDimensionalTable(DimensionType dimType, ResourceLocation lootTable)
@@ -118,7 +116,7 @@ public class MimicLootHandler {
         if(DIMENSIONAL_TABLES.containsKey(type)) {
             return DIMENSIONAL_TABLES.get(type);
         }
-        return new ArrayList<ResourceLocation>();
+        return new ArrayList<>();
     }
 
     public static ArrayList<String> getStringDimensionTables(DimensionType type) {

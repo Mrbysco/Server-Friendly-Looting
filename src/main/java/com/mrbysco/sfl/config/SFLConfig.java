@@ -28,7 +28,7 @@ public class SFLConfig {
         public final ForgeConfigSpec.IntValue endMaxGroup;
         public final ForgeConfigSpec.IntValue endWeight;
 
-        public final ConfigValue<List<String>> dimension_blacklist;
+        public final ConfigValue<List<? extends String>> dimension_blacklist;
 
         Spawn(ForgeConfigSpec.Builder builder) {
             builder.push("General settings")
@@ -36,7 +36,7 @@ public class SFLConfig {
 
             dimension_blacklist = builder
                     .comment("Dimensions in which the mimic's can't spawn")
-                    .define("dimensionBlacklist", Lists.newArrayList(""));
+                    .defineList("dimensionBlacklist", Lists.newArrayList(""), o -> (o instanceof String));
 
             builder.pop();
 
@@ -118,7 +118,7 @@ public class SFLConfig {
     }
 
     @SubscribeEvent
-    public static void onFileChange(final ModConfig.ConfigReloading configEvent) {
+    public static void onFileChange(final ModConfig.Reloading configEvent) {
         ServerFriendlyLoot.LOGGER.fatal("ServerFriendlyLoot's config just got changed on the file system!");
     }
 }

@@ -18,7 +18,7 @@ public class WaterMimicRenderer extends MobRenderer<WaterMimicEntity, MimicModel
 
     @Nullable
     @Override
-    protected ResourceLocation getEntityTexture(WaterMimicEntity entity) {
+    public ResourceLocation getEntityTexture(WaterMimicEntity entity) {
         return TEXTURE;
     }
 }

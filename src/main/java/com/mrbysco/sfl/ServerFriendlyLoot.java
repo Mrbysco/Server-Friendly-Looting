@@ -3,13 +3,16 @@ package com.mrbysco.sfl;
 import com.mrbysco.sfl.client.ClientHandler;
 import com.mrbysco.sfl.config.SFLConfig;
 import com.mrbysco.sfl.entity.AbstractMimicEntity;
-import com.mrbysco.sfl.init.ModEntities;
+import com.mrbysco.sfl.init.MimicRegistry;
+import com.mrbysco.sfl.init.MimicSpawns;
 import net.minecraft.entity.SpawnReason;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingSpawnEvent;
 import net.minecraftforge.eventbus.api.Event;
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.DeferredWorkQueue;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
@@ -27,32 +30,35 @@ public class ServerFriendlyLoot {
     public static final Logger LOGGER = LogManager.getLogger();
 
     public ServerFriendlyLoot() {
+        IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
         ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, SFLConfig.spawnSpec, "sfl_spawning.toml");
-        FMLJavaModLoadingContext.get().getModEventBus().register(SFLConfig.class);
+        eventBus.register(SFLConfig.class);
 
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
+        MimicRegistry.ENTITIES.register(eventBus);
+        MimicRegistry.ITEMS.register(eventBus);
+
+        eventBus.addListener(this::setup);
 
         MinecraftForge.EVENT_BUS.register(this);
 
         DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> {
-            MinecraftForge.EVENT_BUS.addListener(ClientHandler::registerRenders);
-            FMLJavaModLoadingContext.get().getModEventBus().addListener(ClientHandler::registerRenders);
+            eventBus.addListener(ClientHandler::registerRenders);
+            eventBus.addListener(ClientHandler::registerItemColors);
         });
     }
 
-    private void setup(final FMLCommonSetupEvent event)
-    {
-        ModEntities.addSpawn();
+    private void setup(final FMLCommonSetupEvent event) {
+        DeferredWorkQueue.runLater(MimicSpawns::addSpawn);
     }
 
     @SubscribeEvent
     public void onSpawn(final LivingSpawnEvent.CheckSpawn event) {
         if (event.getSpawnReason().equals(SpawnReason.NATURAL) && event.getEntityLiving() instanceof AbstractMimicEntity) {
-            List<String> blacklist = SFLConfig.SPAWN.dimension_blacklist.get();
+            List<? extends String> blacklist = SFLConfig.SPAWN.dimension_blacklist.get();
             if (!blacklist.isEmpty()) {
                 int dimensionID = event.getWorld().getDimension().getType().getId();
-                for (String i : blacklist) {
-                    if (!i.isEmpty() && i.equals(String.valueOf(dimensionID)))
+                for (String dimension : blacklist) {
+                    if (!dimension.isEmpty() && dimension.equals(String.valueOf(dimensionID)))
                         event.setResult(Event.Result.DENY);
                 }
             }
