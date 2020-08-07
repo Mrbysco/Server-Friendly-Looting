@@ -8,10 +8,13 @@ import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.CreatureEntity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ILivingEntityData;
-import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.loot.LootContext;
+import net.minecraft.loot.LootParameterSets;
+import net.minecraft.loot.LootTable;
+import net.minecraft.loot.LootTables;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
@@ -22,10 +25,6 @@ import net.minecraft.world.Difficulty;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
-import net.minecraft.world.storage.loot.LootContext;
-import net.minecraft.world.storage.loot.LootParameterSets;
-import net.minecraft.world.storage.loot.LootTable;
-import net.minecraft.world.storage.loot.LootTables;
 import net.minecraftforge.common.util.FakePlayer;
 
 import javax.annotation.Nullable;
@@ -39,14 +38,6 @@ public abstract class AbstractMimicEntity extends CreatureEntity {
 
     public AbstractMimicEntity(EntityType<? extends AbstractMimicEntity> type, World worldIn) {
         super(type, worldIn);
-    }
-
-    @Override
-    protected void registerAttributes() {
-        super.registerAttributes();
-        this.getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(12.0D);
-        this.getAttributes().registerAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(4.0D);
-        this.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue((double)0.25F);
     }
 
     @Override
@@ -110,7 +101,7 @@ public abstract class AbstractMimicEntity extends CreatureEntity {
     public ILivingEntityData onInitialSpawn(IWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
         ILivingEntityData data = super.onInitialSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
 
-        ArrayList<ResourceLocation> tables = MimicLootHandler.getDimensionTables(world.getDimension().getType());
+        ArrayList<ResourceLocation> tables = MimicLootHandler.getDimensionTables(world.func_234923_W_());
         if(tables.isEmpty()) {
             this.defaultLootTable = LootTables.CHESTS_VILLAGE_VILLAGE_FISHER;
         } else {

@@ -5,6 +5,7 @@ import com.mojang.blaze3d.vertex.IVertexBuilder;
 import com.mrbysco.sfl.entity.AbstractMimicEntity;
 import net.minecraft.client.renderer.entity.model.EntityModel;
 import net.minecraft.client.renderer.model.ModelRenderer;
+import net.minecraft.util.math.MathHelper;
 
 public class MimicModel<T extends AbstractMimicEntity> extends EntityModel<T> {
 	private final ModelRenderer Mimic;
@@ -145,8 +146,13 @@ public class MimicModel<T extends AbstractMimicEntity> extends EntityModel<T> {
 	}
 
 	@Override
-	public void setRotationAngles(AbstractMimicEntity entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+	public void setRotationAngles(T entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+		TopHalf.rotateAngleX = Math.min(0, MathHelper.cos(limbSwing * 0.6662F) * 1.4F * limbSwingAmount);
 
+		this.LeftFeet.rotateAngleX = MathHelper.cos(limbSwing * 0.6662F) * 1.4F * limbSwingAmount;
+		this.RightFeet.rotateAngleX = MathHelper.cos(limbSwing * 0.6662F + 3.1415927F) * 1.4F * limbSwingAmount;
+		this.LeftFeet2.rotateAngleX = MathHelper.cos(limbSwing * 0.6662F + 3.1415927F) * 1.4F * limbSwingAmount;
+		this.RightFeet2.rotateAngleX = MathHelper.cos(limbSwing * 0.6662F) * 1.4F * limbSwingAmount;
 	}
 
 	@Override

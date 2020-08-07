@@ -3,9 +3,10 @@ package com.mrbysco.sfl.entity;
 import com.mrbysco.sfl.init.MimicRegistry;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.ai.attributes.IAttributeInstance;
+import net.minecraft.entity.ai.attributes.AttributeModifierMap;
+import net.minecraft.entity.ai.attributes.Attributes;
+import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
 import net.minecraft.entity.ai.goal.HurtByTargetGoal;
 import net.minecraft.entity.ai.goal.LookAtGoal;
 import net.minecraft.entity.ai.goal.LookRandomlyGoal;
@@ -26,7 +27,7 @@ import java.util.UUID;
 
 public class EndMimicEntity extends AbstractMimicEntity {
     private static final UUID ATTACKING_SPEED_BOOST_ID = UUID.fromString("03D531C2-DD68-431A-AFB5-8F79AD6990CB");
-    private static final AttributeModifier ATTACKING_SPEED_BOOST = (new AttributeModifier(ATTACKING_SPEED_BOOST_ID, "Attacking speed boost", (double)0.15F, AttributeModifier.Operation.ADDITION)).setSaved(false);
+    private static final AttributeModifier ATTACKING_SPEED_BOOST = new AttributeModifier(ATTACKING_SPEED_BOOST_ID, "Attacking speed boost", (double)0.15F, AttributeModifier.Operation.ADDITION);
 
     private int targetChangeTime;
 
@@ -50,18 +51,17 @@ public class EndMimicEntity extends AbstractMimicEntity {
         this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, PlayerEntity.class, true));
     }
 
-    @Override
-    protected void registerAttributes() {
-        super.registerAttributes();
-        this.getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(20.0D);
-        this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(8.0D);
-        this.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue((double)0.275F);
+    public static AttributeModifierMap.MutableAttribute registerAttributes() {
+        return AbstractMimicEntity.func_233666_p_()
+                .createMutableAttribute(Attributes.MAX_HEALTH, 20.0D)
+                .createMutableAttribute(Attributes.ATTACK_DAMAGE, 8.0D)
+                .createMutableAttribute(Attributes.MOVEMENT_SPEED, (double)0.275F);
     }
 
     protected void updateAITasks() {
         if (this.world.isDaytime() && this.ticksExisted >= this.targetChangeTime + 600) {
             float f = this.getBrightness();
-            if (f > 0.5F && this.world.canSeeSky(new BlockPos(this)) && this.rand.nextFloat() * 30.0F < (f - 0.4F) * 2.0F) {
+            if (f > 0.5F && this.world.canSeeSky(getPosition()) && this.rand.nextFloat() * 30.0F < (f - 0.4F) * 2.0F) {
                 this.setAttackTarget((LivingEntity)null);
                 this.teleportRandomly();
             }
@@ -100,14 +100,14 @@ public class EndMimicEntity extends AbstractMimicEntity {
     }
 
     public void setAttackTarget(@Nullable LivingEntity entitylivingbaseIn) {
-        IAttributeInstance iattributeinstance = this.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED);
+        ModifiableAttributeInstance iattributeinstance = this.getAttribute(Attributes.MOVEMENT_SPEED);
         if (entitylivingbaseIn == null) {
             this.targetChangeTime = 0;
             iattributeinstance.removeModifier(ATTACKING_SPEED_BOOST);
         } else {
             this.targetChangeTime = this.ticksExisted;
             if (!iattributeinstance.hasModifier(ATTACKING_SPEED_BOOST)) {
-                iattributeinstance.applyModifier(ATTACKING_SPEED_BOOST);
+                iattributeinstance.applyNonPersistentModifier(ATTACKING_SPEED_BOOST);
             }
         }
 
@@ -128,7 +128,7 @@ public class EndMimicEntity extends AbstractMimicEntity {
     public boolean attackEntityFrom(DamageSource source, float amount) {
         if (this.isInvulnerableTo(source)) {
             return false;
-        } else if (!(source instanceof IndirectEntityDamageSource) && source != DamageSource.FIREWORKS) {
+        } else if (!(source instanceof IndirectEntityDamageSource)) {
             boolean flag = super.attackEntityFrom(source, amount);
             if (source.isUnblockable() && this.rand.nextInt(10) != 0) {
                 this.teleportRandomly();

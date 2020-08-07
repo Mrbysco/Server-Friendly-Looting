@@ -3,6 +3,7 @@ package com.mrbysco.sfl.compat.ct;
 import com.blamejared.crafttweaker.api.CraftTweakerAPI;
 import com.blamejared.crafttweaker.api.annotations.ZenRegister;
 import com.mrbysco.sfl.init.MimicLootHandler;
+import net.minecraft.util.ResourceLocation;
 import org.openzen.zencode.java.ZenCodeType.Getter;
 import org.openzen.zencode.java.ZenCodeType.Method;
 import org.openzen.zencode.java.ZenCodeType.Name;
@@ -13,12 +14,12 @@ import java.util.List;
 @Name("mods.cft.DimensionalTables")
 public class DimensionalTablesCT {
     @Method
-    public static void addTable(int dimension, String lootTable) {
+    public static void addTable(String dimension, String lootTable) {
         CraftTweakerAPI.apply(new AddDimensionalTableAction(dimension, lootTable));
     }
 
     @Method
-    public static void removeTable(int dimension, String lootTable) {
+    public static void removeTable(String dimension, String lootTable) {
         CraftTweakerAPI.apply(new AddDimensionalTableAction(dimension, lootTable));
     }
 
@@ -33,8 +34,8 @@ public class DimensionalTablesCT {
     }
 
     @Getter("tables")
-    public List<String> getTables(int dimension) {
-        return MimicLootHandler.getStringDimensionTables(dimension);
+    public List<String> getTables(String dimension) {
+        return MimicLootHandler.getStringDimensionTables(new ResourceLocation(dimension));
     }
 
     @Getter("waterTables")

@@ -4,8 +4,9 @@ import com.mrbysco.sfl.client.ClientHandler;
 import com.mrbysco.sfl.config.SFLConfig;
 import com.mrbysco.sfl.entity.AbstractMimicEntity;
 import com.mrbysco.sfl.init.MimicRegistry;
-import com.mrbysco.sfl.init.MimicSpawns;
+import com.mrbysco.sfl.init.MimicEntities;
 import net.minecraft.entity.SpawnReason;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingSpawnEvent;
@@ -48,7 +49,8 @@ public class ServerFriendlyLoot {
     }
 
     private void setup(final FMLCommonSetupEvent event) {
-        DeferredWorkQueue.runLater(MimicSpawns::addSpawn);
+        MimicEntities.addSpawn();
+        MimicEntities.entityAttributes();
     }
 
     @SubscribeEvent
@@ -56,9 +58,9 @@ public class ServerFriendlyLoot {
         if (event.getSpawnReason().equals(SpawnReason.NATURAL) && event.getEntityLiving() instanceof AbstractMimicEntity) {
             List<? extends String> blacklist = SFLConfig.SPAWN.dimension_blacklist.get();
             if (!blacklist.isEmpty()) {
-                int dimensionID = event.getWorld().getDimension().getType().getId();
+                ResourceLocation dimensionLocation = event.getWorld().getWorld().func_234923_W_().func_240901_a_();
                 for (String dimension : blacklist) {
-                    if (!dimension.isEmpty() && dimension.equals(String.valueOf(dimensionID)))
+                    if (!dimension.isEmpty() && new ResourceLocation(dimension).equals(dimensionLocation))
                         event.setResult(Event.Result.DENY);
                 }
             }

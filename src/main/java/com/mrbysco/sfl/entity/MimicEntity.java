@@ -3,8 +3,9 @@ package com.mrbysco.sfl.entity;
 import com.mrbysco.sfl.init.MimicRegistry;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ILivingEntityData;
-import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.SpawnReason;
+import net.minecraft.entity.ai.attributes.AttributeModifierMap;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.HurtByTargetGoal;
 import net.minecraft.entity.ai.goal.LookAtGoal;
 import net.minecraft.entity.ai.goal.LookRandomlyGoal;
@@ -16,7 +17,6 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
@@ -47,12 +47,11 @@ public class MimicEntity extends AbstractMimicEntity {
         this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, PlayerEntity.class, true));
     }
 
-    @Override
-    protected void registerAttributes() {
-        super.registerAttributes();
-        this.getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(12.0D);
-        this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(4.0D);
-        this.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue((double)0.25F);
+    public static AttributeModifierMap.MutableAttribute registerAttributes() {
+        return AbstractMimicEntity.func_233666_p_()
+                .createMutableAttribute(Attributes.MAX_HEALTH, 12.0D)
+                .createMutableAttribute(Attributes.ATTACK_DAMAGE, 4.0D)
+                .createMutableAttribute(Attributes.MOVEMENT_SPEED, (double)0.25F);
     }
 
     @Override
@@ -94,7 +93,7 @@ public class MimicEntity extends AbstractMimicEntity {
     }
 
     private int getRandomMimicType(IWorld world) {
-        Biome biome = world.getBiome(new BlockPos(this));
+        Biome biome = world.getBiome(getPosition());
         int i = this.rand.nextInt(6);
         if (biome.getPrecipitation() == Biome.RainType.SNOW) {
             return this.rand.nextBoolean() ? 1 : i;

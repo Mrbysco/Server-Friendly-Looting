@@ -6,9 +6,10 @@ import net.minecraft.entity.CreatureEntity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MoverType;
-import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.ai.RandomPositionGenerator;
+import net.minecraft.entity.ai.attributes.AttributeModifierMap;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.controller.MovementController;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.ai.goal.HurtByTargetGoal;
@@ -25,7 +26,7 @@ import net.minecraft.pathfinding.SwimmerPathNavigator;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.LightType;
@@ -72,12 +73,11 @@ public class WaterMimicEntity extends AbstractMimicEntity {
         this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, PlayerEntity.class, true));
     }
 
-    @Override
-    protected void registerAttributes() {
-        super.registerAttributes();
-        this.getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(12.0D);
-        this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(4.0D);
-        this.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue((double)0.25F);
+    public static AttributeModifierMap.MutableAttribute registerAttributes() {
+        return AbstractMimicEntity.func_233666_p_()
+                .createMutableAttribute(Attributes.MAX_HEALTH, 12.0D)
+                .createMutableAttribute(Attributes.ATTACK_DAMAGE, 4.0D)
+                .createMutableAttribute(Attributes.MOVEMENT_SPEED, (double)0.25F);
     }
 
     private int getRandomMimicType(IWorld world) {
@@ -143,7 +143,7 @@ public class WaterMimicEntity extends AbstractMimicEntity {
         return false;
     }
 
-    public void travel(Vec3d p_213352_1_) {
+    public void travel(Vector3d p_213352_1_) {
         if (this.isServerWorld() && this.isInWater() && this.func_204715_dF()) {
             this.moveRelative(0.01F, p_213352_1_);
             this.move(MoverType.SELF, this.getMotion());
@@ -194,7 +194,7 @@ public class WaterMimicEntity extends AbstractMimicEntity {
                 float lvt_10_1_ = (float)(MathHelper.atan2(lvt_6_1_, lvt_2_1_) * 57.2957763671875D) - 90.0F;
                 this.mimic.rotationYaw = this.limitAngle(this.mimic.rotationYaw, lvt_10_1_, 90.0F);
                 this.mimic.renderYawOffset = this.mimic.rotationYaw;
-                float lvt_11_1_ = (float)(this.speed * this.mimic.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getValue());
+                float lvt_11_1_ = (float)(this.speed * this.mimic.getAttribute(Attributes.MOVEMENT_SPEED).getValue());
                 float lvt_12_1_ = MathHelper.lerp(0.125F, this.mimic.getAIMoveSpeed(), lvt_11_1_);
                 this.mimic.setAIMoveSpeed(lvt_12_1_);
                 this.mimic.setMotion(this.mimic.getMotion().add((double)lvt_12_1_ * lvt_2_1_ * 0.005D, (double)lvt_12_1_ * lvt_4_1_ * 0.1D, (double)lvt_12_1_ * lvt_6_1_ * 0.005D));
@@ -230,7 +230,7 @@ public class WaterMimicEntity extends AbstractMimicEntity {
             } else if (this.field_204730_a.isInWater()) {
                 return false;
             } else {
-                Vec3d lvt_1_1_ = this.func_204729_f();
+                Vector3d lvt_1_1_ = this.func_204729_f();
                 if (lvt_1_1_ == null) {
                     return false;
                 } else {
@@ -251,14 +251,14 @@ public class WaterMimicEntity extends AbstractMimicEntity {
         }
 
         @Nullable
-        private Vec3d func_204729_f() {
+        private Vector3d func_204729_f() {
             Random lvt_1_1_ = this.field_204730_a.getRNG();
             BlockPos lvt_2_1_ = new BlockPos(this.field_204730_a.getPosX(), this.field_204730_a.getBoundingBox().minY, this.field_204730_a.getPosZ());
 
             for(int lvt_3_1_ = 0; lvt_3_1_ < 10; ++lvt_3_1_) {
                 BlockPos lvt_4_1_ = lvt_2_1_.add(lvt_1_1_.nextInt(20) - 10, 2 - lvt_1_1_.nextInt(8), lvt_1_1_.nextInt(20) - 10);
                 if (this.field_204735_f.getBlockState(lvt_4_1_).getBlock() == Blocks.WATER) {
-                    return new Vec3d((double)lvt_4_1_.getX(), (double)lvt_4_1_.getY(), (double)lvt_4_1_.getZ());
+                    return new Vector3d((double)lvt_4_1_.getX(), (double)lvt_4_1_.getY(), (double)lvt_4_1_.getZ());
                 }
             }
 
@@ -288,7 +288,7 @@ public class WaterMimicEntity extends AbstractMimicEntity {
 
         public void tick() {
             if (this.field_204736_a.getPosY() < (double)(this.targetY - 1) && (this.field_204736_a.getNavigator().noPath() || this.field_204736_a.isCloseToPathTarget())) {
-                Vec3d lvt_1_1_ = RandomPositionGenerator.findRandomTargetBlockTowards(this.field_204736_a, 4, 8, new Vec3d(this.field_204736_a.getPosX(), (double)(this.targetY - 1), this.field_204736_a.getPosZ()));
+                Vector3d lvt_1_1_ = RandomPositionGenerator.findRandomTargetBlockTowards(this.field_204736_a, 4, 8, new Vector3d(this.field_204736_a.getPosX(), (double)(this.targetY - 1), this.field_204736_a.getPosZ()));
                 if (lvt_1_1_ == null) {
                     this.obstructed = true;
                     return;

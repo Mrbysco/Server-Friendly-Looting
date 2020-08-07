@@ -16,8 +16,8 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 
 public class MimicRegistry {
-    public static final DeferredRegister<Item> ITEMS = new DeferredRegister<>(ForgeRegistries.ITEMS, ServerFriendlyLoot.MOD_ID);
-    public static final DeferredRegister<EntityType<?>> ENTITIES = new DeferredRegister<>(ForgeRegistries.ENTITIES, ServerFriendlyLoot.MOD_ID);
+    public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, ServerFriendlyLoot.MOD_ID);
+    public static final DeferredRegister<EntityType<?>> ENTITIES = DeferredRegister.create(ForgeRegistries.ENTITIES, ServerFriendlyLoot.MOD_ID);
 
     public static final RegistryObject<EntityType<MimicEntity>> MIMIC = ENTITIES.register("mimic", () -> register("mimic", EntityType.Builder.<MimicEntity>create(MimicEntity::new, EntityClassification.MONSTER).size(1.0F, 0.9F)));
     public static final RegistryObject<EntityType<EndMimicEntity>> END_MIMIC = ENTITIES.register("end_mimic", () -> register("end_mimic", EntityType.Builder.<EndMimicEntity>create(EndMimicEntity::new, EntityClassification.MONSTER).size(1.0F, 0.9F)));

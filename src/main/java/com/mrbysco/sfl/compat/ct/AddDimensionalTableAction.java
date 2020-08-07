@@ -5,17 +5,17 @@ import com.mrbysco.sfl.init.MimicLootHandler;
 import net.minecraft.util.ResourceLocation;
 
 public class AddDimensionalTableAction implements IUndoableAction {
-    public final int dimension;
+    public final String dimension;
     public final ResourceLocation lootTable;
 
-    public AddDimensionalTableAction(int dim, String table) {
+    public AddDimensionalTableAction(String dim, String table) {
         this.dimension = dim;
         this.lootTable = new ResourceLocation(table);
     }
 
     @Override
     public void apply() {
-        MimicLootHandler.addDimensionalTable(dimension, lootTable);
+        MimicLootHandler.addDimensionalTable(new ResourceLocation(dimension), lootTable);
     }
 
     @Override
@@ -25,7 +25,7 @@ public class AddDimensionalTableAction implements IUndoableAction {
 
     @Override
     public void undo() {
-        MimicLootHandler.removeDimensionalTable(dimension, lootTable);
+        MimicLootHandler.removeDimensionalTable(new ResourceLocation(dimension), lootTable);
     }
 
     @Override
