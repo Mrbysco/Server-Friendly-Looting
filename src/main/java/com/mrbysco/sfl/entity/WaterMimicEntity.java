@@ -24,10 +24,12 @@ import net.minecraft.pathfinding.Path;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.pathfinding.SwimmerPathNavigator;
 import net.minecraft.tags.FluidTags;
+import net.minecraft.util.RegistryKey;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.Difficulty;
+import net.minecraft.world.IServerWorld;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.LightType;
 import net.minecraft.world.World;
@@ -36,6 +38,8 @@ import net.minecraft.world.biome.Biomes;
 
 import javax.annotation.Nullable;
 import java.util.EnumSet;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.Random;
 
 public class WaterMimicEntity extends AbstractMimicEntity {
@@ -92,27 +96,27 @@ public class WaterMimicEntity extends AbstractMimicEntity {
         return !this.isSwimming();
     }
 
-    public static boolean spawnPredicate(EntityType<? extends AbstractMimicEntity> typeIn, IWorld worldIn, SpawnReason reason, BlockPos pos, Random randomIn) {
-        Biome biome = worldIn.getBiome(pos);
+    public static boolean spawnPredicate(EntityType<? extends AbstractMimicEntity> typeIn, IServerWorld worldIn, SpawnReason reason, BlockPos pos, Random randomIn) {
+        Optional<RegistryKey<Biome>> optionalBiome = worldIn.func_242406_i(pos);
         boolean lvt_6_1_ = worldIn.getDifficulty() != Difficulty.PEACEFUL && isValidLightLevel(worldIn, pos, randomIn) && (reason == SpawnReason.SPAWNER || worldIn.getFluidState(pos).isTagged(FluidTags.WATER));
-        if (biome != Biomes.RIVER && biome != Biomes.FROZEN_RIVER) {
+        if (!Objects.equals(optionalBiome, Optional.of(Biomes.RIVER)) && !Objects.equals(optionalBiome, Optional.of(Biomes.FROZEN_RIVER))) {
             return randomIn.nextInt(40) == 0 && isUnderSeaLevel(worldIn, pos) && lvt_6_1_;
         } else {
             return randomIn.nextInt(15) == 0 && lvt_6_1_;
         }
     }
 
-    public static boolean isValidLightLevel(IWorld p_223323_0_, BlockPos p_223323_1_, Random p_223323_2_) {
-        if (p_223323_0_.getLightFor(LightType.SKY, p_223323_1_) > p_223323_2_.nextInt(32)) {
+    public static boolean isValidLightLevel(IWorld world, BlockPos pos, Random random) {
+        if (world.getLightFor(LightType.SKY, pos) > random.nextInt(32)) {
             return false;
         } else {
-            int lvt_3_1_ = p_223323_0_.getWorld().isThundering() ? p_223323_0_.getNeighborAwareLightSubtracted(p_223323_1_, 10) : p_223323_0_.getLight(p_223323_1_);
-            return lvt_3_1_ <= p_223323_2_.nextInt(8);
+            int lvt_3_1_ = world.getWorldInfo().isThundering() ? world.getNeighborAwareLightSubtracted(pos, 10) : world.getLight(pos);
+            return lvt_3_1_ <= random.nextInt(8);
         }
     }
 
-    private static boolean isUnderSeaLevel(IWorld p_223333_0_, BlockPos p_223333_1_) {
-        return p_223333_1_.getY() < p_223333_0_.getSeaLevel() - 5;
+    private static boolean isUnderSeaLevel(IWorld world, BlockPos pos) {
+        return pos.getY() < world.getSeaLevel() - 5;
     }
 
     public void updateSwimming() {

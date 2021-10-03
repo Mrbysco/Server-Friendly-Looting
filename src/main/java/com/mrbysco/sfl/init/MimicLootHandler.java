@@ -14,44 +14,47 @@ public class MimicLootHandler {
     private static ArrayList<ResourceLocation> WATER_LOOT_TABLES = new ArrayList<>();
 
     static {
-        DIMENSIONAL_TABLES.put(World.field_234918_g_, new ArrayList<>());
-        DIMENSIONAL_TABLES.put(World.field_234919_h_, new ArrayList<>());
-        DIMENSIONAL_TABLES.put(World.field_234920_i_, new ArrayList<>());
+        DIMENSIONAL_TABLES.put(World.OVERWORLD, new ArrayList<>());
+        DIMENSIONAL_TABLES.put(World.THE_NETHER, new ArrayList<>());
+        DIMENSIONAL_TABLES.put(World.THE_END, new ArrayList<>());
 
         //Nether
-        addDimensionalTable(World.field_234919_h_, LootTables.CHESTS_NETHER_BRIDGE);
+        addDimensionalTable(World.THE_NETHER, LootTables.CHESTS_NETHER_BRIDGE);
+        addDimensionalTable(World.THE_NETHER, LootTables.BASTION_TREASURE);
+        addDimensionalTable(World.THE_NETHER, LootTables.BASTION_BRIDGE);
+        addDimensionalTable(World.THE_NETHER, LootTables.BASTION_OTHER);
+        addDimensionalTable(World.THE_NETHER, LootTables.BASTION_HOGLIN_STABLE);
 
         //End
-        addDimensionalTable(World.field_234920_i_, LootTables.CHESTS_END_CITY_TREASURE);
+        addDimensionalTable(World.THE_END, LootTables.CHESTS_END_CITY_TREASURE);
 
         //Overworld
-        addDimensionalTable(World.field_234918_g_, LootTables.CHESTS_SIMPLE_DUNGEON);
-        addDimensionalTable(World.field_234918_g_, LootTables.CHESTS_VILLAGE_VILLAGE_WEAPONSMITH);
-        addDimensionalTable(World.field_234918_g_, LootTables.CHESTS_VILLAGE_VILLAGE_TOOLSMITH);
-        addDimensionalTable(World.field_234918_g_, LootTables.CHESTS_VILLAGE_VILLAGE_ARMORER);
-        addDimensionalTable(World.field_234918_g_, LootTables.CHESTS_VILLAGE_VILLAGE_CARTOGRAPHER);
-        addDimensionalTable(World.field_234918_g_, LootTables.CHESTS_VILLAGE_VILLAGE_MASON);
-        addDimensionalTable(World.field_234918_g_, LootTables.CHESTS_VILLAGE_VILLAGE_SHEPHERD);
-        addDimensionalTable(World.field_234918_g_, LootTables.CHESTS_VILLAGE_VILLAGE_BUTCHER);
-        addDimensionalTable(World.field_234918_g_, LootTables.CHESTS_VILLAGE_VILLAGE_FLETCHER);
-        addDimensionalTable(World.field_234918_g_, LootTables.CHESTS_VILLAGE_VILLAGE_FISHER);
-        addDimensionalTable(World.field_234918_g_, LootTables.CHESTS_VILLAGE_VILLAGE_TANNERY);
-        addDimensionalTable(World.field_234918_g_, LootTables.CHESTS_VILLAGE_VILLAGE_TEMPLE);
-        addDimensionalTable(World.field_234918_g_, LootTables.CHESTS_VILLAGE_VILLAGE_DESERT_HOUSE);
-        addDimensionalTable(World.field_234918_g_, LootTables.CHESTS_VILLAGE_VILLAGE_PLAINS_HOUSE);
-        addDimensionalTable(World.field_234918_g_, LootTables.CHESTS_VILLAGE_VILLAGE_TAIGA_HOUSE);
-        addDimensionalTable(World.field_234918_g_, LootTables.CHESTS_VILLAGE_VILLAGE_SNOWY_HOUSE);
-        addDimensionalTable(World.field_234918_g_, LootTables.CHESTS_VILLAGE_VILLAGE_SAVANNA_HOUSE);
-        addDimensionalTable(World.field_234918_g_, LootTables.CHESTS_ABANDONED_MINESHAFT);
-        addDimensionalTable(World.field_234918_g_, LootTables.CHESTS_STRONGHOLD_LIBRARY);
-        addDimensionalTable(World.field_234918_g_, LootTables.CHESTS_STRONGHOLD_CROSSING);
-        addDimensionalTable(World.field_234918_g_, LootTables.CHESTS_STRONGHOLD_CORRIDOR);
-        addDimensionalTable(World.field_234918_g_, LootTables.CHESTS_DESERT_PYRAMID);
-        addDimensionalTable(World.field_234918_g_, LootTables.CHESTS_JUNGLE_TEMPLE);
-        addDimensionalTable(World.field_234918_g_, LootTables.CHESTS_JUNGLE_TEMPLE_DISPENSER);
-        addDimensionalTable(World.field_234918_g_, LootTables.CHESTS_IGLOO_CHEST);
-        addDimensionalTable(World.field_234918_g_, LootTables.CHESTS_WOODLAND_MANSION);
-
+        addDimensionalTable(World.OVERWORLD, LootTables.CHESTS_SIMPLE_DUNGEON);
+        addDimensionalTable(World.OVERWORLD, LootTables.CHESTS_VILLAGE_VILLAGE_WEAPONSMITH);
+        addDimensionalTable(World.OVERWORLD, LootTables.CHESTS_VILLAGE_VILLAGE_TOOLSMITH);
+        addDimensionalTable(World.OVERWORLD, LootTables.CHESTS_VILLAGE_VILLAGE_ARMORER);
+        addDimensionalTable(World.OVERWORLD, LootTables.CHESTS_VILLAGE_VILLAGE_CARTOGRAPHER);
+        addDimensionalTable(World.OVERWORLD, LootTables.CHESTS_VILLAGE_VILLAGE_MASON);
+        addDimensionalTable(World.OVERWORLD, LootTables.CHESTS_VILLAGE_VILLAGE_SHEPHERD);
+        addDimensionalTable(World.OVERWORLD, LootTables.CHESTS_VILLAGE_VILLAGE_BUTCHER);
+        addDimensionalTable(World.OVERWORLD, LootTables.CHESTS_VILLAGE_VILLAGE_FLETCHER);
+        addDimensionalTable(World.OVERWORLD, LootTables.CHESTS_VILLAGE_VILLAGE_FISHER);
+        addDimensionalTable(World.OVERWORLD, LootTables.CHESTS_VILLAGE_VILLAGE_TANNERY);
+        addDimensionalTable(World.OVERWORLD, LootTables.CHESTS_VILLAGE_VILLAGE_TEMPLE);
+        addDimensionalTable(World.OVERWORLD, LootTables.CHESTS_VILLAGE_VILLAGE_DESERT_HOUSE);
+        addDimensionalTable(World.OVERWORLD, LootTables.CHESTS_VILLAGE_VILLAGE_PLAINS_HOUSE);
+        addDimensionalTable(World.OVERWORLD, LootTables.CHESTS_VILLAGE_VILLAGE_TAIGA_HOUSE);
+        addDimensionalTable(World.OVERWORLD, LootTables.CHESTS_VILLAGE_VILLAGE_SNOWY_HOUSE);
+        addDimensionalTable(World.OVERWORLD, LootTables.CHESTS_VILLAGE_VILLAGE_SAVANNA_HOUSE);
+        addDimensionalTable(World.OVERWORLD, LootTables.CHESTS_ABANDONED_MINESHAFT);
+        addDimensionalTable(World.OVERWORLD, LootTables.CHESTS_STRONGHOLD_LIBRARY);
+        addDimensionalTable(World.OVERWORLD, LootTables.CHESTS_STRONGHOLD_CROSSING);
+        addDimensionalTable(World.OVERWORLD, LootTables.CHESTS_STRONGHOLD_CORRIDOR);
+        addDimensionalTable(World.OVERWORLD, LootTables.CHESTS_DESERT_PYRAMID);
+        addDimensionalTable(World.OVERWORLD, LootTables.CHESTS_JUNGLE_TEMPLE);
+        addDimensionalTable(World.OVERWORLD, LootTables.CHESTS_JUNGLE_TEMPLE_DISPENSER);
+        addDimensionalTable(World.OVERWORLD, LootTables.CHESTS_IGLOO_CHEST);
+        addDimensionalTable(World.OVERWORLD, LootTables.CHESTS_WOODLAND_MANSION);
 
         addWaterTable(LootTables.CHESTS_UNDERWATER_RUIN_SMALL);
         addWaterTable(LootTables.CHESTS_UNDERWATER_RUIN_BIG);
@@ -90,7 +93,7 @@ public class MimicLootHandler {
     }
 
     public static RegistryKey<World> getKeyFromLocation(ResourceLocation loc) {
-        return RegistryKey.func_240903_a_(Registry.WORLD_KEY, loc);
+        return RegistryKey.getOrCreateKey(Registry.WORLD_KEY, loc);
     }
 
     public static void addDimensionalTable(ResourceLocation dimensionLocation, ResourceLocation lootTable)

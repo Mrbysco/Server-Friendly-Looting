@@ -7,7 +7,9 @@ import com.mrbysco.sfl.client.renderer.WaterMimicRenderer;
 import com.mrbysco.sfl.init.MimicRegistry;
 import com.mrbysco.sfl.item.CustomSpawnEggItem;
 import net.minecraft.client.renderer.color.ItemColors;
+import net.minecraft.item.Item;
 import net.minecraftforge.client.event.ColorHandlerEvent;
+import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
@@ -22,10 +24,11 @@ public class ClientHandler {
     public static void registerItemColors(final ColorHandlerEvent.Item event) {
         ItemColors colors = event.getItemColors();
 
-        for(CustomSpawnEggItem spawneggitem : CustomSpawnEggItem.getEggs()) {
-            colors.register((p_198141_1_, p_198141_2_) -> {
-                return spawneggitem.getColor(p_198141_2_);
-            }, spawneggitem);
+        for(RegistryObject<Item> registryObject : MimicRegistry.ITEMS.getEntries()) {
+            if(registryObject.get() instanceof CustomSpawnEggItem) {
+                CustomSpawnEggItem spawnEgg = (CustomSpawnEggItem) registryObject.get();
+                colors.register((stack, tintIndex) -> spawnEgg.getColor(tintIndex), spawnEgg);
+            }
         }
     }
 }
