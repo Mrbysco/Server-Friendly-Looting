@@ -1,38 +1,38 @@
 package com.mrbysco.sfl.entity;
 
 import com.mrbysco.sfl.init.MimicRegistry;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.ILivingEntityData;
-import net.minecraft.entity.SpawnReason;
-import net.minecraft.entity.ai.attributes.AttributeModifierMap;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.ai.goal.HurtByTargetGoal;
-import net.minecraft.entity.ai.goal.LookAtGoal;
-import net.minecraft.entity.ai.goal.LookRandomlyGoal;
-import net.minecraft.entity.ai.goal.MeleeAttackGoal;
-import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
-import net.minecraft.entity.ai.goal.WaterAvoidingRandomWalkingGoal;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.SpawnGroupData;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
+import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
+import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.DifficultyInstance;
-import net.minecraft.world.IServerWorld;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
+import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.biome.Biome;
 
 import javax.annotation.Nullable;
 
 public class MimicEntity extends AbstractMimicEntity {
-    private static final DataParameter<Integer> MIMIC_TYPE = EntityDataManager.createKey(MimicEntity.class, DataSerializers.VARINT);
+    private static final EntityDataAccessor<Integer> MIMIC_TYPE = SynchedEntityData.defineId(MimicEntity.class, EntityDataSerializers.INT);
 
-    public MimicEntity(EntityType<? extends MimicEntity> type, World worldIn) {
+    public MimicEntity(EntityType<? extends MimicEntity> type, Level worldIn) {
         super(type, worldIn);
     }
 
-    public MimicEntity(World worldIn)
+    public MimicEntity(Level worldIn)
     {
         super(MimicRegistry.MIMIC.get(), worldIn);
     }
@@ -41,38 +41,38 @@ public class MimicEntity extends AbstractMimicEntity {
     protected void registerGoals() {
         super.registerGoals();
         this.goalSelector.addGoal(5, new MeleeAttackGoal(this, 1.0D, true));
-        this.goalSelector.addGoal(8, new WaterAvoidingRandomWalkingGoal(this, 1.0D));
-        this.goalSelector.addGoal(10, new LookAtGoal(this, PlayerEntity.class, 8.0F));
-        this.goalSelector.addGoal(10, new LookRandomlyGoal(this));
-        this.targetSelector.addGoal(3, (new HurtByTargetGoal(this)).setCallsForHelp());
-        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, PlayerEntity.class, true));
+        this.goalSelector.addGoal(8, new WaterAvoidingRandomStrollGoal(this, 1.0D));
+        this.goalSelector.addGoal(10, new LookAtPlayerGoal(this, Player.class, 8.0F));
+        this.goalSelector.addGoal(10, new RandomLookAroundGoal(this));
+        this.targetSelector.addGoal(3, (new HurtByTargetGoal(this)).setAlertOthers());
+        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, true));
     }
 
-    public static AttributeModifierMap.MutableAttribute registerAttributes() {
-        return AbstractMimicEntity.func_233666_p_()
-                .createMutableAttribute(Attributes.MAX_HEALTH, 12.0D)
-                .createMutableAttribute(Attributes.ATTACK_DAMAGE, 4.0D)
-                .createMutableAttribute(Attributes.MOVEMENT_SPEED, (double)0.25F);
+    public static AttributeSupplier.Builder registerAttributes() {
+        return AbstractMimicEntity.createMobAttributes()
+                .add(Attributes.MAX_HEALTH, 12.0D)
+                .add(Attributes.ATTACK_DAMAGE, 4.0D)
+                .add(Attributes.MOVEMENT_SPEED, (double)0.25F);
     }
 
     @Override
-    public void writeAdditional(CompoundNBT compound) {
-        super.writeAdditional(compound);
+    public void addAdditionalSaveData(CompoundTag compound) {
+        super.addAdditionalSaveData(compound);
 
         compound.putInt("MimicType", this.getMimicType());
     }
 
     @Override
-    public void readAdditional(CompoundNBT compound) {
-        super.readAdditional(compound);
+    public void readAdditionalSaveData(CompoundTag compound) {
+        super.readAdditionalSaveData(compound);
 
         this.setMimicType(compound.getInt("MimicType"));
     }
 
     @Nullable
     @Override
-    public ILivingEntityData onInitialSpawn(IServerWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
-        ILivingEntityData data = super.onInitialSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn, @Nullable CompoundTag dataTag) {
+        SpawnGroupData data = super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
         int i = this.getRandomMimicType(worldIn);
         this.setMimicType(i);
 
@@ -80,26 +80,26 @@ public class MimicEntity extends AbstractMimicEntity {
     }
 
 
-    protected void registerData() {
-        super.registerData();
-        this.dataManager.register(MIMIC_TYPE, 0);
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(MIMIC_TYPE, 0);
     }
 
     public int getMimicType() {
-        return this.dataManager.get(MIMIC_TYPE);
+        return this.entityData.get(MIMIC_TYPE);
     }
 
     public void setMimicType(int mimicTypeId) {
-        this.dataManager.set(MIMIC_TYPE, mimicTypeId);
+        this.entityData.set(MIMIC_TYPE, mimicTypeId);
     }
 
-    private int getRandomMimicType(IWorld world) {
-        Biome biome = world.getBiome(getPosition());
-        int i = this.rand.nextInt(6);
-        if (biome.getPrecipitation() == Biome.RainType.SNOW) {
-            return this.rand.nextBoolean() ? 1 : i;
-        } else if (biome.getCategory() == Biome.Category.DESERT) {
-            return this.rand.nextBoolean() ? 4 : i;
+    private int getRandomMimicType(LevelAccessor world) {
+        Biome biome = world.getBiome(blockPosition());
+        int i = this.random.nextInt(6);
+        if (biome.getPrecipitation() == Biome.Precipitation.SNOW) {
+            return this.random.nextBoolean() ? 1 : i;
+        } else if (biome.getBiomeCategory() == Biome.BiomeCategory.DESERT) {
+            return this.random.nextBoolean() ? 4 : i;
         } else {
             return i;
         }

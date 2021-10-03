@@ -1,26 +1,27 @@
 package com.mrbysco.sfl.entity;
 
 import com.mrbysco.sfl.init.MimicRegistry;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.ai.attributes.AttributeModifierMap;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
-import net.minecraft.entity.ai.goal.HurtByTargetGoal;
-import net.minecraft.entity.ai.goal.LookAtGoal;
-import net.minecraft.entity.ai.goal.LookRandomlyGoal;
-import net.minecraft.entity.ai.goal.MeleeAttackGoal;
-import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
-import net.minecraft.entity.ai.goal.WaterAvoidingRandomWalkingGoal;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.Direction;
-import net.minecraft.util.IndirectEntityDamageSource;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.IndirectEntityDamageSource;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
+import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
+import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
+import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
+import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
+import net.minecraftforge.event.entity.EntityTeleportEvent;
 
 import javax.annotation.Nullable;
 import java.util.UUID;
@@ -31,11 +32,11 @@ public class EndMimicEntity extends AbstractMimicEntity {
 
     private int targetChangeTime;
 
-    public EndMimicEntity(EntityType<? extends EndMimicEntity> type, World worldIn) {
+    public EndMimicEntity(EntityType<? extends EndMimicEntity> type, Level worldIn) {
         super(type, worldIn);
     }
 
-    public EndMimicEntity(World worldIn)
+    public EndMimicEntity(Level worldIn)
     {
         super(MimicRegistry.END_MIMIC.get(), worldIn);
     }
@@ -44,93 +45,93 @@ public class EndMimicEntity extends AbstractMimicEntity {
     protected void registerGoals() {
         super.registerGoals();
         this.goalSelector.addGoal(5, new MeleeAttackGoal(this, 1.0D, true));
-        this.goalSelector.addGoal(8, new WaterAvoidingRandomWalkingGoal(this, 1.0D));
-        this.goalSelector.addGoal(10, new LookAtGoal(this, PlayerEntity.class, 8.0F));
-        this.goalSelector.addGoal(10, new LookRandomlyGoal(this));
-        this.targetSelector.addGoal(3, (new HurtByTargetGoal(this)).setCallsForHelp());
-        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, PlayerEntity.class, true));
+        this.goalSelector.addGoal(8, new WaterAvoidingRandomStrollGoal(this, 1.0D));
+        this.goalSelector.addGoal(10, new LookAtPlayerGoal(this, Player.class, 8.0F));
+        this.goalSelector.addGoal(10, new RandomLookAroundGoal(this));
+        this.targetSelector.addGoal(3, (new HurtByTargetGoal(this)).setAlertOthers());
+        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, true));
     }
 
-    public static AttributeModifierMap.MutableAttribute registerAttributes() {
-        return AbstractMimicEntity.func_233666_p_()
-                .createMutableAttribute(Attributes.MAX_HEALTH, 20.0D)
-                .createMutableAttribute(Attributes.ATTACK_DAMAGE, 8.0D)
-                .createMutableAttribute(Attributes.MOVEMENT_SPEED, (double)0.275F);
+    public static AttributeSupplier.Builder registerAttributes() {
+        return AbstractMimicEntity.createMobAttributes()
+                .add(Attributes.MAX_HEALTH, 20.0D)
+                .add(Attributes.ATTACK_DAMAGE, 8.0D)
+                .add(Attributes.MOVEMENT_SPEED, (double)0.275F);
     }
 
-    protected void updateAITasks() {
-        if (this.world.isDaytime() && this.ticksExisted >= this.targetChangeTime + 600) {
+    protected void customServerAiStep() {
+        if (this.level.isDay() && this.tickCount >= this.targetChangeTime + 600) {
             float f = this.getBrightness();
-            if (f > 0.5F && this.world.canSeeSky(getPosition()) && this.rand.nextFloat() * 30.0F < (f - 0.4F) * 2.0F) {
-                this.setAttackTarget((LivingEntity)null);
+            if (f > 0.5F && this.level.canSeeSky(blockPosition()) && this.random.nextFloat() * 30.0F < (f - 0.4F) * 2.0F) {
+                this.setTarget((LivingEntity)null);
                 this.teleportRandomly();
             }
         }
 
-        super.updateAITasks();
+        super.customServerAiStep();
     }
 
     protected boolean teleportRandomly() {
-        double d0 = this.getPosX() + (this.rand.nextDouble() - 0.5D) * 64.0D;
-        double d1 = this.getPosY() + (double)(this.rand.nextInt(64) - 32);
-        double d2 = this.getPosZ() + (this.rand.nextDouble() - 0.5D) * 64.0D;
-        return this.teleportTo(d0, d1, d2);
+        double d0 = this.getX() + (this.random.nextDouble() - 0.5D) * 64.0D;
+        double d1 = this.getY() + (double)(this.random.nextInt(64) - 32);
+        double d2 = this.getZ() + (this.random.nextDouble() - 0.5D) * 64.0D;
+        return this.teleport(d0, d1, d2);
     }
 
-    private boolean teleportTo(double x, double y, double z) {
-        BlockPos.Mutable blockpos$mutableblockpos = new BlockPos.Mutable(x, y, z);
+    private boolean teleport(double x, double y, double z) {
+        BlockPos.MutableBlockPos blockpos$mutableblockpos = new BlockPos.MutableBlockPos(x, y, z);
 
-        while(blockpos$mutableblockpos.getY() > 0 && !this.world.getBlockState(blockpos$mutableblockpos).getMaterial().blocksMovement()) {
+        while(blockpos$mutableblockpos.getY() > 0 && !this.level.getBlockState(blockpos$mutableblockpos).getMaterial().blocksMotion()) {
             blockpos$mutableblockpos.move(Direction.DOWN);
         }
 
-        if (!this.world.getBlockState(blockpos$mutableblockpos).getMaterial().blocksMovement()) {
+        if (!this.level.getBlockState(blockpos$mutableblockpos).getMaterial().blocksMotion()) {
             return false;
         } else {
-            net.minecraftforge.event.entity.living.EnderTeleportEvent event = new net.minecraftforge.event.entity.living.EnderTeleportEvent(this, x, y, z, 0);
+            EntityTeleportEvent.EnderEntity event = new EntityTeleportEvent.EnderEntity(this, x, y, z);
             if (net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(event)) return false;
-            boolean flag = this.attemptTeleport(event.getTargetX(), event.getTargetY(), event.getTargetZ(), true);
+            boolean flag = this.randomTeleport(event.getTargetX(), event.getTargetY(), event.getTargetZ(), true);
             if (flag) {
-                this.world.playSound((PlayerEntity)null, this.prevPosX, this.prevPosY, this.prevPosZ, SoundEvents.ENTITY_ENDERMAN_TELEPORT, this.getSoundCategory(), 1.0F, 1.0F);
-                this.playSound(SoundEvents.ENTITY_ENDERMAN_TELEPORT, 1.0F, 1.0F);
+                this.level.playSound((Player)null, this.xo, this.yo, this.zo, SoundEvents.ENDERMAN_TELEPORT, this.getSoundSource(), 1.0F, 1.0F);
+                this.playSound(SoundEvents.ENDERMAN_TELEPORT, 1.0F, 1.0F);
             }
 
             return flag;
         }
     }
 
-    public void setAttackTarget(@Nullable LivingEntity entitylivingbaseIn) {
-        ModifiableAttributeInstance iattributeinstance = this.getAttribute(Attributes.MOVEMENT_SPEED);
+    public void setTarget(@Nullable LivingEntity entitylivingbaseIn) {
+        AttributeInstance iattributeinstance = this.getAttribute(Attributes.MOVEMENT_SPEED);
         if (entitylivingbaseIn == null) {
             this.targetChangeTime = 0;
             iattributeinstance.removeModifier(ATTACKING_SPEED_BOOST);
         } else {
-            this.targetChangeTime = this.ticksExisted;
+            this.targetChangeTime = this.tickCount;
             if (!iattributeinstance.hasModifier(ATTACKING_SPEED_BOOST)) {
-                iattributeinstance.applyNonPersistentModifier(ATTACKING_SPEED_BOOST);
+                iattributeinstance.addTransientModifier(ATTACKING_SPEED_BOOST);
             }
         }
 
-        super.setAttackTarget(entitylivingbaseIn); //Forge: Moved down to allow event handlers to write data manager values.
+        super.setTarget(entitylivingbaseIn); //Forge: Moved down to allow event handlers to write data manager values.
     }
 
-    public void livingTick() {
-        if (this.world.isRemote) {
+    public void aiStep() {
+        if (this.level.isClientSide) {
             for(int i = 0; i < 2; ++i) {
-                this.world.addParticle(ParticleTypes.PORTAL, this.getPosX() + (this.rand.nextDouble() - 0.5D) * (double)this.getWidth(), this.getPosY() + this.rand.nextDouble() * (double)this.getHeight() - 0.25D, this.getPosZ() + (this.rand.nextDouble() - 0.5D) * (double)this.getWidth(), (this.rand.nextDouble() - 0.5D) * 2.0D, -this.rand.nextDouble(), (this.rand.nextDouble() - 0.5D) * 2.0D);
+                this.level.addParticle(ParticleTypes.PORTAL, this.getX() + (this.random.nextDouble() - 0.5D) * (double)this.getBbWidth(), this.getY() + this.random.nextDouble() * (double)this.getBbHeight() - 0.25D, this.getZ() + (this.random.nextDouble() - 0.5D) * (double)this.getBbWidth(), (this.random.nextDouble() - 0.5D) * 2.0D, -this.random.nextDouble(), (this.random.nextDouble() - 0.5D) * 2.0D);
             }
         }
 
-        this.isJumping = false;
-        super.livingTick();
+        this.jumping = false;
+        super.aiStep();
     }
 
-    public boolean attackEntityFrom(DamageSource source, float amount) {
+    public boolean hurt(DamageSource source, float amount) {
         if (this.isInvulnerableTo(source)) {
             return false;
         } else if (!(source instanceof IndirectEntityDamageSource)) {
-            boolean flag = super.attackEntityFrom(source, amount);
-            if (source.isUnblockable() && this.rand.nextInt(10) != 0) {
+            boolean flag = super.hurt(source, amount);
+            if (source.isBypassArmor() && this.random.nextInt(10) != 0) {
                 this.teleportRandomly();
             }
 

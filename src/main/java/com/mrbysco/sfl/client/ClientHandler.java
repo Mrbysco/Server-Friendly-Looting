@@ -1,24 +1,33 @@
 package com.mrbysco.sfl.client;
 
+import com.mrbysco.sfl.ServerFriendlyLoot;
+import com.mrbysco.sfl.client.model.MimicModel;
 import com.mrbysco.sfl.client.renderer.EndMimicRenderer;
 import com.mrbysco.sfl.client.renderer.MimicRenderer;
 import com.mrbysco.sfl.client.renderer.NetherMimicRenderer;
 import com.mrbysco.sfl.client.renderer.WaterMimicRenderer;
 import com.mrbysco.sfl.init.MimicRegistry;
 import com.mrbysco.sfl.item.CustomSpawnEggItem;
-import net.minecraft.client.renderer.color.ItemColors;
-import net.minecraft.item.Item;
+import net.minecraft.client.color.item.ItemColors;
+import net.minecraft.client.model.geom.ModelLayerLocation;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
 import net.minecraftforge.client.event.ColorHandlerEvent;
-import net.minecraftforge.fml.RegistryObject;
-import net.minecraftforge.fml.client.registry.RenderingRegistry;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.minecraftforge.client.event.EntityRenderersEvent;
+import net.minecraftforge.fmllegacy.RegistryObject;
 
 public class ClientHandler {
-    public static void registerRenders(FMLClientSetupEvent event) {
-        RenderingRegistry.registerEntityRenderingHandler(MimicRegistry.MIMIC.get(), MimicRenderer::new);
-        RenderingRegistry.registerEntityRenderingHandler(MimicRegistry.NETHER_MIMIC.get(), NetherMimicRenderer::new);
-        RenderingRegistry.registerEntityRenderingHandler(MimicRegistry.END_MIMIC.get(), EndMimicRenderer::new);
-        RenderingRegistry.registerEntityRenderingHandler(MimicRegistry.WATER_MIMIC.get(), WaterMimicRenderer::new);
+    public static final ModelLayerLocation MIMIC = new ModelLayerLocation(new ResourceLocation(ServerFriendlyLoot.MOD_ID, "main"), "mimic");
+
+    public static void registerEntityRenders(EntityRenderersEvent.RegisterRenderers event) {
+        event.registerEntityRenderer(MimicRegistry.MIMIC.get(), MimicRenderer::new);
+        event.registerEntityRenderer(MimicRegistry.NETHER_MIMIC.get(), NetherMimicRenderer::new);
+        event.registerEntityRenderer(MimicRegistry.END_MIMIC.get(), EndMimicRenderer::new);
+        event.registerEntityRenderer(MimicRegistry.WATER_MIMIC.get(), WaterMimicRenderer::new);
+    }
+
+    public static void registerLayerDefinitions(EntityRenderersEvent.RegisterLayerDefinitions event) {
+        event.registerLayerDefinition(MIMIC, () -> MimicModel.createBodyLayer());
     }
 
     public static void registerItemColors(final ColorHandlerEvent.Item event) {
