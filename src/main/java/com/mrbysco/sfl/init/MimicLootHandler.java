@@ -1,10 +1,10 @@
 package com.mrbysco.sfl.init;
 
-import net.minecraft.world.level.storage.loot.BuiltInLootTables;
+import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.core.Registry;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.storage.loot.BuiltInLootTables;
 
 import java.util.ArrayList;
 import java.util.HashMap;

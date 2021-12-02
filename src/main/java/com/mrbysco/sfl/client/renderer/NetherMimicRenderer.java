@@ -4,7 +4,6 @@ import com.mrbysco.sfl.ServerFriendlyLoot;
 import com.mrbysco.sfl.client.ClientHandler;
 import com.mrbysco.sfl.client.model.MimicModel;
 import com.mrbysco.sfl.entity.NetherMimicEntity;
-import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
@@ -22,11 +21,9 @@ public class NetherMimicRenderer extends MobRenderer<NetherMimicEntity, MimicMod
     @Nullable
     @Override
     public ResourceLocation getTextureLocation(NetherMimicEntity entity) {
-        switch(entity.getMimicType()) {
-            default:
-                return NETHER1;
-            case 1:
-                return NETHER2;
-        }
+        return switch (entity.getMimicType()) {
+            default -> NETHER1;
+            case 1 -> NETHER2;
+        };
     }
 }

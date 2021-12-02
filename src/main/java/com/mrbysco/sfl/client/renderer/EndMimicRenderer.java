@@ -4,7 +4,6 @@ import com.mrbysco.sfl.ServerFriendlyLoot;
 import com.mrbysco.sfl.client.ClientHandler;
 import com.mrbysco.sfl.client.model.MimicModel;
 import com.mrbysco.sfl.entity.EndMimicEntity;
-import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
