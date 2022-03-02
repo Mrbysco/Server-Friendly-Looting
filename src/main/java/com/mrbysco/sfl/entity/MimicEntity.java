@@ -1,6 +1,7 @@
 package com.mrbysco.sfl.entity;
 
 import com.mrbysco.sfl.init.MimicRegistry;
+import net.minecraft.core.Holder;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -94,11 +95,11 @@ public class MimicEntity extends AbstractMimicEntity {
     }
 
     private int getRandomMimicType(LevelAccessor world) {
-        Biome biome = world.getBiome(blockPosition());
+        Holder<Biome> biomeHolder = world.getBiome(blockPosition());
         int i = this.random.nextInt(6);
-        if (biome.getPrecipitation() == Biome.Precipitation.SNOW) {
+        if (biomeHolder.value().getPrecipitation() == Biome.Precipitation.SNOW) {
             return this.random.nextBoolean() ? 1 : i;
-        } else if (biome.getBiomeCategory() == Biome.BiomeCategory.DESERT) {
+        } else if (Biome.getBiomeCategory(biomeHolder) == Biome.BiomeCategory.DESERT) {
             return this.random.nextBoolean() ? 4 : i;
         } else {
             return i;

@@ -2,6 +2,7 @@ package com.mrbysco.sfl.entity;
 
 import com.mrbysco.sfl.init.MimicRegistry;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
@@ -30,6 +31,7 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.biome.Biome.BiomeCategory;
 import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.pathfinder.BlockPathTypes;
@@ -97,9 +99,9 @@ public class WaterMimicEntity extends AbstractMimicEntity {
     }
 
     public static boolean spawnPredicate(EntityType<? extends AbstractMimicEntity> typeIn, ServerLevelAccessor worldIn, MobSpawnType reason, BlockPos pos, Random randomIn) {
-        Optional<ResourceKey<Biome>> optionalBiome = worldIn.getBiomeName(pos);
+        Holder<Biome> biomeHolder = worldIn.getBiome(pos);
         boolean lvt_6_1_ = worldIn.getDifficulty() != Difficulty.PEACEFUL && isValidLightLevel(worldIn, pos, randomIn) && (reason == MobSpawnType.SPAWNER || worldIn.getFluidState(pos).is(FluidTags.WATER));
-        if (!Objects.equals(optionalBiome, Optional.of(Biomes.RIVER)) && !Objects.equals(optionalBiome, Optional.of(Biomes.FROZEN_RIVER))) {
+        if (!(Biome.getBiomeCategory(biomeHolder) == BiomeCategory.RIVER)) {
             return randomIn.nextInt(40) == 0 && isUnderSeaLevel(worldIn, pos) && lvt_6_1_;
         } else {
             return randomIn.nextInt(15) == 0 && lvt_6_1_;

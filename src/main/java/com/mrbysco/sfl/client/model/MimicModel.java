@@ -33,7 +33,7 @@ public class MimicModel<T extends AbstractMimicEntity> extends EntityModel<T> {
 		this.RightFeet = BottomHalf.getChild("right_feet");
 		this.RightFeet2 = BottomHalf.getChild("right_feet2");
 	}
-	
+
 	public static LayerDefinition createBodyLayer() {
 		MeshDefinition meshdefinition = new MeshDefinition();
 		PartDefinition partdefinition = meshdefinition.getRoot();
@@ -139,7 +139,7 @@ public class MimicModel<T extends AbstractMimicEntity> extends EntityModel<T> {
 
 		return LayerDefinition.create(meshdefinition, 128, 128);
 	}
-	
+
 	@Override
 	public void setupAnim(T entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
 		this.TopHalf.xRot = Math.min(0, Mth.cos(limbSwing * 0.6662F) * 1.4F * limbSwingAmount);
