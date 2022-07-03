@@ -11,15 +11,15 @@ import net.minecraft.resources.ResourceLocation;
 import javax.annotation.Nullable;
 
 public class EndMimicRenderer extends MobRenderer<EndMimicEntity, MimicModel<EndMimicEntity>> {
-	private static final ResourceLocation TEXTURES = new ResourceLocation(ServerFriendlyLoot.MOD_ID, "textures/entity/mimic_end.png");
+    private static final ResourceLocation TEXTURES = new ResourceLocation(ServerFriendlyLoot.MOD_ID, "textures/entity/mimic_end.png");
 
-	public EndMimicRenderer(EntityRendererProvider.Context context) {
-		super(context, new MimicModel<>(context.bakeLayer(ClientHandler.MIMIC)), 0.25F);
-	}
+    public EndMimicRenderer(EntityRendererProvider.Context context) {
+        super(context, new MimicModel<>(context.bakeLayer(ClientHandler.MIMIC)), 0.25F);
+    }
 
-	@Nullable
-	@Override
-	public ResourceLocation getTextureLocation(EndMimicEntity entity) {
-		return TEXTURES;
-	}
+    @Nullable
+    @Override
+    public ResourceLocation getTextureLocation(EndMimicEntity entity) {
+        return TEXTURES;
+    }
 }

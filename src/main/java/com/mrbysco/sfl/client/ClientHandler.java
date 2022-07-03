@@ -12,16 +12,16 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 
 public class ClientHandler {
-	public static final ModelLayerLocation MIMIC = new ModelLayerLocation(new ResourceLocation(ServerFriendlyLoot.MOD_ID, "main"), "mimic");
+    public static final ModelLayerLocation MIMIC = new ModelLayerLocation(new ResourceLocation(ServerFriendlyLoot.MOD_ID, "main"), "mimic");
 
-	public static void registerEntityRenders(EntityRenderersEvent.RegisterRenderers event) {
-		event.registerEntityRenderer(MimicRegistry.MIMIC.get(), MimicRenderer::new);
-		event.registerEntityRenderer(MimicRegistry.NETHER_MIMIC.get(), NetherMimicRenderer::new);
-		event.registerEntityRenderer(MimicRegistry.END_MIMIC.get(), EndMimicRenderer::new);
-		event.registerEntityRenderer(MimicRegistry.WATER_MIMIC.get(), WaterMimicRenderer::new);
-	}
+    public static void registerEntityRenders(EntityRenderersEvent.RegisterRenderers event) {
+        event.registerEntityRenderer(MimicRegistry.MIMIC.get(), MimicRenderer::new);
+        event.registerEntityRenderer(MimicRegistry.NETHER_MIMIC.get(), NetherMimicRenderer::new);
+        event.registerEntityRenderer(MimicRegistry.END_MIMIC.get(), EndMimicRenderer::new);
+        event.registerEntityRenderer(MimicRegistry.WATER_MIMIC.get(), WaterMimicRenderer::new);
+    }
 
-	public static void registerLayerDefinitions(EntityRenderersEvent.RegisterLayerDefinitions event) {
-		event.registerLayerDefinition(MIMIC, () -> MimicModel.createBodyLayer());
-	}
+    public static void registerLayerDefinitions(EntityRenderersEvent.RegisterLayerDefinitions event) {
+        event.registerLayerDefinition(MIMIC, () -> MimicModel.createBodyLayer());
+    }
 }

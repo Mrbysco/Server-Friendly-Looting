@@ -11,19 +11,19 @@ import net.minecraft.resources.ResourceLocation;
 import javax.annotation.Nullable;
 
 public class NetherMimicRenderer extends MobRenderer<NetherMimicEntity, MimicModel<NetherMimicEntity>> {
-	private static final ResourceLocation NETHER1 = new ResourceLocation(ServerFriendlyLoot.MOD_ID, "textures/entity/mimic_nether1.png");
-	private static final ResourceLocation NETHER2 = new ResourceLocation(ServerFriendlyLoot.MOD_ID, "textures/entity/mimic_nether2.png");
+    private static final ResourceLocation NETHER1 = new ResourceLocation(ServerFriendlyLoot.MOD_ID, "textures/entity/mimic_nether1.png");
+    private static final ResourceLocation NETHER2 = new ResourceLocation(ServerFriendlyLoot.MOD_ID, "textures/entity/mimic_nether2.png");
 
-	public NetherMimicRenderer(EntityRendererProvider.Context context) {
-		super(context, new MimicModel<>(context.bakeLayer(ClientHandler.MIMIC)), 0.25F);
-	}
+    public NetherMimicRenderer(EntityRendererProvider.Context context) {
+        super(context, new MimicModel<>(context.bakeLayer(ClientHandler.MIMIC)), 0.25F);
+    }
 
-	@Nullable
-	@Override
-	public ResourceLocation getTextureLocation(NetherMimicEntity entity) {
-		return switch (entity.getMimicType()) {
-			default -> NETHER1;
-			case 1 -> NETHER2;
-		};
-	}
+    @Nullable
+    @Override
+    public ResourceLocation getTextureLocation(NetherMimicEntity entity) {
+        return switch (entity.getMimicType()) {
+            default -> NETHER1;
+            case 1 -> NETHER2;
+        };
+    }
 }

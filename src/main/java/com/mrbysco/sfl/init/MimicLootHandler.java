@@ -10,8 +10,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class MimicLootHandler {
-	private static final HashMap<ResourceKey<Level>, ArrayList<ResourceLocation>> DIMENSIONAL_TABLES = new HashMap<>();
-	private static final ArrayList<ResourceLocation> WATER_LOOT_TABLES = new ArrayList<>();
+	private static HashMap<ResourceKey<Level>, ArrayList<ResourceLocation>> DIMENSIONAL_TABLES = new HashMap<>();
+	private static ArrayList<ResourceLocation> WATER_LOOT_TABLES = new ArrayList<>();
 
 	static {
 		DIMENSIONAL_TABLES.put(Level.OVERWORLD, new ArrayList<>());

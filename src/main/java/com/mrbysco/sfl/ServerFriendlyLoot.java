@@ -27,43 +27,43 @@ import java.util.List;
 
 @Mod(ServerFriendlyLoot.MOD_ID)
 public class ServerFriendlyLoot {
-	public static final String MOD_ID = "sfl";
-	public static final Logger LOGGER = LogManager.getLogger();
+    public static final String MOD_ID = "sfl";
+    public static final Logger LOGGER = LogManager.getLogger();
 
-	public ServerFriendlyLoot() {
-		IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
-		ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, SFLConfig.spawnSpec, "sfl_spawning.toml");
-		eventBus.register(SFLConfig.class);
+    public ServerFriendlyLoot() {
+        IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
+        ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, SFLConfig.spawnSpec, "sfl_spawning.toml");
+        eventBus.register(SFLConfig.class);
 
-		MimicRegistry.ENTITIES.register(eventBus);
-		MimicRegistry.ITEMS.register(eventBus);
+        MimicRegistry.ENTITIES.register(eventBus);
+        MimicRegistry.ITEMS.register(eventBus);
 
-		eventBus.addListener(MimicEntities::registerEntityAttributes);
-		eventBus.addListener(this::setup);
+        eventBus.addListener(MimicEntities::registerEntityAttributes);
+        eventBus.addListener(this::setup);
 
-		MinecraftForge.EVENT_BUS.register(this);
+        MinecraftForge.EVENT_BUS.register(this);
 
-		DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
-			eventBus.addListener(ClientHandler::registerEntityRenders);
-			eventBus.addListener(ClientHandler::registerLayerDefinitions);
-		});
-	}
+        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
+            eventBus.addListener(ClientHandler::registerEntityRenders);
+            eventBus.addListener(ClientHandler::registerLayerDefinitions);
+        });
+    }
 
-	private void setup(final FMLCommonSetupEvent event) {
-		MimicEntities.setupPlacement();
-	}
+    private void setup(final FMLCommonSetupEvent event) {
+        MimicEntities.setupPlacement();
+    }
 
-	@SubscribeEvent
-	public void onSpawn(final LivingSpawnEvent.CheckSpawn event) {
-		if (event.getSpawnReason().equals(MobSpawnType.NATURAL) && event.getEntityLiving() instanceof AbstractMimicEntity) {
-			List<? extends String> blacklist = SFLConfig.SPAWN.dimension_blacklist.get();
-			if (!blacklist.isEmpty()) {
-				ResourceLocation dimensionLocation = ((Level) event.getWorld()).dimension().location();
-				for (String dimension : blacklist) {
-					if (!dimension.isEmpty() && new ResourceLocation(dimension).equals(dimensionLocation))
-						event.setResult(Event.Result.DENY);
-				}
-			}
-		}
-	}
+    @SubscribeEvent
+    public void onSpawn(final LivingSpawnEvent.CheckSpawn event) {
+        if (event.getSpawnReason().equals(MobSpawnType.NATURAL) && event.getEntityLiving() instanceof AbstractMimicEntity) {
+            List<? extends String> blacklist = SFLConfig.SPAWN.dimension_blacklist.get();
+            if (!blacklist.isEmpty()) {
+                ResourceLocation dimensionLocation = ((Level)event.getWorld()).dimension().location();
+                for (String dimension : blacklist) {
+                    if (!dimension.isEmpty() && new ResourceLocation(dimension).equals(dimensionLocation))
+                        event.setResult(Event.Result.DENY);
+                }
+            }
+        }
+    }
 }
