@@ -1,4 +1,5 @@
-[![build](https://github.com/Mrbysco/Server-Friendly-Looting/actions/workflows/build.yml/badge.svg)](https://github.com/Mrbysco/Server-Friendly-Looting/actions/workflows/build.yml) [![](http://cf.way2muchnoise.eu/versions/351155_latest.svg)](https://www.curseforge.com/minecraft/mc-mods/server-friendly-looting)
+[![build](https://github.com/Mrbysco/Server-Friendly-Looting/actions/workflows/build.yml/badge.svg)](https://github.com/Mrbysco/Server-Friendly-Looting/actions/workflows/build.yml) 
+[![](http://cf.way2muchnoise.eu/versions/351155.svg)](https://www.curseforge.com/minecraft/mc-mods/server-friendly-looting)
 
 # Server Friendly Looting #
 
