@@ -35,7 +35,7 @@ public class ServerFriendlyLoot {
 		ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, SFLConfig.spawnSpec, "sfl_spawning.toml");
 		eventBus.register(SFLConfig.class);
 
-		MimicRegistry.ENTITIES.register(eventBus);
+		MimicRegistry.ENTITY_TYPES.register(eventBus);
 		MimicRegistry.ITEMS.register(eventBus);
 
 		eventBus.addListener(MimicEntities::registerEntityAttributes);
@@ -55,10 +55,10 @@ public class ServerFriendlyLoot {
 
 	@SubscribeEvent
 	public void onSpawn(final LivingSpawnEvent.CheckSpawn event) {
-		if (event.getSpawnReason().equals(MobSpawnType.NATURAL) && event.getEntityLiving() instanceof AbstractMimicEntity) {
+		if (event.getSpawnReason().equals(MobSpawnType.NATURAL) && event.getEntity() instanceof AbstractMimicEntity) {
 			List<? extends String> blacklist = SFLConfig.SPAWN.dimension_blacklist.get();
 			if (!blacklist.isEmpty()) {
-				ResourceLocation dimensionLocation = ((Level) event.getWorld()).dimension().location();
+				ResourceLocation dimensionLocation = ((Level) event.getLevel()).dimension().location();
 				for (String dimension : blacklist) {
 					if (!dimension.isEmpty() && new ResourceLocation(dimension).equals(dimensionLocation))
 						event.setResult(Event.Result.DENY);

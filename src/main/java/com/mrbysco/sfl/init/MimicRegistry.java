@@ -17,12 +17,12 @@ import net.minecraftforge.registries.RegistryObject;
 
 public class MimicRegistry {
 	public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, ServerFriendlyLoot.MOD_ID);
-	public static final DeferredRegister<EntityType<?>> ENTITIES = DeferredRegister.create(ForgeRegistries.ENTITIES, ServerFriendlyLoot.MOD_ID);
+	public static final DeferredRegister<EntityType<?>> ENTITY_TYPES = DeferredRegister.create(ForgeRegistries.ENTITY_TYPES, ServerFriendlyLoot.MOD_ID);
 
-	public static final RegistryObject<EntityType<MimicEntity>> MIMIC = ENTITIES.register("mimic", () -> register("mimic", EntityType.Builder.<MimicEntity>of(MimicEntity::new, MobCategory.MONSTER).sized(1.0F, 0.9F)));
-	public static final RegistryObject<EntityType<EndMimicEntity>> END_MIMIC = ENTITIES.register("end_mimic", () -> register("end_mimic", EntityType.Builder.<EndMimicEntity>of(EndMimicEntity::new, MobCategory.MONSTER).sized(1.0F, 0.9F)));
-	public static final RegistryObject<EntityType<NetherMimicEntity>> NETHER_MIMIC = ENTITIES.register("nether_mimic", () -> register("nether_mimic", EntityType.Builder.<NetherMimicEntity>of(NetherMimicEntity::new, MobCategory.MONSTER).sized(1.0F, 0.9F)));
-	public static final RegistryObject<EntityType<WaterMimicEntity>> WATER_MIMIC = ENTITIES.register("water_mimic", () -> register("water_mimic", EntityType.Builder.<WaterMimicEntity>of(WaterMimicEntity::new, MobCategory.MONSTER).sized(1.0F, 0.9F)));
+	public static final RegistryObject<EntityType<MimicEntity>> MIMIC = ENTITY_TYPES.register("mimic", () -> register("mimic", EntityType.Builder.<MimicEntity>of(MimicEntity::new, MobCategory.MONSTER).sized(1.0F, 0.9F)));
+	public static final RegistryObject<EntityType<EndMimicEntity>> END_MIMIC = ENTITY_TYPES.register("end_mimic", () -> register("end_mimic", EntityType.Builder.<EndMimicEntity>of(EndMimicEntity::new, MobCategory.MONSTER).sized(1.0F, 0.9F)));
+	public static final RegistryObject<EntityType<NetherMimicEntity>> NETHER_MIMIC = ENTITY_TYPES.register("nether_mimic", () -> register("nether_mimic", EntityType.Builder.<NetherMimicEntity>of(NetherMimicEntity::new, MobCategory.MONSTER).sized(1.0F, 0.9F)));
+	public static final RegistryObject<EntityType<WaterMimicEntity>> WATER_MIMIC = ENTITY_TYPES.register("water_mimic", () -> register("water_mimic", EntityType.Builder.<WaterMimicEntity>of(WaterMimicEntity::new, MobCategory.MONSTER).sized(1.0F, 0.9F)));
 
 	public static final RegistryObject<Item> MIMIC_SPAWN_EGG = ITEMS.register("mimic_spawn_egg", () -> new ForgeSpawnEggItem(() -> MIMIC.get(), 8282679, 16368742, itemBuilder()));
 	public static final RegistryObject<Item> END_MIMIC_SPAWN_EGG = ITEMS.register("end_mimic_spawn_egg", () -> new ForgeSpawnEggItem(() -> END_MIMIC.get(), 1057581, 16368742, itemBuilder()));
