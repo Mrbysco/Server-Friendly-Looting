@@ -1,39 +1,42 @@
 package com.mrbysco.sfl.compat.ct;
 
+import com.blamejared.crafttweaker.api.CraftTweakerAPI;
+import com.blamejared.crafttweaker.api.annotation.ZenRegister;
 import com.mrbysco.sfl.init.MimicLootHandler;
 import net.minecraft.resources.ResourceLocation;
+import org.openzen.zencode.java.ZenCodeType;
 
 import java.util.List;
 
-//@ZenRegister
-//@Name("mods.cft.DimensionalTables")
+@ZenRegister
+@ZenCodeType.Name("mods.cft.DimensionalTables")
 public class DimensionalTablesCT {
-	//    @Method
+	@ZenCodeType.Method
 	public static void addTable(String dimension, String lootTable) {
-//        CraftTweakerAPI.apply(new AddDimensionalTableAction(dimension, lootTable));
+		CraftTweakerAPI.apply(new AddDimensionalTableAction(dimension, lootTable));
 	}
 
-	//    @Method
+	@ZenCodeType.Method
 	public static void removeTable(String dimension, String lootTable) {
-//        CraftTweakerAPI.apply(new AddDimensionalTableAction(dimension, lootTable));
+		CraftTweakerAPI.apply(new RemoveDimensionalTableAction(dimension, lootTable));
 	}
 
-	//    @Method
+	@ZenCodeType.Method
 	public static void addWaterTable(String lootTable) {
-//        CraftTweakerAPI.apply(new AddWaterTableAction(lootTable));
+		CraftTweakerAPI.apply(new AddWaterTableAction(lootTable));
 	}
 
-	//    @Method
+	@ZenCodeType.Method
 	public static void removeWaterTable(String lootTable) {
-//        CraftTweakerAPI.apply(new RemoveWaterTableAction(lootTable));
+		CraftTweakerAPI.apply(new RemoveWaterTableAction(lootTable));
 	}
 
-	//    @Getter("tables")
+	@ZenCodeType.Getter("tables")
 	public List<String> getTables(String dimension) {
 		return MimicLootHandler.getStringDimensionTables(new ResourceLocation(dimension));
 	}
 
-	//    @Getter("waterTables")
+	@ZenCodeType.Getter("waterTables")
 	public List<String> getWaterTables() {
 		return MimicLootHandler.getStringWaterTables();
 	}
