@@ -8,7 +8,6 @@ import com.mrbysco.sfl.entity.WaterMimicEntity;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.common.ForgeSpawnEggItem;
 import net.minecraftforge.registries.DeferredRegister;
@@ -38,6 +37,6 @@ public class MimicRegistry {
 	}
 
 	private static Item.Properties itemBuilder() {
-		return new Item.Properties().tab(CreativeModeTab.TAB_MISC);
+		return new Item.Properties();
 	}
 }

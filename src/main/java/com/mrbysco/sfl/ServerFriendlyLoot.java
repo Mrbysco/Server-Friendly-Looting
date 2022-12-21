@@ -7,9 +7,12 @@ import com.mrbysco.sfl.init.MimicEntities;
 import com.mrbysco.sfl.init.MimicRegistry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.item.CreativeModeTabs;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.CreativeModeTabEvent;
 import net.minecraftforge.event.entity.living.LivingSpawnEvent;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -18,7 +21,6 @@ import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -38,8 +40,9 @@ public class ServerFriendlyLoot {
 		MimicRegistry.ENTITY_TYPES.register(eventBus);
 		MimicRegistry.ITEMS.register(eventBus);
 
+		eventBus.addListener(MimicEntities::registerSpawnPlacements);
 		eventBus.addListener(MimicEntities::registerEntityAttributes);
-		eventBus.addListener(this::setup);
+		eventBus.addListener(this::addTabContents);
 
 		MinecraftForge.EVENT_BUS.register(this);
 
@@ -49,8 +52,11 @@ public class ServerFriendlyLoot {
 		});
 	}
 
-	private void setup(final FMLCommonSetupEvent event) {
-		MimicEntities.setupPlacement();
+	private void addTabContents(final CreativeModeTabEvent.BuildContents event) {
+		if (event.getTab() == CreativeModeTabs.SPAWN_EGGS) {
+			List<ItemStack> stacks = MimicRegistry.ITEMS.getEntries().stream().map(reg -> new ItemStack(reg.get())).toList();
+			event.acceptAll(stacks);
+		}
 	}
 
 	@SubscribeEvent

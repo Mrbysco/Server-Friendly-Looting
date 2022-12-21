@@ -1,6 +1,6 @@
 package com.mrbysco.sfl.init;
 
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
@@ -90,7 +90,7 @@ public class MimicLootHandler {
 	}
 
 	public static ResourceKey<Level> getKeyFromLocation(ResourceLocation loc) {
-		return ResourceKey.create(Registry.DIMENSION_REGISTRY, loc);
+		return ResourceKey.create(Registries.DIMENSION, loc);
 	}
 
 	public static void addDimensionalTable(ResourceLocation dimensionLocation, ResourceLocation lootTable) {
