@@ -10,6 +10,7 @@ displayName="Server Friendly Looting"
 displayURL="https://www.curseforge.com/minecraft/mc-mods/Server-Friendly-Looting"
 authors="ShyNieke, Mrbysco"
 description='''Adds more server friendly ways of getting loot'''
+
 [[dependencies.sfl]]
 modId="minecraft"
 mandatory=true
