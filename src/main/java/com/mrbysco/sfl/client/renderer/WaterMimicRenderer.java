@@ -11,15 +11,15 @@ import net.minecraft.resources.ResourceLocation;
 import javax.annotation.Nullable;
 
 public class WaterMimicRenderer extends MobRenderer<WaterMimicEntity, MimicModel<WaterMimicEntity>> {
-    private static final ResourceLocation TEXTURE = new ResourceLocation(ServerFriendlyLoot.MOD_ID, "textures/entity/mimic_water.png");
+	private static final ResourceLocation TEXTURE = new ResourceLocation(ServerFriendlyLoot.MOD_ID, "textures/entity/mimic_water.png");
 
-    public WaterMimicRenderer(EntityRendererProvider.Context context) {
-        super(context, new MimicModel<>(context.bakeLayer(ClientHandler.MIMIC)), 0.25F);
-    }
+	public WaterMimicRenderer(EntityRendererProvider.Context context) {
+		super(context, new MimicModel<>(context.bakeLayer(ClientHandler.MIMIC)), 0.25F);
+	}
 
-    @Nullable
-    @Override
-    public ResourceLocation getTextureLocation(WaterMimicEntity entity) {
-        return TEXTURE;
-    }
+	@Nullable
+	@Override
+	public ResourceLocation getTextureLocation(WaterMimicEntity entity) {
+		return TEXTURE;
+	}
 }

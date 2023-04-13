@@ -27,82 +27,81 @@ import net.minecraft.world.level.biome.Biome;
 import javax.annotation.Nullable;
 
 public class MimicEntity extends AbstractMimicEntity {
-    private static final EntityDataAccessor<Integer> MIMIC_TYPE = SynchedEntityData.defineId(MimicEntity.class, EntityDataSerializers.INT);
+	private static final EntityDataAccessor<Integer> MIMIC_TYPE = SynchedEntityData.defineId(MimicEntity.class, EntityDataSerializers.INT);
 
-    public MimicEntity(EntityType<? extends MimicEntity> type, Level worldIn) {
-        super(type, worldIn);
-    }
+	public MimicEntity(EntityType<? extends MimicEntity> type, Level worldIn) {
+		super(type, worldIn);
+	}
 
-    public MimicEntity(Level worldIn)
-    {
-        super(MimicRegistry.MIMIC.get(), worldIn);
-    }
+	public MimicEntity(Level worldIn) {
+		super(MimicRegistry.MIMIC.get(), worldIn);
+	}
 
-    @Override
-    protected void registerGoals() {
-        super.registerGoals();
-        this.goalSelector.addGoal(5, new MeleeAttackGoal(this, 1.0D, true));
-        this.goalSelector.addGoal(8, new WaterAvoidingRandomStrollGoal(this, 1.0D));
-        this.goalSelector.addGoal(10, new LookAtPlayerGoal(this, Player.class, 8.0F));
-        this.goalSelector.addGoal(10, new RandomLookAroundGoal(this));
-        this.targetSelector.addGoal(3, (new HurtByTargetGoal(this)).setAlertOthers());
-        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, true));
-    }
+	@Override
+	protected void registerGoals() {
+		super.registerGoals();
+		this.goalSelector.addGoal(5, new MeleeAttackGoal(this, 1.0D, true));
+		this.goalSelector.addGoal(8, new WaterAvoidingRandomStrollGoal(this, 1.0D));
+		this.goalSelector.addGoal(10, new LookAtPlayerGoal(this, Player.class, 8.0F));
+		this.goalSelector.addGoal(10, new RandomLookAroundGoal(this));
+		this.targetSelector.addGoal(3, (new HurtByTargetGoal(this)).setAlertOthers());
+		this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, true));
+	}
 
-    public static AttributeSupplier.Builder registerAttributes() {
-        return AbstractMimicEntity.createMobAttributes()
-                .add(Attributes.MAX_HEALTH, 12.0D)
-                .add(Attributes.ATTACK_DAMAGE, 4.0D)
-                .add(Attributes.MOVEMENT_SPEED, (double)0.25F);
-    }
+	public static AttributeSupplier.Builder registerAttributes() {
+		return AbstractMimicEntity.createMobAttributes()
+				.add(Attributes.MAX_HEALTH, 12.0D)
+				.add(Attributes.ATTACK_DAMAGE, 4.0D)
+				.add(Attributes.MOVEMENT_SPEED, (double) 0.25F);
+	}
 
-    @Override
-    public void addAdditionalSaveData(CompoundTag compound) {
-        super.addAdditionalSaveData(compound);
+	@Override
+	public void addAdditionalSaveData(CompoundTag compound) {
+		super.addAdditionalSaveData(compound);
 
-        compound.putInt("MimicType", this.getMimicType());
-    }
+		compound.putInt("MimicType", this.getMimicType());
+	}
 
-    @Override
-    public void readAdditionalSaveData(CompoundTag compound) {
-        super.readAdditionalSaveData(compound);
+	@Override
+	public void readAdditionalSaveData(CompoundTag compound) {
+		super.readAdditionalSaveData(compound);
 
-        this.setMimicType(compound.getInt("MimicType"));
-    }
+		this.setMimicType(compound.getInt("MimicType"));
+	}
 
-    @Nullable
-    @Override
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn, @Nullable CompoundTag dataTag) {
-        SpawnGroupData data = super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
-        int i = this.getRandomMimicType(worldIn);
-        this.setMimicType(i);
+	@Nullable
+	@Override
+	public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn, @Nullable CompoundTag dataTag) {
+		SpawnGroupData data = super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
+		int i = this.getRandomMimicType(worldIn);
+		this.setMimicType(i);
 
-        return data;
-    }
+		return data;
+	}
 
 
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(MIMIC_TYPE, 0);
-    }
+	protected void defineSynchedData() {
+		super.defineSynchedData();
+		this.entityData.define(MIMIC_TYPE, 0);
+	}
 
-    public int getMimicType() {
-        return this.entityData.get(MIMIC_TYPE);
-    }
+	public int getMimicType() {
+		return this.entityData.get(MIMIC_TYPE);
+	}
 
-    public void setMimicType(int mimicTypeId) {
-        this.entityData.set(MIMIC_TYPE, mimicTypeId);
-    }
+	public void setMimicType(int mimicTypeId) {
+		this.entityData.set(MIMIC_TYPE, mimicTypeId);
+	}
 
-    private int getRandomMimicType(LevelAccessor world) {
-        Holder<Biome> biomeHolder = world.getBiome(blockPosition());
-        int i = this.random.nextInt(6);
-        if (biomeHolder.value().getPrecipitation() == Biome.Precipitation.SNOW) {
-            return this.random.nextBoolean() ? 1 : i;
-        } else if (Biome.getBiomeCategory(biomeHolder) == Biome.BiomeCategory.DESERT) {
-            return this.random.nextBoolean() ? 4 : i;
-        } else {
-            return i;
-        }
-    }
+	private int getRandomMimicType(LevelAccessor world) {
+		Holder<Biome> biomeHolder = world.getBiome(blockPosition());
+		int i = this.random.nextInt(6);
+		if (biomeHolder.value().getPrecipitation() == Biome.Precipitation.SNOW) {
+			return this.random.nextBoolean() ? 1 : i;
+		} else if (Biome.getBiomeCategory(biomeHolder) == Biome.BiomeCategory.DESERT) {
+			return this.random.nextBoolean() ? 4 : i;
+		} else {
+			return i;
+		}
+	}
 }
