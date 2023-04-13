@@ -1,6 +1,7 @@
 package com.mrbysco.sfl.entity;
 
 import com.mrbysco.sfl.init.MimicRegistry;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -74,7 +75,7 @@ public class MimicEntity extends AbstractMimicEntity {
 	@Override
 	public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn, @Nullable CompoundTag dataTag) {
 		SpawnGroupData data = super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
-		int i = this.getRandomMimicType(worldIn);
+		int i = this.getRandomMimicType(worldIn, blockPosition());
 		this.setMimicType(i);
 
 		return data;
@@ -94,10 +95,10 @@ public class MimicEntity extends AbstractMimicEntity {
 		this.entityData.set(MIMIC_TYPE, mimicTypeId);
 	}
 
-	private int getRandomMimicType(LevelAccessor levelAccessor) {
+	private int getRandomMimicType(LevelAccessor levelAccessor, BlockPos blockPos) {
 		Holder<Biome> biomeHolder = levelAccessor.getBiome(blockPosition());
 		int i = this.random.nextInt(6);
-		if (biomeHolder.value().getPrecipitation() == Biome.Precipitation.SNOW) {
+		if (biomeHolder.value().coldEnoughToSnow(blockPos)) {
 			return this.random.nextBoolean() ? 1 : i;
 		} else if (biomeHolder.is(Tags.Biomes.IS_SANDY)) {
 			return this.random.nextBoolean() ? 4 : i;

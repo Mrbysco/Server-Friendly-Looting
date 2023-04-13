@@ -13,8 +13,7 @@ import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.CreativeModeTabEvent;
-import net.minecraftforge.event.entity.living.LivingSpawnEvent;
-import net.minecraftforge.eventbus.api.Event;
+import net.minecraftforge.event.entity.living.MobSpawnEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DistExecutor;
@@ -60,14 +59,14 @@ public class ServerFriendlyLoot {
 	}
 
 	@SubscribeEvent
-	public void onSpawn(final LivingSpawnEvent.CheckSpawn event) {
-		if (event.getSpawnReason().equals(MobSpawnType.NATURAL) && event.getEntity() instanceof AbstractMimicEntity) {
+	public void onSpawn(final MobSpawnEvent.FinalizeSpawn event) {
+		if (event.getSpawnType().equals(MobSpawnType.NATURAL) && event.getEntity() instanceof AbstractMimicEntity) {
 			List<? extends String> blacklist = SFLConfig.SPAWN.dimension_blacklist.get();
 			if (!blacklist.isEmpty()) {
 				ResourceLocation dimensionLocation = ((Level) event.getLevel()).dimension().location();
 				for (String dimension : blacklist) {
 					if (!dimension.isEmpty() && new ResourceLocation(dimension).equals(dimensionLocation))
-						event.setResult(Event.Result.DENY);
+						event.setSpawnCancelled(true);
 				}
 			}
 		}

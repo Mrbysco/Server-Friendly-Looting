@@ -236,7 +236,7 @@ public class WaterMimicEntity extends AbstractMimicEntity {
 		@Nullable
 		private Vec3 getWaterPos() {
 			RandomSource random = this.mob.getRandom();
-			BlockPos pos = new BlockPos(this.mob.getX(), this.mob.getBoundingBox().minY, this.mob.getZ());
+			BlockPos pos = BlockPos.containing(this.mob.getX(), this.mob.getBoundingBox().minY, this.mob.getZ());
 
 			for (int i = 0; i < 10; ++i) {
 				BlockPos offPos = pos.offset(random.nextInt(20) - 10, 2 - random.nextInt(8), random.nextInt(20) - 10);

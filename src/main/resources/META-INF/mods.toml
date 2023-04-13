@@ -1,5 +1,5 @@
 modLoader="javafml"
-loaderVersion="[44,)"
+loaderVersion="[45,)"
 issueTrackerURL="https://github.com/mrbysco/Server-Friendly-Looting/issues"
 license="MIT"
 
@@ -13,12 +13,6 @@ description='''Adds more server friendly ways of getting loot'''
 [[dependencies.sfl]]
 modId="minecraft"
 mandatory=true
-versionRange="[1.19.3,1.20)"
-ordering="NONE"
-side="BOTH"
-[[dependencies.sfl]]
-modId="forge"
-mandatory=true
-versionRange="[44.0.36,)"
+versionRange="[1.19.4,1.20)"
 ordering="NONE"
 side="BOTH"

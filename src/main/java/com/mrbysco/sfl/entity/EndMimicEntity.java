@@ -5,8 +5,8 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.damagesource.IndirectEntityDamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
@@ -128,9 +128,9 @@ public class EndMimicEntity extends AbstractMimicEntity {
 	public boolean hurt(DamageSource source, float amount) {
 		if (this.isInvulnerableTo(source)) {
 			return false;
-		} else if (!(source instanceof IndirectEntityDamageSource)) {
+		} else if (!source.isIndirect()) {
 			boolean flag = super.hurt(source, amount);
-			if (source.isBypassArmor() && this.random.nextInt(10) != 0) {
+			if (!source.is(DamageTypeTags.BYPASSES_ARMOR) && this.random.nextInt(10) != 0) {
 				this.teleportRandomly();
 			}
 
