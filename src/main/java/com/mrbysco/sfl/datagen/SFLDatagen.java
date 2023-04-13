@@ -34,22 +34,22 @@ public class SFLDatagen {
 		ExistingFileHelper helper = event.getExistingFileHelper();
 
 		if (event.includeServer()) {
-			final HolderSet.Named<Biome> overworldTag = new HolderSet.Named<>(ops.registry(Registry.BIOME_REGISTRY).get(), BiomeTags.IS_OVERWORLD);
+			final HolderSet.Named<Biome> overworldTag = new HolderSet.Named<>(ops.registry(Registry.BIOME_REGISTRY).orElseThrow(), BiomeTags.IS_OVERWORLD);
 			final BiomeModifier addOverworldSpawn = AddSpawnsBiomeModifier.singleSpawn(
 					overworldTag,
 					new SpawnerData(MimicRegistry.MIMIC.get(), 1, 1, 1));
 
-			final HolderSet.Named<Biome> netherTag = new HolderSet.Named<>(ops.registry(Registry.BIOME_REGISTRY).get(), BiomeTags.IS_NETHER);
+			final HolderSet.Named<Biome> netherTag = new HolderSet.Named<>(ops.registry(Registry.BIOME_REGISTRY).orElseThrow(), BiomeTags.IS_NETHER);
 			final BiomeModifier addNetherSpawn = AddSpawnsBiomeModifier.singleSpawn(
 					netherTag,
 					new SpawnerData(MimicRegistry.NETHER_MIMIC.get(), 1, 1, 1));
 
-			final HolderSet.Named<Biome> endTag = new HolderSet.Named<>(ops.registry(Registry.BIOME_REGISTRY).get(), BiomeTags.IS_END);
+			final HolderSet.Named<Biome> endTag = new HolderSet.Named<>(ops.registry(Registry.BIOME_REGISTRY).orElseThrow(), BiomeTags.IS_END);
 			final BiomeModifier addEndSpawn = AddSpawnsBiomeModifier.singleSpawn(
 					endTag,
 					new SpawnerData(MimicRegistry.END_MIMIC.get(), 1, 1, 1));
 
-			final HolderSet.Named<Biome> waterTag = new HolderSet.Named<>(ops.registry(Registry.BIOME_REGISTRY).get(), Tags.Biomes.IS_WATER);
+			final HolderSet.Named<Biome> waterTag = new HolderSet.Named<>(ops.registry(Registry.BIOME_REGISTRY).orElseThrow(), Tags.Biomes.IS_WATER);
 			final BiomeModifier addWaterTag = AddSpawnsBiomeModifier.singleSpawn(
 					waterTag,
 					new SpawnerData(MimicRegistry.WATER_MIMIC.get(), 1, 1, 1));
