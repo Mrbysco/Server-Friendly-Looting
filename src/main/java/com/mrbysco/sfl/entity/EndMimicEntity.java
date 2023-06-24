@@ -59,9 +59,9 @@ public class EndMimicEntity extends AbstractMimicEntity {
 	}
 
 	protected void customServerAiStep() {
-		if (this.level.isDay() && this.tickCount >= this.targetChangeTime + 600) {
+		if (this.level().isDay() && this.tickCount >= this.targetChangeTime + 600) {
 			float f = this.getLightLevelDependentMagicValue();
-			if (f > 0.5F && this.level.canSeeSky(blockPosition()) && this.random.nextFloat() * 30.0F < (f - 0.4F) * 2.0F) {
+			if (f > 0.5F && this.level().canSeeSky(blockPosition()) && this.random.nextFloat() * 30.0F < (f - 0.4F) * 2.0F) {
 				this.setTarget((LivingEntity) null);
 				this.teleportRandomly();
 			}
@@ -80,18 +80,18 @@ public class EndMimicEntity extends AbstractMimicEntity {
 	private boolean teleport(double x, double y, double z) {
 		BlockPos.MutableBlockPos blockpos$mutableblockpos = new BlockPos.MutableBlockPos(x, y, z);
 
-		while (blockpos$mutableblockpos.getY() > 0 && !this.level.getBlockState(blockpos$mutableblockpos).getMaterial().blocksMotion()) {
+		while (blockpos$mutableblockpos.getY() > 0 && !this.level().getBlockState(blockpos$mutableblockpos).blocksMotion()) {
 			blockpos$mutableblockpos.move(Direction.DOWN);
 		}
 
-		if (!this.level.getBlockState(blockpos$mutableblockpos).getMaterial().blocksMotion()) {
+		if (!this.level().getBlockState(blockpos$mutableblockpos).blocksMotion()) {
 			return false;
 		} else {
 			EntityTeleportEvent.EnderEntity event = new EntityTeleportEvent.EnderEntity(this, x, y, z);
 			if (net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(event)) return false;
 			boolean flag = this.randomTeleport(event.getTargetX(), event.getTargetY(), event.getTargetZ(), true);
 			if (flag) {
-				this.level.playSound((Player) null, this.xo, this.yo, this.zo, SoundEvents.ENDERMAN_TELEPORT, this.getSoundSource(), 1.0F, 1.0F);
+				this.level().playSound((Player) null, this.xo, this.yo, this.zo, SoundEvents.ENDERMAN_TELEPORT, this.getSoundSource(), 1.0F, 1.0F);
 				this.playSound(SoundEvents.ENDERMAN_TELEPORT, 1.0F, 1.0F);
 			}
 
@@ -115,9 +115,9 @@ public class EndMimicEntity extends AbstractMimicEntity {
 	}
 
 	public void aiStep() {
-		if (this.level.isClientSide) {
+		if (this.level().isClientSide) {
 			for (int i = 0; i < 2; ++i) {
-				this.level.addParticle(ParticleTypes.PORTAL, this.getX() + (this.random.nextDouble() - 0.5D) * (double) this.getBbWidth(), this.getY() + this.random.nextDouble() * (double) this.getBbHeight() - 0.25D, this.getZ() + (this.random.nextDouble() - 0.5D) * (double) this.getBbWidth(), (this.random.nextDouble() - 0.5D) * 2.0D, -this.random.nextDouble(), (this.random.nextDouble() - 0.5D) * 2.0D);
+				this.level().addParticle(ParticleTypes.PORTAL, this.getX() + (this.random.nextDouble() - 0.5D) * (double) this.getBbWidth(), this.getY() + this.random.nextDouble() * (double) this.getBbHeight() - 0.25D, this.getZ() + (this.random.nextDouble() - 0.5D) * (double) this.getBbWidth(), (this.random.nextDouble() - 0.5D) * 2.0D, -this.random.nextDouble(), (this.random.nextDouble() - 0.5D) * 2.0D);
 			}
 		}
 

@@ -4,6 +4,7 @@ import com.mrbysco.sfl.init.MimicLootHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.RandomSource;
@@ -24,9 +25,10 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.storage.loot.BuiltInLootTables;
-import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fluids.FluidType;
 
@@ -55,8 +57,16 @@ public abstract class AbstractMimicEntity extends Monster {
 	@Override
 	protected void dropFromLootTable(DamageSource damageSourceIn, boolean wasRecentlyHit) {
 		ResourceLocation resourcelocation = this.getLootTable();
-		LootTable loottable = this.level.getServer().getLootTables().get(resourcelocation);
-		LootContext.Builder lootcontext$builder = this.createLootContext(wasRecentlyHit, damageSourceIn);
+		LootTable loottable = this.level().getServer().getLootData().getLootTable(resourcelocation);
+
+		LootParams.Builder lootcontext$builder = (new LootParams.Builder((ServerLevel) this.level()))
+				.withParameter(LootContextParams.THIS_ENTITY, this).withParameter(LootContextParams.ORIGIN, this.position())
+				.withParameter(LootContextParams.DAMAGE_SOURCE, damageSourceIn).withOptionalParameter(LootContextParams.KILLER_ENTITY, damageSourceIn.getEntity())
+				.withOptionalParameter(LootContextParams.DIRECT_KILLER_ENTITY, damageSourceIn.getDirectEntity());
+		if (wasRecentlyHit && this.lastHurtByPlayer != null) {
+			lootcontext$builder = lootcontext$builder.withParameter(LootContextParams.LAST_DAMAGE_PLAYER, this.lastHurtByPlayer).withLuck(this.lastHurtByPlayer.getLuck());
+		}
+
 		List<ItemStack> loot = loottable.getRandomItems(lootcontext$builder.create(LootContextParamSets.ENTITY));
 		int stackAmount = 1;
 
@@ -102,7 +112,7 @@ public abstract class AbstractMimicEntity extends Monster {
 	public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn, @Nullable CompoundTag dataTag) {
 		SpawnGroupData data = super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
 
-		ArrayList<ResourceLocation> tables = MimicLootHandler.getDimensionTables(level.dimension());
+		ArrayList<ResourceLocation> tables = MimicLootHandler.getDimensionTables(this.level().dimension());
 		if (tables.isEmpty()) {
 			this.defaultLootTable = BuiltInLootTables.VILLAGE_FISHER;
 		} else {

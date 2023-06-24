@@ -12,7 +12,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.CreativeModeTabEvent;
+import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraftforge.event.entity.living.MobSpawnEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -51,8 +51,8 @@ public class ServerFriendlyLoot {
 		});
 	}
 
-	private void addTabContents(final CreativeModeTabEvent.BuildContents event) {
-		if (event.getTab() == CreativeModeTabs.SPAWN_EGGS) {
+	private void addTabContents(final BuildCreativeModeTabContentsEvent event) {
+		if (event.getTabKey() == CreativeModeTabs.SPAWN_EGGS) {
 			List<ItemStack> stacks = MimicRegistry.ITEMS.getEntries().stream().map(reg -> new ItemStack(reg.get())).toList();
 			event.acceptAll(stacks);
 		}

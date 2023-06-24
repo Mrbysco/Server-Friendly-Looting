@@ -64,7 +64,7 @@ public class WaterMimicEntity extends AbstractMimicEntity {
 		super.registerGoals();
 		this.goalSelector.addGoal(5, new MeleeAttackGoal(this, 1.0D, true));
 		this.goalSelector.addGoal(1, new WaterMimicEntity.GoToWaterGoal(this, 1.0D));
-		this.goalSelector.addGoal(6, new WaterMimicEntity.SwimUpGoal(this, 1.0D, this.level.getSeaLevel()));
+		this.goalSelector.addGoal(6, new WaterMimicEntity.SwimUpGoal(this, 1.0D, this.level().getSeaLevel()));
 		this.goalSelector.addGoal(7, new RandomStrollGoal(this, 1.0D));
 		this.goalSelector.addGoal(10, new LookAtPlayerGoal(this, Player.class, 8.0F));
 		this.goalSelector.addGoal(10, new RandomLookAroundGoal(this));
@@ -102,7 +102,7 @@ public class WaterMimicEntity extends AbstractMimicEntity {
 	}
 
 	public void updateSwimming() {
-		if (!this.level.isClientSide) {
+		if (!this.level().isClientSide) {
 			if (this.isEffectiveAi() && this.isInWater() && this.wantsToSwim()) {
 				this.navigation = this.waterNavigator;
 				this.setSwimming(true);
@@ -158,9 +158,9 @@ public class WaterMimicEntity extends AbstractMimicEntity {
 		}
 
 		public void tick() {
-			LivingEntity lvt_1_1_ = this.mimic.getTarget();
+			LivingEntity target = this.mimic.getTarget();
 			if (this.mimic.wantsToSwim() && this.mimic.isInWater()) {
-				if (lvt_1_1_ != null && lvt_1_1_.getY() > this.mimic.getY() || this.mimic.swimmingUp) {
+				if (target != null && target.getY() > this.mimic.getY() || this.mimic.swimmingUp) {
 					this.mimic.setDeltaMovement(this.mimic.getDeltaMovement().add(0.0D, 0.002D, 0.0D));
 				}
 
@@ -169,20 +169,20 @@ public class WaterMimicEntity extends AbstractMimicEntity {
 					return;
 				}
 
-				double lvt_2_1_ = this.wantedX - this.mimic.getX();
-				double lvt_4_1_ = this.wantedY - this.mimic.getY();
-				double lvt_6_1_ = this.wantedZ - this.mimic.getZ();
-				double lvt_8_1_ = Math.sqrt(lvt_2_1_ * lvt_2_1_ + lvt_4_1_ * lvt_4_1_ + lvt_6_1_ * lvt_6_1_);
-				lvt_4_1_ /= lvt_8_1_;
-				float lvt_10_1_ = (float) (Mth.atan2(lvt_6_1_, lvt_2_1_) * 57.2957763671875D) - 90.0F;
+				double x = this.wantedX - this.mimic.getX();
+				double y = this.wantedY - this.mimic.getY();
+				double z = this.wantedZ - this.mimic.getZ();
+				double sqrt = Math.sqrt(x * x + y * y + z * z);
+				y /= sqrt;
+				float lvt_10_1_ = (float) (Mth.atan2(z, x) * 57.2957763671875D) - 90.0F;
 				this.mimic.setYRot(this.rotlerp(this.mimic.getYRot(), lvt_10_1_, 90.0F));
 				this.mimic.yBodyRot = this.mimic.getYRot();
-				float lvt_11_1_ = (float) (this.speedModifier * this.mimic.getAttribute(Attributes.MOVEMENT_SPEED).getValue());
-				float lvt_12_1_ = Mth.lerp(0.125F, this.mimic.getSpeed(), lvt_11_1_);
-				this.mimic.setSpeed(lvt_12_1_);
-				this.mimic.setDeltaMovement(this.mimic.getDeltaMovement().add((double) lvt_12_1_ * lvt_2_1_ * 0.005D, (double) lvt_12_1_ * lvt_4_1_ * 0.1D, (double) lvt_12_1_ * lvt_6_1_ * 0.005D));
+				float speed = (float) (this.speedModifier * this.mimic.getAttribute(Attributes.MOVEMENT_SPEED).getValue());
+				float speedLerped = Mth.lerp(0.125F, this.mimic.getSpeed(), speed);
+				this.mimic.setSpeed(speedLerped);
+				this.mimic.setDeltaMovement(this.mimic.getDeltaMovement().add((double) speedLerped * x * 0.005D, (double) speedLerped * y * 0.1D, (double) speedLerped * z * 0.005D));
 			} else {
-				if (!this.mimic.onGround) {
+				if (!this.mimic.onGround()) {
 					this.mimic.setDeltaMovement(this.mimic.getDeltaMovement().add(0.0D, -0.008D, 0.0D));
 				}
 
@@ -200,10 +200,10 @@ public class WaterMimicEntity extends AbstractMimicEntity {
 		private final double speedModifier;
 		private final Level level;
 
-		public GoToWaterGoal(PathfinderMob p_i48910_1_, double p_i48910_2_) {
-			this.mob = p_i48910_1_;
-			this.speedModifier = p_i48910_2_;
-			this.level = p_i48910_1_.level;
+		public GoToWaterGoal(PathfinderMob mob, double speedModifier) {
+			this.mob = mob;
+			this.speedModifier = speedModifier;
+			this.level = mob.level();
 			this.setFlags(EnumSet.of(Flag.MOVE));
 		}
 
@@ -213,13 +213,13 @@ public class WaterMimicEntity extends AbstractMimicEntity {
 			} else if (this.mob.isInWater()) {
 				return false;
 			} else {
-				Vec3 lvt_1_1_ = this.getWaterPos();
-				if (lvt_1_1_ == null) {
+				Vec3 waterPos = this.getWaterPos();
+				if (waterPos == null) {
 					return false;
 				} else {
-					this.wantedX = lvt_1_1_.x;
-					this.wantedY = lvt_1_1_.y;
-					this.wantedZ = lvt_1_1_.z;
+					this.wantedX = waterPos.x;
+					this.wantedY = waterPos.y;
+					this.wantedZ = waterPos.z;
 					return true;
 				}
 			}
@@ -250,19 +250,19 @@ public class WaterMimicEntity extends AbstractMimicEntity {
 	}
 
 	static class SwimUpGoal extends Goal {
-		private final WaterMimicEntity drowned;
+		private final WaterMimicEntity waterMimicEntity;
 		private final double speedModifier;
 		private final int targetY;
 		private boolean obstructed;
 
-		public SwimUpGoal(WaterMimicEntity p_i48908_1_, double p_i48908_2_, int p_i48908_4_) {
-			this.drowned = p_i48908_1_;
-			this.speedModifier = p_i48908_2_;
-			this.targetY = p_i48908_4_;
+		public SwimUpGoal(WaterMimicEntity waterMimic, double speedModifier, int targetY) {
+			this.waterMimicEntity = waterMimic;
+			this.speedModifier = speedModifier;
+			this.targetY = targetY;
 		}
 
 		public boolean canUse() {
-			return !this.drowned.level.isDay() && this.drowned.isInWater() && this.drowned.getY() < (double) (this.targetY - 2);
+			return !this.waterMimicEntity.level().isDay() && this.waterMimicEntity.isInWater() && this.waterMimicEntity.getY() < (double) (this.targetY - 2);
 		}
 
 		public boolean canContinueToUse() {
@@ -270,25 +270,25 @@ public class WaterMimicEntity extends AbstractMimicEntity {
 		}
 
 		public void tick() {
-			if (this.drowned.getY() < (double) (this.targetY - 1) && (this.drowned.getNavigation().isDone() || this.drowned.isCloseToPathTarget())) {
-				Vec3 vec3 = DefaultRandomPos.getPosTowards(this.drowned, 4, 8, new Vec3(this.drowned.getX(), (double) (this.targetY - 1), this.drowned.getZ()), (double) ((float) Math.PI / 2F));
+			if (this.waterMimicEntity.getY() < (double) (this.targetY - 1) && (this.waterMimicEntity.getNavigation().isDone() || this.waterMimicEntity.isCloseToPathTarget())) {
+				Vec3 vec3 = DefaultRandomPos.getPosTowards(this.waterMimicEntity, 4, 8, new Vec3(this.waterMimicEntity.getX(), (double) (this.targetY - 1), this.waterMimicEntity.getZ()), (double) ((float) Math.PI / 2F));
 				if (vec3 == null) {
 					this.obstructed = true;
 					return;
 				}
 
-				this.drowned.getNavigation().moveTo(vec3.x, vec3.y, vec3.z, this.speedModifier);
+				this.waterMimicEntity.getNavigation().moveTo(vec3.x, vec3.y, vec3.z, this.speedModifier);
 			}
 
 		}
 
 		public void start() {
-			this.drowned.setSwimmingUp(true);
+			this.waterMimicEntity.setSwimmingUp(true);
 			this.obstructed = false;
 		}
 
 		public void stop() {
-			this.drowned.setSwimmingUp(false);
+			this.waterMimicEntity.setSwimmingUp(false);
 		}
 	}
 }
