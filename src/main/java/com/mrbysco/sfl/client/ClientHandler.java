@@ -22,6 +22,6 @@ public class ClientHandler {
 	}
 
 	public static void registerLayerDefinitions(EntityRenderersEvent.RegisterLayerDefinitions event) {
-		event.registerLayerDefinition(MIMIC, () -> MimicModel.createBodyLayer());
+		event.registerLayerDefinition(MIMIC, MimicModel::createBodyLayer);
 	}
 }
