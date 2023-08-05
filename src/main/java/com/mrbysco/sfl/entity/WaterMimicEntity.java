@@ -1,6 +1,5 @@
 package com.mrbysco.sfl.entity;
 
-import com.mrbysco.sfl.init.MimicRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.tags.BiomeTags;
 import net.minecraft.tags.FluidTags;
@@ -43,20 +42,12 @@ public class WaterMimicEntity extends AbstractMimicEntity {
 	protected final GroundPathNavigation groundNavigator;
 	private boolean swimmingUp;
 
-	public WaterMimicEntity(EntityType<? extends WaterMimicEntity> type, Level worldIn) {
-		super(type, worldIn);
+	public WaterMimicEntity(EntityType<? extends WaterMimicEntity> type, Level level) {
+		super(type, level);
 		this.moveControl = new WaterMimicEntity.MoveHelperController(this);
 		this.setPathfindingMalus(BlockPathTypes.WATER, 0.0F);
-		this.waterNavigator = new WaterBoundPathNavigation(this, worldIn);
-		this.groundNavigator = new GroundPathNavigation(this, worldIn);
-	}
-
-	public WaterMimicEntity(Level worldIn) {
-		super(MimicRegistry.NETHER_MIMIC.get(), worldIn);
-		this.moveControl = new WaterMimicEntity.MoveHelperController(this);
-		this.setPathfindingMalus(BlockPathTypes.WATER, 0.0F);
-		this.waterNavigator = new WaterBoundPathNavigation(this, worldIn);
-		this.groundNavigator = new GroundPathNavigation(this, worldIn);
+		this.waterNavigator = new WaterBoundPathNavigation(this, level);
+		this.groundNavigator = new GroundPathNavigation(this, level);
 	}
 
 	@Override

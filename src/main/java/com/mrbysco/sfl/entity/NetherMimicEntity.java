@@ -1,6 +1,5 @@
 package com.mrbysco.sfl.entity;
 
-import com.mrbysco.sfl.init.MimicRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -30,12 +29,8 @@ import javax.annotation.Nullable;
 public class NetherMimicEntity extends AbstractMimicEntity {
 	private static final EntityDataAccessor<Integer> MIMIC_TYPE = SynchedEntityData.defineId(NetherMimicEntity.class, EntityDataSerializers.INT);
 
-	public NetherMimicEntity(EntityType<? extends NetherMimicEntity> type, Level worldIn) {
-		super(type, worldIn);
-	}
-
-	public NetherMimicEntity(Level worldIn) {
-		super(MimicRegistry.NETHER_MIMIC.get(), worldIn);
+	public NetherMimicEntity(EntityType<? extends NetherMimicEntity> type, Level level) {
+		super(type, level);
 	}
 
 	@Override
@@ -72,9 +67,9 @@ public class NetherMimicEntity extends AbstractMimicEntity {
 
 	@Nullable
 	@Override
-	public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn, @Nullable CompoundTag dataTag) {
-		SpawnGroupData data = super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
-		int i = this.getRandomMimicType(worldIn);
+	public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn, @Nullable CompoundTag dataTag) {
+		SpawnGroupData data = super.finalizeSpawn(level, difficultyIn, reason, spawnDataIn, dataTag);
+		int i = this.getRandomMimicType(level);
 		this.setMimicType(i);
 
 		return data;
@@ -102,7 +97,7 @@ public class NetherMimicEntity extends AbstractMimicEntity {
 		}
 	}
 
-	public static boolean spawnPredicate(EntityType<? extends AbstractMimicEntity> typeIn, LevelAccessor worldIn, MobSpawnType reason, BlockPos pos, RandomSource randomIn) {
-		return worldIn.getDifficulty() != Difficulty.PEACEFUL;
+	public static boolean spawnPredicate(EntityType<? extends AbstractMimicEntity> typeIn, LevelAccessor level, MobSpawnType reason, BlockPos pos, RandomSource randomIn) {
+		return level.getDifficulty() != Difficulty.PEACEFUL;
 	}
 }
