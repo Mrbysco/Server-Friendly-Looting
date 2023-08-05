@@ -38,8 +38,8 @@ import java.util.Map;
 public abstract class AbstractMimicEntity extends Monster {
 	private ResourceLocation defaultLootTable;
 
-	public AbstractMimicEntity(EntityType<? extends AbstractMimicEntity> type, Level worldIn) {
-		super(type, worldIn);
+	public AbstractMimicEntity(EntityType<? extends AbstractMimicEntity> type, Level level) {
+		super(type, level);
 	}
 
 	@Override
@@ -99,10 +99,10 @@ public abstract class AbstractMimicEntity extends Monster {
 
 	@Nullable
 	@Override
-	public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn, @Nullable CompoundTag dataTag) {
-		SpawnGroupData data = super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
+	public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn, @Nullable CompoundTag dataTag) {
+		SpawnGroupData data = super.finalizeSpawn(level, difficultyIn, reason, spawnDataIn, dataTag);
 
-		ArrayList<ResourceLocation> tables = MimicLootHandler.getDimensionTables(level.dimension());
+		ArrayList<ResourceLocation> tables = MimicLootHandler.getDimensionTables(level.getLevel().dimension());
 		if (tables.isEmpty()) {
 			this.defaultLootTable = BuiltInLootTables.VILLAGE_FISHER;
 		} else {
@@ -133,7 +133,7 @@ public abstract class AbstractMimicEntity extends Monster {
 		return SoundEvents.CHEST_CLOSE;
 	}
 
-	public static boolean spawnPredicate(EntityType<? extends AbstractMimicEntity> typeIn, LevelAccessor worldIn, MobSpawnType reason, BlockPos pos, RandomSource randomIn) {
-		return worldIn.getDifficulty() != Difficulty.PEACEFUL && checkMobSpawnRules(typeIn, worldIn, reason, pos, randomIn);
+	public static boolean spawnPredicate(EntityType<? extends AbstractMimicEntity> typeIn, LevelAccessor level, MobSpawnType reason, BlockPos pos, RandomSource randomIn) {
+		return level.getDifficulty() != Difficulty.PEACEFUL && checkMobSpawnRules(typeIn, level, reason, pos, randomIn);
 	}
 }

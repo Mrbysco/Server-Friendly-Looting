@@ -1,6 +1,5 @@
 package com.mrbysco.sfl.entity;
 
-import com.mrbysco.sfl.init.MimicRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
@@ -32,12 +31,8 @@ public class EndMimicEntity extends AbstractMimicEntity {
 
 	private int targetChangeTime;
 
-	public EndMimicEntity(EntityType<? extends EndMimicEntity> type, Level worldIn) {
-		super(type, worldIn);
-	}
-
-	public EndMimicEntity(Level worldIn) {
-		super(MimicRegistry.END_MIMIC.get(), worldIn);
+	public EndMimicEntity(EntityType<? extends EndMimicEntity> type, Level level) {
+		super(type, level);
 	}
 
 	@Override

@@ -1,6 +1,5 @@
 package com.mrbysco.sfl.entity;
 
-import com.mrbysco.sfl.init.MimicRegistry;
 import net.minecraft.core.Holder;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -30,12 +29,8 @@ import javax.annotation.Nullable;
 public class MimicEntity extends AbstractMimicEntity {
 	private static final EntityDataAccessor<Integer> MIMIC_TYPE = SynchedEntityData.defineId(MimicEntity.class, EntityDataSerializers.INT);
 
-	public MimicEntity(EntityType<? extends MimicEntity> type, Level worldIn) {
-		super(type, worldIn);
-	}
-
-	public MimicEntity(Level worldIn) {
-		super(MimicRegistry.MIMIC.get(), worldIn);
+	public MimicEntity(EntityType<? extends MimicEntity> type, Level level) {
+		super(type, level);
 	}
 
 	@Override
@@ -72,9 +67,9 @@ public class MimicEntity extends AbstractMimicEntity {
 
 	@Nullable
 	@Override
-	public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn, @Nullable CompoundTag dataTag) {
-		SpawnGroupData data = super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
-		int i = this.getRandomMimicType(worldIn);
+	public SpawnGroupData finalizeSpawn(ServerLevelAccessor levelAccessor, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn, @Nullable CompoundTag dataTag) {
+		SpawnGroupData data = super.finalizeSpawn(levelAccessor, difficultyIn, reason, spawnDataIn, dataTag);
+		int i = this.getRandomMimicType(levelAccessor);
 		this.setMimicType(i);
 
 		return data;

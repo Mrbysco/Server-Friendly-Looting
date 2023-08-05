@@ -1,0 +1,10 @@
+{
+  "entity.sfl.end_mimic": "End Mimic",
+  "entity.sfl.mimic": "Mimic",
+  "entity.sfl.nether_mimic": "Nether Mimic",
+  "entity.sfl.water_mimic": "Mimic",
+  "item.sfl.end_mimic_spawn_egg": "End Mimic Spawn Egg",
+  "item.sfl.mimic_spawn_egg": "Mimic Spawn Egg",
+  "item.sfl.nether_mimic_spawn_egg": "Nether Mimic Spawn Egg",
+  "item.sfl.water_mimic_spawn_egg": "Water Mimic Spawn Egg"
+}
