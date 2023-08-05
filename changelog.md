@@ -1,1 +1,2 @@
-* Initial update to 1.20
+* Fix localization
+* Re-enable CraftTweaker support
