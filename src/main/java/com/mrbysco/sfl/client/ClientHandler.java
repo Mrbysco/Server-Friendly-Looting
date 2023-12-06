@@ -9,7 +9,7 @@ import com.mrbysco.sfl.client.renderer.WaterMimicRenderer;
 import com.mrbysco.sfl.init.MimicRegistry;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.client.event.EntityRenderersEvent;
+import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 
 public class ClientHandler {
 	public static final ModelLayerLocation MIMIC = new ModelLayerLocation(new ResourceLocation(ServerFriendlyLoot.MOD_ID, "main"), "mimic");

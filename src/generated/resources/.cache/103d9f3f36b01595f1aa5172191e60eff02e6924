@@ -1,5 +1,5 @@
-// 1.20.1	2023-06-24T22:34:48.6886531	Registries
-8dbbbef553d132506c94474440158d0d12fc59d8 data/sfl/forge/biome_modifier/add_end_mimic.json
-bd4dac4950d4b0211b9667d2e4fb0a2dd10fdd3e data/sfl/forge/biome_modifier/add_mimic.json
-712a39f1f2dc3873c63844ece26e255491b9bf95 data/sfl/forge/biome_modifier/add_nether_mimic.json
-d719b7e17e9e0191a0cfdf34ffe7cf416daaa031 data/sfl/forge/biome_modifier/add_water_mimic.json
+// 1.20.2	2023-12-06T01:35:15.128155	Registries
+2c1dd6689f6d0220a57ca4ac50b2a893f19c662f data/sfl/neoforge/biome_modifier/add_end_mimic.json
+64dbc806291f4cedd81a63852ead699226ab0f23 data/sfl/neoforge/biome_modifier/add_mimic.json
+87e3ce60d251dcbbbc0a66dcc9cc1ff6a0bab736 data/sfl/neoforge/biome_modifier/add_nether_mimic.json
+1332e49a881a79b43dabbe94ec224dd2f97d018a data/sfl/neoforge/biome_modifier/add_water_mimic.json

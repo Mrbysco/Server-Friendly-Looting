@@ -11,16 +11,16 @@ import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.registries.VanillaRegistries;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraftforge.common.data.DatapackBuiltinEntriesProvider;
-import net.minecraftforge.common.data.LanguageProvider;
-import net.minecraftforge.data.event.GatherDataEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.common.data.DatapackBuiltinEntriesProvider;
+import net.neoforged.neoforge.common.data.LanguageProvider;
+import net.neoforged.neoforge.data.event.GatherDataEvent;
+import net.neoforged.neoforge.registries.NeoForgeRegistries;
 
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
+import java.util.function.Supplier;
 
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
 public class SFLDatagen {
@@ -58,7 +58,7 @@ public class SFLDatagen {
 //			addSubtitle(MimicSounds.MIMIC_HURT, "Mimic hurts");
 		}
 
-		public void addSubtitle(RegistryObject<SoundEvent> sound, String name) {
+		public void addSubtitle(Supplier<SoundEvent> sound, String name) {
 			this.addSubtitle(sound.get(), name);
 		}
 
@@ -74,7 +74,7 @@ public class SFLDatagen {
 		});
 		registryBuilder.add(Registries.PLACED_FEATURE, $ -> {
 		});
-		registryBuilder.add(ForgeRegistries.Keys.BIOME_MODIFIERS, SFLBiomeModifiers::bootstrap);
+		registryBuilder.add(NeoForgeRegistries.Keys.BIOME_MODIFIERS, SFLBiomeModifiers::bootstrap);
 		// We need the BIOME registry to be present so we can use a biome tag, doesn't matter that it's empty
 		registryBuilder.add(Registries.BIOME, $ -> {
 		});

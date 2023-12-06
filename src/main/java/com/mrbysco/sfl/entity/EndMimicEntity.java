@@ -20,7 +20,8 @@ import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.event.entity.EntityTeleportEvent;
+import net.neoforged.neoforge.event.EventHooks;
+import net.neoforged.neoforge.event.entity.EntityTeleportEvent;
 
 import javax.annotation.Nullable;
 import java.util.UUID;
@@ -82,8 +83,8 @@ public class EndMimicEntity extends AbstractMimicEntity {
 		if (!this.level().getBlockState(blockpos$mutableblockpos).blocksMotion()) {
 			return false;
 		} else {
-			EntityTeleportEvent.EnderEntity event = new EntityTeleportEvent.EnderEntity(this, x, y, z);
-			if (net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(event)) return false;
+			EntityTeleportEvent.EnderEntity event = EventHooks.onEnderTeleport(this, x, y, z);
+			if (event.isCanceled()) return false;
 			boolean flag = this.randomTeleport(event.getTargetX(), event.getTargetY(), event.getTargetZ(), true);
 			if (flag) {
 				this.level().playSound((Player) null, this.xo, this.yo, this.zo, SoundEvents.ENDERMAN_TELEPORT, this.getSoundSource(), 1.0F, 1.0F);
@@ -96,9 +97,10 @@ public class EndMimicEntity extends AbstractMimicEntity {
 
 	public void setTarget(@Nullable LivingEntity entitylivingbaseIn) {
 		AttributeInstance attributeInstance = this.getAttribute(Attributes.MOVEMENT_SPEED);
+		if (attributeInstance == null) return;
 		if (entitylivingbaseIn == null) {
 			this.targetChangeTime = 0;
-			attributeInstance.removeModifier(ATTACKING_SPEED_BOOST);
+			attributeInstance.removeModifier(ATTACKING_SPEED_BOOST_ID);
 		} else {
 			this.targetChangeTime = this.tickCount;
 			if (!attributeInstance.hasModifier(ATTACKING_SPEED_BOOST)) {
