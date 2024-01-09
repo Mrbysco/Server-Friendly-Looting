@@ -15,7 +15,6 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModLoadingContext;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
-import net.neoforged.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
@@ -30,8 +29,7 @@ public class ServerFriendlyLoot {
 	public static final String MOD_ID = "sfl";
 	public static final Logger LOGGER = LogManager.getLogger();
 
-	public ServerFriendlyLoot() {
-		IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
+	public ServerFriendlyLoot(IEventBus eventBus) {
 		ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, SFLConfig.spawnSpec, "sfl_spawning.toml");
 		eventBus.register(SFLConfig.class);
 
@@ -42,7 +40,7 @@ public class ServerFriendlyLoot {
 		eventBus.addListener(MimicEntities::registerEntityAttributes);
 		eventBus.addListener(this::addTabContents);
 
-		NeoForge.EVENT_BUS.register(this);
+		NeoForge.EVENT_BUS.addListener(this::onFinalizeSpawn);
 
 		if (FMLEnvironment.dist.isClient()) {
 			eventBus.addListener(ClientHandler::registerEntityRenders);
@@ -57,8 +55,7 @@ public class ServerFriendlyLoot {
 		}
 	}
 
-	@SubscribeEvent
-	public void onSpawn(final MobSpawnEvent.FinalizeSpawn event) {
+	private void onFinalizeSpawn(final MobSpawnEvent.FinalizeSpawn event) {
 		if (event.getSpawnType().equals(MobSpawnType.NATURAL) && event.getEntity() instanceof AbstractMimicEntity) {
 			List<? extends String> blacklist = SFLConfig.SPAWN.dimension_blacklist.get();
 			if (!blacklist.isEmpty()) {

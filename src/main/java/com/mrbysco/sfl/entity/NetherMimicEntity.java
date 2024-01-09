@@ -67,9 +67,10 @@ public class NetherMimicEntity extends AbstractMimicEntity {
 
 	@Nullable
 	@Override
-	public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn, @Nullable CompoundTag dataTag) {
-		SpawnGroupData data = super.finalizeSpawn(level, difficultyIn, reason, spawnDataIn, dataTag);
-		int i = this.getRandomMimicType(level);
+	public SpawnGroupData finalizeSpawn(ServerLevelAccessor levelAccessor, DifficultyInstance difficultyInstance,
+										MobSpawnType spawnType, @Nullable SpawnGroupData groupData, @Nullable CompoundTag dataTag) {
+		SpawnGroupData data = super.finalizeSpawn(levelAccessor, difficultyInstance, spawnType, groupData, dataTag);
+		int i = this.getRandomMimicType(levelAccessor);
 		this.setMimicType(i);
 
 		return data;
@@ -89,7 +90,7 @@ public class NetherMimicEntity extends AbstractMimicEntity {
 		this.entityData.set(MIMIC_TYPE, mimicTypeId);
 	}
 
-	private int getRandomMimicType(LevelAccessor world) {
+	private int getRandomMimicType(LevelAccessor levelAccessor) {
 		if (random.nextBoolean()) {
 			return 0;
 		} else {
@@ -97,7 +98,8 @@ public class NetherMimicEntity extends AbstractMimicEntity {
 		}
 	}
 
-	public static boolean spawnPredicate(EntityType<? extends AbstractMimicEntity> typeIn, LevelAccessor level, MobSpawnType reason, BlockPos pos, RandomSource randomIn) {
-		return level.getDifficulty() != Difficulty.PEACEFUL;
+	public static boolean spawnPredicate(EntityType<? extends AbstractMimicEntity> typeIn, LevelAccessor levelAccessor,
+										 MobSpawnType spawnType, BlockPos pos, RandomSource randomSource) {
+		return levelAccessor.getDifficulty() != Difficulty.PEACEFUL;
 	}
 }

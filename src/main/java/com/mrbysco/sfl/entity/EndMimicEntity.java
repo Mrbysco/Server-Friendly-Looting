@@ -74,20 +74,21 @@ public class EndMimicEntity extends AbstractMimicEntity {
 	}
 
 	private boolean teleport(double x, double y, double z) {
-		BlockPos.MutableBlockPos blockpos$mutableblockpos = new BlockPos.MutableBlockPos(x, y, z);
+		BlockPos.MutableBlockPos blockPos = new BlockPos.MutableBlockPos(x, y, z);
 
-		while (blockpos$mutableblockpos.getY() > 0 && !this.level().getBlockState(blockpos$mutableblockpos).blocksMotion()) {
-			blockpos$mutableblockpos.move(Direction.DOWN);
+		while (blockPos.getY() > 0 && !this.level().getBlockState(blockPos).blocksMotion()) {
+			blockPos.move(Direction.DOWN);
 		}
 
-		if (!this.level().getBlockState(blockpos$mutableblockpos).blocksMotion()) {
+		if (!this.level().getBlockState(blockPos).blocksMotion()) {
 			return false;
 		} else {
 			EntityTeleportEvent.EnderEntity event = EventHooks.onEnderTeleport(this, x, y, z);
 			if (event.isCanceled()) return false;
 			boolean flag = this.randomTeleport(event.getTargetX(), event.getTargetY(), event.getTargetZ(), true);
 			if (flag) {
-				this.level().playSound((Player) null, this.xo, this.yo, this.zo, SoundEvents.ENDERMAN_TELEPORT, this.getSoundSource(), 1.0F, 1.0F);
+				this.level().playSound((Player) null, this.xo, this.yo, this.zo, SoundEvents.ENDERMAN_TELEPORT,
+						this.getSoundSource(), 1.0F, 1.0F);
 				this.playSound(SoundEvents.ENDERMAN_TELEPORT, 1.0F, 1.0F);
 			}
 
@@ -95,10 +96,10 @@ public class EndMimicEntity extends AbstractMimicEntity {
 		}
 	}
 
-	public void setTarget(@Nullable LivingEntity entitylivingbaseIn) {
+	public void setTarget(@Nullable LivingEntity livingEntity) {
 		AttributeInstance attributeInstance = this.getAttribute(Attributes.MOVEMENT_SPEED);
 		if (attributeInstance == null) return;
-		if (entitylivingbaseIn == null) {
+		if (livingEntity == null) {
 			this.targetChangeTime = 0;
 			attributeInstance.removeModifier(ATTACKING_SPEED_BOOST_ID);
 		} else {
@@ -108,13 +109,18 @@ public class EndMimicEntity extends AbstractMimicEntity {
 			}
 		}
 
-		super.setTarget(entitylivingbaseIn); //Forge: Moved down to allow event handlers to write data manager values.
+		super.setTarget(livingEntity); //Forge: Moved down to allow event handlers to write data manager values.
 	}
 
 	public void aiStep() {
 		if (this.level().isClientSide) {
 			for (int i = 0; i < 2; ++i) {
-				this.level().addParticle(ParticleTypes.PORTAL, this.getX() + (this.random.nextDouble() - 0.5D) * (double) this.getBbWidth(), this.getY() + this.random.nextDouble() * (double) this.getBbHeight() - 0.25D, this.getZ() + (this.random.nextDouble() - 0.5D) * (double) this.getBbWidth(), (this.random.nextDouble() - 0.5D) * 2.0D, -this.random.nextDouble(), (this.random.nextDouble() - 0.5D) * 2.0D);
+				this.level().addParticle(ParticleTypes.PORTAL,
+						this.getX() + (this.random.nextDouble() - 0.5D) * (double) this.getBbWidth(),
+						this.getY() + this.random.nextDouble() * (double) this.getBbHeight() - 0.25D,
+						this.getZ() + (this.random.nextDouble() - 0.5D) * (double) this.getBbWidth(),
+						(this.random.nextDouble() - 0.5D) * 2.0D, -this.random.nextDouble(),
+						(this.random.nextDouble() - 0.5D) * 2.0D);
 			}
 		}
 

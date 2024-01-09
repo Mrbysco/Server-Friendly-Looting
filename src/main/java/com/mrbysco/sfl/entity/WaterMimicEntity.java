@@ -64,32 +64,28 @@ public class WaterMimicEntity extends AbstractMimicEntity {
 	}
 
 	public static AttributeSupplier.Builder registerAttributes() {
-		return AbstractMimicEntity.createMobAttributes().add(Attributes.MAX_HEALTH, 12.0D).add(Attributes.ATTACK_DAMAGE, 4.0D).add(Attributes.MOVEMENT_SPEED, (double) 0.25F);
-	}
-
-	private int getRandomMimicType(LevelAccessor world) {
-		if (random.nextBoolean()) {
-			return 0;
-		} else {
-			return 1;
-		}
+		return AbstractMimicEntity.createMobAttributes()
+				.add(Attributes.MAX_HEALTH, 12.0D)
+				.add(Attributes.ATTACK_DAMAGE, 4.0D)
+				.add(Attributes.MOVEMENT_SPEED, (double) 0.25F);
 	}
 
 	public boolean isPushedByFluid(FluidType fluidType) {
 		return !this.isSwimming();
 	}
 
-	public static boolean spawnPredicate(EntityType<? extends AbstractMimicEntity> typeIn, ServerLevelAccessor levelAccessor, MobSpawnType reason, BlockPos pos, RandomSource randomIn) {
-		boolean flag = levelAccessor.getDifficulty() != Difficulty.PEACEFUL && isDarkEnoughToSpawn(levelAccessor, pos, randomIn) && (reason == MobSpawnType.SPAWNER || levelAccessor.getFluidState(pos).is(FluidTags.WATER));
+	public static boolean spawnPredicate(EntityType<? extends AbstractMimicEntity> typeIn, ServerLevelAccessor levelAccessor,
+										 MobSpawnType spawnType, BlockPos pos, RandomSource randomSource) {
+		boolean flag = levelAccessor.getDifficulty() != Difficulty.PEACEFUL && isDarkEnoughToSpawn(levelAccessor, pos, randomSource) && (spawnType == MobSpawnType.SPAWNER || levelAccessor.getFluidState(pos).is(FluidTags.WATER));
 		if (!levelAccessor.getBiome(pos).is(BiomeTags.IS_RIVER)) {
-			return randomIn.nextInt(40) == 0 && isUnderSeaLevel(levelAccessor, pos) && flag;
+			return randomSource.nextInt(40) == 0 && isUnderSeaLevel(levelAccessor, pos) && flag;
 		} else {
-			return randomIn.nextInt(15) == 0 && flag;
+			return randomSource.nextInt(15) == 0 && flag;
 		}
 	}
 
-	private static boolean isUnderSeaLevel(LevelAccessor world, BlockPos pos) {
-		return pos.getY() < world.getSeaLevel() - 5;
+	private static boolean isUnderSeaLevel(LevelAccessor levelAccessor, BlockPos pos) {
+		return pos.getY() < levelAccessor.getSeaLevel() - 5;
 	}
 
 	public void updateSwimming() {
@@ -117,35 +113,35 @@ public class WaterMimicEntity extends AbstractMimicEntity {
 		return false;
 	}
 
-	public void travel(Vec3 p_213352_1_) {
+	public void travel(Vec3 travelVector) {
 		if (this.isEffectiveAi() && this.isInWater() && this.wantsToSwim()) {
-			this.moveRelative(0.01F, p_213352_1_);
+			this.moveRelative(0.01F, travelVector);
 			this.move(MoverType.SELF, this.getDeltaMovement());
 			this.setDeltaMovement(this.getDeltaMovement().scale(0.9D));
 		} else {
-			super.travel(p_213352_1_);
+			super.travel(travelVector);
 		}
 	}
 
-	public void setSwimmingUp(boolean p_204713_1_) {
-		this.swimmingUp = p_204713_1_;
+	public void setSwimmingUp(boolean swimmingUp) {
+		this.swimmingUp = swimmingUp;
 	}
 
 	private boolean wantsToSwim() {
 		if (this.swimmingUp) {
 			return true;
 		} else {
-			LivingEntity lvt_1_1_ = this.getTarget();
-			return lvt_1_1_ != null && lvt_1_1_.isInWater();
+			LivingEntity target = this.getTarget();
+			return target != null && target.isInWater();
 		}
 	}
 
 	static class MoveHelperController extends MoveControl {
 		private final WaterMimicEntity mimic;
 
-		public MoveHelperController(WaterMimicEntity p_i48909_1_) {
-			super(p_i48909_1_);
-			this.mimic = p_i48909_1_;
+		public MoveHelperController(WaterMimicEntity waterMimic) {
+			super(waterMimic);
+			this.mimic = waterMimic;
 		}
 
 		public void tick() {
@@ -179,7 +175,6 @@ public class WaterMimicEntity extends AbstractMimicEntity {
 
 				super.tick();
 			}
-
 		}
 	}
 
@@ -270,7 +265,6 @@ public class WaterMimicEntity extends AbstractMimicEntity {
 
 				this.waterMimicEntity.getNavigation().moveTo(vec3.x, vec3.y, vec3.z, this.speedModifier);
 			}
-
 		}
 
 		public void start() {

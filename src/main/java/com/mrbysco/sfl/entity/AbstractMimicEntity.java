@@ -109,8 +109,9 @@ public abstract class AbstractMimicEntity extends Monster {
 
 	@Nullable
 	@Override
-	public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn, @Nullable CompoundTag dataTag) {
-		SpawnGroupData data = super.finalizeSpawn(level, difficultyIn, reason, spawnDataIn, dataTag);
+	public SpawnGroupData finalizeSpawn(ServerLevelAccessor levelAccessor, DifficultyInstance difficultyInstance,
+										MobSpawnType spawnType, @Nullable SpawnGroupData groupData, @Nullable CompoundTag dataTag) {
+		SpawnGroupData data = super.finalizeSpawn(levelAccessor, difficultyInstance, spawnType, groupData, dataTag);
 
 		ArrayList<ResourceLocation> tables = MimicLootHandler.getDimensionTables(this.level().dimension());
 		if (tables.isEmpty()) {
@@ -134,7 +135,7 @@ public abstract class AbstractMimicEntity extends Monster {
 	}
 
 	@Override
-	protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
+	protected SoundEvent getHurtSound(DamageSource damageSource) {
 		return SoundEvents.CHEST_OPEN;
 	}
 
@@ -143,7 +144,8 @@ public abstract class AbstractMimicEntity extends Monster {
 		return SoundEvents.CHEST_CLOSE;
 	}
 
-	public static boolean spawnPredicate(EntityType<? extends AbstractMimicEntity> typeIn, LevelAccessor level, MobSpawnType reason, BlockPos pos, RandomSource randomIn) {
-		return level.getDifficulty() != Difficulty.PEACEFUL && checkMobSpawnRules(typeIn, level, reason, pos, randomIn);
+	public static boolean spawnPredicate(EntityType<? extends AbstractMimicEntity> typeIn, LevelAccessor levelAccessor,
+										 MobSpawnType spawnType, BlockPos pos, RandomSource randomSource) {
+		return levelAccessor.getDifficulty() != Difficulty.PEACEFUL && checkMobSpawnRules(typeIn, levelAccessor, spawnType, pos, randomSource);
 	}
 }
