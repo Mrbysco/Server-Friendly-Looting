@@ -29,8 +29,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import net.minecraft.world.level.pathfinder.Path;
+import net.minecraft.world.level.pathfinder.PathType;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.fluids.FluidType;
 
@@ -45,7 +45,7 @@ public class WaterMimicEntity extends AbstractMimicEntity {
 	public WaterMimicEntity(EntityType<? extends WaterMimicEntity> type, Level level) {
 		super(type, level);
 		this.moveControl = new WaterMimicEntity.MoveHelperController(this);
-		this.setPathfindingMalus(BlockPathTypes.WATER, 0.0F);
+		this.setPathfindingMalus(PathType.WATER, 0.0F);
 		this.waterNavigator = new WaterBoundPathNavigation(this, level);
 		this.groundNavigator = new GroundPathNavigation(this, level);
 	}

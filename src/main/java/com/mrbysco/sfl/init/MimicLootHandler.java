@@ -5,6 +5,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.loot.BuiltInLootTables;
+import net.minecraft.world.level.storage.loot.LootTable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -71,8 +72,16 @@ public class MimicLootHandler {
 		}
 	}
 
+	public static void addWaterTable(ResourceKey<LootTable> resourceKey) {
+		addWaterTable(resourceKey.location());
+	}
+
 	public static void removeWaterTable(ResourceLocation lootTable) {
 		WATER_LOOT_TABLES.remove(lootTable);
+	}
+
+	public static void addDimensionalTable(ResourceKey<Level> dimType, ResourceKey<LootTable> resourceKey) {
+		addDimensionalTable(dimType, resourceKey.location());
 	}
 
 	public static void addDimensionalTable(ResourceKey<Level> dimType, ResourceLocation lootTable) {

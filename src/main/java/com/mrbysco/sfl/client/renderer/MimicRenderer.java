@@ -8,8 +8,6 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
 
-import javax.annotation.Nullable;
-
 public class MimicRenderer extends MobRenderer<MimicEntity, MimicModel<MimicEntity>> {
 	private static final ResourceLocation OAK = new ResourceLocation(ServerFriendlyLoot.MOD_ID, "textures/entity/mimic_oak.png");
 	private static final ResourceLocation SPRUCE = new ResourceLocation(ServerFriendlyLoot.MOD_ID, "textures/entity/mimic_spruce.png");
@@ -22,7 +20,6 @@ public class MimicRenderer extends MobRenderer<MimicEntity, MimicModel<MimicEnti
 		super(context, new MimicModel<>(context.bakeLayer(ClientHandler.MIMIC)), 0.25F);
 	}
 
-	@Nullable
 	@Override
 	public ResourceLocation getTextureLocation(MimicEntity entity) {
 		return switch (entity.getMimicType()) {

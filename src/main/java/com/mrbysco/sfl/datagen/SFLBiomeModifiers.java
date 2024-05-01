@@ -5,10 +5,9 @@ import com.mrbysco.sfl.init.MimicRegistry;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.data.worldgen.BootstapContext;
+import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.BiomeTags;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.MobSpawnSettings;
 import net.neoforged.neoforge.common.Tags;
@@ -26,13 +25,13 @@ public class SFLBiomeModifiers {
 	protected static final ResourceKey<BiomeModifier> ADD_WATER_MIMIC = ResourceKey.create(NeoForgeRegistries.Keys.BIOME_MODIFIERS,
 			new ResourceLocation(ServerFriendlyLoot.MOD_ID, "add_water_mimic"));
 
-	public static void bootstrap(BootstapContext<BiomeModifier> context) {
+	public static void bootstrap(BootstrapContext<BiomeModifier> context) {
 		HolderGetter<Biome> biomeGetter = context.lookup(Registries.BIOME);
 
-		HolderSet.Named<Biome> isOverworld = biomeGetter.getOrThrow(BiomeTags.IS_OVERWORLD);
-		HolderSet.Named<Biome> isNether = biomeGetter.getOrThrow(BiomeTags.IS_NETHER);
-		HolderSet.Named<Biome> isEnd = biomeGetter.getOrThrow(BiomeTags.IS_END);
-		HolderSet.Named<Biome> isWater = biomeGetter.getOrThrow(Tags.Biomes.IS_WATER);
+		HolderSet.Named<Biome> isOverworld = biomeGetter.getOrThrow(Tags.Biomes.IS_OVERWORLD);
+		HolderSet.Named<Biome> isNether = biomeGetter.getOrThrow(Tags.Biomes.IS_NETHER);
+		HolderSet.Named<Biome> isEnd = biomeGetter.getOrThrow(Tags.Biomes.IS_END);
+		HolderSet.Named<Biome> isWater = biomeGetter.getOrThrow(Tags.Biomes.IS_WET_OVERWORLD);
 
 		context.register(ADD_MIMIC, BiomeModifiers.AddSpawnsBiomeModifier.singleSpawn(
 				isOverworld,

@@ -28,7 +28,7 @@ import java.util.UUID;
 
 public class EndMimicEntity extends AbstractMimicEntity {
 	private static final UUID ATTACKING_SPEED_BOOST_ID = UUID.fromString("03D531C2-DD68-431A-AFB5-8F79AD6990CB");
-	private static final AttributeModifier ATTACKING_SPEED_BOOST = new AttributeModifier(ATTACKING_SPEED_BOOST_ID, "Attacking speed boost", (double) 0.15F, AttributeModifier.Operation.ADDITION);
+	private static final AttributeModifier ATTACKING_SPEED_BOOST = new AttributeModifier(ATTACKING_SPEED_BOOST_ID, "Attacking speed boost", (double) 0.15F, AttributeModifier.Operation.ADD_VALUE);
 
 	private int targetChangeTime;
 

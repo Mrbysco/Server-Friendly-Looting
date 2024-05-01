@@ -69,18 +69,18 @@ public class MimicEntity extends AbstractMimicEntity {
 	@Nullable
 	@Override
 	public SpawnGroupData finalizeSpawn(ServerLevelAccessor levelAccessor, DifficultyInstance difficultyInstance,
-										MobSpawnType spawnType, @Nullable SpawnGroupData groupData, @Nullable CompoundTag dataTag) {
-		SpawnGroupData data = super.finalizeSpawn(levelAccessor, difficultyInstance, spawnType, groupData, dataTag);
+	                                    MobSpawnType spawnType, @Nullable SpawnGroupData groupData) {
+		SpawnGroupData data = super.finalizeSpawn(levelAccessor, difficultyInstance, spawnType, groupData);
 		int i = this.getRandomMimicType(levelAccessor, blockPosition());
 		this.setMimicType(i);
 
 		return data;
 	}
 
-
-	protected void defineSynchedData() {
-		super.defineSynchedData();
-		this.entityData.define(MIMIC_TYPE, 0);
+	@Override
+	protected void defineSynchedData(SynchedEntityData.Builder builder) {
+		super.defineSynchedData(builder);
+		builder.define(MIMIC_TYPE, 0);
 	}
 
 	public int getMimicType() {

@@ -10,12 +10,11 @@ import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
-import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.ModLoadingContext;
+import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
-import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import net.neoforged.neoforge.event.entity.living.MobSpawnEvent;
@@ -29,8 +28,8 @@ public class ServerFriendlyLoot {
 	public static final String MOD_ID = "sfl";
 	public static final Logger LOGGER = LogManager.getLogger();
 
-	public ServerFriendlyLoot(IEventBus eventBus) {
-		ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, SFLConfig.spawnSpec, "sfl_spawning.toml");
+	public ServerFriendlyLoot(IEventBus eventBus, Dist dist, ModContainer container) {
+		container.registerConfig(ModConfig.Type.SERVER, SFLConfig.spawnSpec, "sfl_spawning.toml");
 		eventBus.register(SFLConfig.class);
 
 		MimicRegistry.ENTITY_TYPES.register(eventBus);
@@ -42,7 +41,7 @@ public class ServerFriendlyLoot {
 
 		NeoForge.EVENT_BUS.addListener(this::onFinalizeSpawn);
 
-		if (FMLEnvironment.dist.isClient()) {
+		if (dist.isClient()) {
 			eventBus.addListener(ClientHandler::registerEntityRenders);
 			eventBus.addListener(ClientHandler::registerLayerDefinitions);
 		}

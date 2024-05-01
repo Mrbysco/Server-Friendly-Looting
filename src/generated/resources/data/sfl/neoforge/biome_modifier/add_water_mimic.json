@@ -1,6 +1,6 @@
 {
   "type": "neoforge:add_spawns",
-  "biomes": "#forge:is_water",
+  "biomes": "#c:is_wet/overworld",
   "spawners": {
     "type": "sfl:water_mimic",
     "maxCount": 1,
