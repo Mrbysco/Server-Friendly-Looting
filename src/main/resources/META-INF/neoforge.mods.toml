@@ -20,6 +20,6 @@ side="BOTH"
 [[dependencies.sfl]]
 modId="neoforge"
 type="REQUIRED"
-versionRange="[20.6.12-beta,)"
+versionRange="[20.6.78-beta,)"
 ordering="NONE"
 side="BOTH"

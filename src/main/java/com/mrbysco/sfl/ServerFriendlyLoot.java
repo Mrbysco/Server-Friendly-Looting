@@ -17,7 +17,7 @@ import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
-import net.neoforged.neoforge.event.entity.living.MobSpawnEvent;
+import net.neoforged.neoforge.event.entity.living.FinalizeSpawnEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -54,7 +54,7 @@ public class ServerFriendlyLoot {
 		}
 	}
 
-	private void onFinalizeSpawn(final MobSpawnEvent.FinalizeSpawn event) {
+	private void onFinalizeSpawn(final FinalizeSpawnEvent event) {
 		if (event.getSpawnType().equals(MobSpawnType.NATURAL) && event.getEntity() instanceof AbstractMimicEntity) {
 			List<? extends String> blacklist = SFLConfig.SPAWN.dimension_blacklist.get();
 			if (!blacklist.isEmpty()) {
