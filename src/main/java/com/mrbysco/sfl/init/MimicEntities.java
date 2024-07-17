@@ -7,14 +7,14 @@ import com.mrbysco.sfl.entity.WaterMimicEntity;
 import net.minecraft.world.entity.SpawnPlacementTypes;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
-import net.neoforged.neoforge.event.entity.SpawnPlacementRegisterEvent;
+import net.neoforged.neoforge.event.entity.RegisterSpawnPlacementsEvent;
 
 public class MimicEntities {
-	public static void registerSpawnPlacements(SpawnPlacementRegisterEvent event) {
-		event.register(MimicRegistry.MIMIC.get(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, MimicEntity::spawnPredicate, SpawnPlacementRegisterEvent.Operation.AND);
-		event.register(MimicRegistry.END_MIMIC.get(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, MimicEntity::spawnPredicate, SpawnPlacementRegisterEvent.Operation.AND);
-		event.register(MimicRegistry.NETHER_MIMIC.get(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, NetherMimicEntity::spawnPredicate, SpawnPlacementRegisterEvent.Operation.AND);
-		event.register(MimicRegistry.WATER_MIMIC.get(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, WaterMimicEntity::spawnPredicate, SpawnPlacementRegisterEvent.Operation.AND);
+	public static void registerSpawnPlacements(RegisterSpawnPlacementsEvent event) {
+		event.register(MimicRegistry.MIMIC.get(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, MimicEntity::spawnPredicate, RegisterSpawnPlacementsEvent.Operation.AND);
+		event.register(MimicRegistry.END_MIMIC.get(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, MimicEntity::spawnPredicate, RegisterSpawnPlacementsEvent.Operation.AND);
+		event.register(MimicRegistry.NETHER_MIMIC.get(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, NetherMimicEntity::spawnPredicate, RegisterSpawnPlacementsEvent.Operation.AND);
+		event.register(MimicRegistry.WATER_MIMIC.get(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, WaterMimicEntity::spawnPredicate, RegisterSpawnPlacementsEvent.Operation.AND);
 	}
 
 	public static void registerEntityAttributes(EntityAttributeCreationEvent event) {

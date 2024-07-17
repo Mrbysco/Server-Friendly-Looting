@@ -9,12 +9,12 @@ import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
 
 public class MimicRenderer extends MobRenderer<MimicEntity, MimicModel<MimicEntity>> {
-	private static final ResourceLocation OAK = new ResourceLocation(ServerFriendlyLoot.MOD_ID, "textures/entity/mimic_oak.png");
-	private static final ResourceLocation SPRUCE = new ResourceLocation(ServerFriendlyLoot.MOD_ID, "textures/entity/mimic_spruce.png");
-	private static final ResourceLocation BIRCH = new ResourceLocation(ServerFriendlyLoot.MOD_ID, "textures/entity/mimic_birch.png");
-	private static final ResourceLocation JUNGLE = new ResourceLocation(ServerFriendlyLoot.MOD_ID, "textures/entity/mimic_jungle.png");
-	private static final ResourceLocation ACACIA = new ResourceLocation(ServerFriendlyLoot.MOD_ID, "textures/entity/mimic_acacia.png");
-	private static final ResourceLocation DARK_OAK = new ResourceLocation(ServerFriendlyLoot.MOD_ID, "textures/entity/mimic_dark_oak.png");
+	private static final ResourceLocation OAK = ResourceLocation.fromNamespaceAndPath(ServerFriendlyLoot.MOD_ID, "textures/entity/mimic_oak.png");
+	private static final ResourceLocation SPRUCE = ResourceLocation.fromNamespaceAndPath(ServerFriendlyLoot.MOD_ID, "textures/entity/mimic_spruce.png");
+	private static final ResourceLocation BIRCH = ResourceLocation.fromNamespaceAndPath(ServerFriendlyLoot.MOD_ID, "textures/entity/mimic_birch.png");
+	private static final ResourceLocation JUNGLE = ResourceLocation.fromNamespaceAndPath(ServerFriendlyLoot.MOD_ID, "textures/entity/mimic_jungle.png");
+	private static final ResourceLocation ACACIA = ResourceLocation.fromNamespaceAndPath(ServerFriendlyLoot.MOD_ID, "textures/entity/mimic_acacia.png");
+	private static final ResourceLocation DARK_OAK = ResourceLocation.fromNamespaceAndPath(ServerFriendlyLoot.MOD_ID, "textures/entity/mimic_dark_oak.png");
 
 	public MimicRenderer(EntityRendererProvider.Context context) {
 		super(context, new MimicModel<>(context.bakeLayer(ClientHandler.MIMIC)), 0.25F);

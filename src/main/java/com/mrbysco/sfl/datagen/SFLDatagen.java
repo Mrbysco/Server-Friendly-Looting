@@ -75,7 +75,7 @@ public class SFLDatagen {
 		registryBuilder.add(Registries.PLACED_FEATURE, $ -> {
 		});
 		registryBuilder.add(NeoForgeRegistries.Keys.BIOME_MODIFIERS, SFLBiomeModifiers::bootstrap);
-		// We need the BIOME registry to be present so we can use a biome tag, doesn't matter that it's empty
+		// We need the BIOME registry to be present, so we can use a biome tag, doesn't matter that it's empty
 		registryBuilder.add(Registries.BIOME, $ -> {
 		});
 		RegistryAccess.Frozen regAccess = RegistryAccess.fromRegistryOfRegistries(BuiltInRegistries.REGISTRY);

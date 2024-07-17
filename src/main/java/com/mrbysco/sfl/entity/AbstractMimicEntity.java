@@ -59,8 +59,8 @@ public abstract class AbstractMimicEntity extends Monster {
 
 		LootParams.Builder lootcontext$builder = (new LootParams.Builder((ServerLevel) this.level()))
 				.withParameter(LootContextParams.THIS_ENTITY, this).withParameter(LootContextParams.ORIGIN, this.position())
-				.withParameter(LootContextParams.DAMAGE_SOURCE, damageSourceIn).withOptionalParameter(LootContextParams.KILLER_ENTITY, damageSourceIn.getEntity())
-				.withOptionalParameter(LootContextParams.DIRECT_KILLER_ENTITY, damageSourceIn.getDirectEntity());
+				.withParameter(LootContextParams.DAMAGE_SOURCE, damageSourceIn).withOptionalParameter(LootContextParams.ATTACKING_ENTITY, damageSourceIn.getEntity())
+				.withOptionalParameter(LootContextParams.DIRECT_ATTACKING_ENTITY, damageSourceIn.getDirectEntity());
 		if (wasRecentlyHit && this.lastHurtByPlayer != null) {
 			lootcontext$builder = lootcontext$builder.withParameter(LootContextParams.LAST_DAMAGE_PLAYER, this.lastHurtByPlayer).withLuck(this.lastHurtByPlayer.getLuck());
 		}
@@ -69,7 +69,7 @@ public abstract class AbstractMimicEntity extends Monster {
 		int stackAmount = 1;
 
 		if (damageSourceIn.getEntity() instanceof Player player && !(damageSourceIn.getEntity() instanceof FakePlayer)) {
-			int looting = player.getMainHandItem().getEnchantmentLevel(Enchantments.LOOTING);
+			int looting = player.getMainHandItem().getEnchantmentLevel(level().holderOrThrow(Enchantments.LOOTING));
 			if (looting > 0) {
 				stackAmount = looting + 1;
 			}
@@ -102,7 +102,7 @@ public abstract class AbstractMimicEntity extends Monster {
 	public void readAdditionalSaveData(CompoundTag compound) {
 		super.readAdditionalSaveData(compound);
 
-		this.defaultLootTable = getLootKey(new ResourceLocation(compound.getString("DefaultLootTable")));
+		this.defaultLootTable = getLootKey(ResourceLocation.tryParse(compound.getString("DefaultLootTable")));
 	}
 
 	private ResourceKey<LootTable> getLootKey(ResourceLocation location) {

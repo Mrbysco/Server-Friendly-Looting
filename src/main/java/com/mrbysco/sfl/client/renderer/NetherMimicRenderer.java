@@ -9,8 +9,8 @@ import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
 
 public class NetherMimicRenderer extends MobRenderer<NetherMimicEntity, MimicModel<NetherMimicEntity>> {
-	private static final ResourceLocation NETHER1 = new ResourceLocation(ServerFriendlyLoot.MOD_ID, "textures/entity/mimic_nether1.png");
-	private static final ResourceLocation NETHER2 = new ResourceLocation(ServerFriendlyLoot.MOD_ID, "textures/entity/mimic_nether2.png");
+	private static final ResourceLocation NETHER1 = ResourceLocation.fromNamespaceAndPath(ServerFriendlyLoot.MOD_ID, "textures/entity/mimic_nether1.png");
+	private static final ResourceLocation NETHER2 = ResourceLocation.fromNamespaceAndPath(ServerFriendlyLoot.MOD_ID, "textures/entity/mimic_nether2.png");
 
 	public NetherMimicRenderer(EntityRendererProvider.Context context) {
 		super(context, new MimicModel<>(context.bakeLayer(ClientHandler.MIMIC)), 0.25F);

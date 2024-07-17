@@ -70,12 +70,13 @@ public class WaterMimicEntity extends AbstractMimicEntity {
 				.add(Attributes.MOVEMENT_SPEED, (double) 0.25F);
 	}
 
+	@Override
 	public boolean isPushedByFluid(FluidType fluidType) {
 		return !this.isSwimming();
 	}
 
 	public static boolean spawnPredicate(EntityType<? extends AbstractMimicEntity> typeIn, ServerLevelAccessor levelAccessor,
-										 MobSpawnType spawnType, BlockPos pos, RandomSource randomSource) {
+	                                     MobSpawnType spawnType, BlockPos pos, RandomSource randomSource) {
 		boolean flag = levelAccessor.getDifficulty() != Difficulty.PEACEFUL && isDarkEnoughToSpawn(levelAccessor, pos, randomSource) && (spawnType == MobSpawnType.SPAWNER || levelAccessor.getFluidState(pos).is(FluidTags.WATER));
 		if (!levelAccessor.getBiome(pos).is(BiomeTags.IS_RIVER)) {
 			return randomSource.nextInt(40) == 0 && isUnderSeaLevel(levelAccessor, pos) && flag;
@@ -88,6 +89,7 @@ public class WaterMimicEntity extends AbstractMimicEntity {
 		return pos.getY() < levelAccessor.getSeaLevel() - 5;
 	}
 
+	@Override
 	public void updateSwimming() {
 		if (!this.level().isClientSide) {
 			if (this.isEffectiveAi() && this.isInWater() && this.wantsToSwim()) {
@@ -113,6 +115,7 @@ public class WaterMimicEntity extends AbstractMimicEntity {
 		return false;
 	}
 
+	@Override
 	public void travel(Vec3 travelVector) {
 		if (this.isEffectiveAi() && this.isInWater() && this.wantsToSwim()) {
 			this.moveRelative(0.01F, travelVector);
@@ -144,6 +147,7 @@ public class WaterMimicEntity extends AbstractMimicEntity {
 			this.mimic = waterMimic;
 		}
 
+		@Override
 		public void tick() {
 			LivingEntity target = this.mimic.getTarget();
 			if (this.mimic.wantsToSwim() && this.mimic.isInWater()) {
@@ -193,6 +197,7 @@ public class WaterMimicEntity extends AbstractMimicEntity {
 			this.setFlags(EnumSet.of(Flag.MOVE));
 		}
 
+		@Override
 		public boolean canUse() {
 			if (!this.level.isDay()) {
 				return false;
@@ -211,10 +216,12 @@ public class WaterMimicEntity extends AbstractMimicEntity {
 			}
 		}
 
+		@Override
 		public boolean canContinueToUse() {
 			return !this.mob.getNavigation().isDone();
 		}
 
+		@Override
 		public void start() {
 			this.mob.getNavigation().moveTo(this.wantedX, this.wantedY, this.wantedZ, this.speedModifier);
 		}
@@ -247,14 +254,17 @@ public class WaterMimicEntity extends AbstractMimicEntity {
 			this.targetY = targetY;
 		}
 
+		@Override
 		public boolean canUse() {
 			return !this.waterMimicEntity.level().isDay() && this.waterMimicEntity.isInWater() && this.waterMimicEntity.getY() < (double) (this.targetY - 2);
 		}
 
+		@Override
 		public boolean canContinueToUse() {
 			return this.canUse() && !this.obstructed;
 		}
 
+		@Override
 		public void tick() {
 			if (this.waterMimicEntity.getY() < (double) (this.targetY - 1) && (this.waterMimicEntity.getNavigation().isDone() || this.waterMimicEntity.isCloseToPathTarget())) {
 				Vec3 vec3 = DefaultRandomPos.getPosTowards(this.waterMimicEntity, 4, 8, new Vec3(this.waterMimicEntity.getX(), (double) (this.targetY - 1), this.waterMimicEntity.getZ()), (double) ((float) Math.PI / 2F));
@@ -267,11 +277,13 @@ public class WaterMimicEntity extends AbstractMimicEntity {
 			}
 		}
 
+		@Override
 		public void start() {
 			this.waterMimicEntity.setSwimmingUp(true);
 			this.obstructed = false;
 		}
 
+		@Override
 		public void stop() {
 			this.waterMimicEntity.setSwimmingUp(false);
 		}

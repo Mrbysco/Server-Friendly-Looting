@@ -17,13 +17,13 @@ import net.neoforged.neoforge.registries.NeoForgeRegistries;
 
 public class SFLBiomeModifiers {
 	protected static final ResourceKey<BiomeModifier> ADD_MIMIC = ResourceKey.create(NeoForgeRegistries.Keys.BIOME_MODIFIERS,
-			new ResourceLocation(ServerFriendlyLoot.MOD_ID, "add_mimic"));
+			ResourceLocation.fromNamespaceAndPath(ServerFriendlyLoot.MOD_ID, "add_mimic"));
 	protected static final ResourceKey<BiomeModifier> ADD_NETHER_MIMIC = ResourceKey.create(NeoForgeRegistries.Keys.BIOME_MODIFIERS,
-			new ResourceLocation(ServerFriendlyLoot.MOD_ID, "add_nether_mimic"));
+			ResourceLocation.fromNamespaceAndPath(ServerFriendlyLoot.MOD_ID, "add_nether_mimic"));
 	protected static final ResourceKey<BiomeModifier> ADD_END_MIMIC = ResourceKey.create(NeoForgeRegistries.Keys.BIOME_MODIFIERS,
-			new ResourceLocation(ServerFriendlyLoot.MOD_ID, "add_end_mimic"));
+			ResourceLocation.fromNamespaceAndPath(ServerFriendlyLoot.MOD_ID, "add_end_mimic"));
 	protected static final ResourceKey<BiomeModifier> ADD_WATER_MIMIC = ResourceKey.create(NeoForgeRegistries.Keys.BIOME_MODIFIERS,
-			new ResourceLocation(ServerFriendlyLoot.MOD_ID, "add_water_mimic"));
+			ResourceLocation.fromNamespaceAndPath(ServerFriendlyLoot.MOD_ID, "add_water_mimic"));
 
 	public static void bootstrap(BootstrapContext<BiomeModifier> context) {
 		HolderGetter<Biome> biomeGetter = context.lookup(Registries.BIOME);

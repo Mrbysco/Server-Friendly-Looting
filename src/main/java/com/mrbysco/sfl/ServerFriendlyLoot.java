@@ -60,7 +60,7 @@ public class ServerFriendlyLoot {
 			if (!blacklist.isEmpty()) {
 				ResourceLocation dimensionLocation = ((Level) event.getLevel()).dimension().location();
 				for (String dimension : blacklist) {
-					if (!dimension.isEmpty() && new ResourceLocation(dimension).equals(dimensionLocation))
+					if (!dimension.isEmpty() && ResourceLocation.tryParse(dimension).equals(dimensionLocation))
 						event.setSpawnCancelled(true);
 				}
 			}

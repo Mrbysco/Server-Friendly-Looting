@@ -9,7 +9,7 @@ import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
 
 public class WaterMimicRenderer extends MobRenderer<WaterMimicEntity, MimicModel<WaterMimicEntity>> {
-	private static final ResourceLocation TEXTURE = new ResourceLocation(ServerFriendlyLoot.MOD_ID, "textures/entity/mimic_water.png");
+	private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(ServerFriendlyLoot.MOD_ID, "textures/entity/mimic_water.png");
 
 	public WaterMimicRenderer(EntityRendererProvider.Context context) {
 		super(context, new MimicModel<>(context.bakeLayer(ClientHandler.MIMIC)), 0.25F);

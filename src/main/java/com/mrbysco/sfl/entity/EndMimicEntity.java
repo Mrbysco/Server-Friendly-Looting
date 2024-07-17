@@ -1,8 +1,11 @@
 package com.mrbysco.sfl.entity;
 
+import com.mrbysco.sfl.ServerFriendlyLoot;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.damagesource.DamageSource;
@@ -19,17 +22,21 @@ import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.ThrownPotion;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.alchemy.PotionContents;
+import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.event.EventHooks;
 import net.neoforged.neoforge.event.entity.EntityTeleportEvent;
 
 import javax.annotation.Nullable;
-import java.util.UUID;
 
 public class EndMimicEntity extends AbstractMimicEntity {
-	private static final UUID ATTACKING_SPEED_BOOST_ID = UUID.fromString("03D531C2-DD68-431A-AFB5-8F79AD6990CB");
-	private static final AttributeModifier ATTACKING_SPEED_BOOST = new AttributeModifier(ATTACKING_SPEED_BOOST_ID, "Attacking speed boost", (double) 0.15F, AttributeModifier.Operation.ADD_VALUE);
-
+	private static final ResourceLocation SPEED_MODIFIER_ATTACKING_ID = ResourceLocation.fromNamespaceAndPath(ServerFriendlyLoot.MOD_ID, "attacking");
+	private static final AttributeModifier SPEED_MODIFIER_ATTACKING = new AttributeModifier(
+			SPEED_MODIFIER_ATTACKING_ID, 0.15F, AttributeModifier.Operation.ADD_VALUE
+	);
 	private int targetChangeTime;
 
 	public EndMimicEntity(EntityType<? extends EndMimicEntity> type, Level level) {
@@ -54,19 +61,20 @@ public class EndMimicEntity extends AbstractMimicEntity {
 				.add(Attributes.MOVEMENT_SPEED, (double) 0.275F);
 	}
 
+	@Override
 	protected void customServerAiStep() {
 		if (this.level().isDay() && this.tickCount >= this.targetChangeTime + 600) {
 			float f = this.getLightLevelDependentMagicValue();
 			if (f > 0.5F && this.level().canSeeSky(blockPosition()) && this.random.nextFloat() * 30.0F < (f - 0.4F) * 2.0F) {
 				this.setTarget((LivingEntity) null);
-				this.teleportRandomly();
+				this.teleport();
 			}
 		}
 
 		super.customServerAiStep();
 	}
 
-	protected boolean teleportRandomly() {
+	protected boolean teleport() {
 		double d0 = this.getX() + (this.random.nextDouble() - 0.5D) * 64.0D;
 		double d1 = this.getY() + (double) (this.random.nextInt(64) - 32);
 		double d2 = this.getZ() + (this.random.nextDouble() - 0.5D) * 64.0D;
@@ -96,22 +104,24 @@ public class EndMimicEntity extends AbstractMimicEntity {
 		}
 	}
 
+	@Override
 	public void setTarget(@Nullable LivingEntity livingEntity) {
 		AttributeInstance attributeInstance = this.getAttribute(Attributes.MOVEMENT_SPEED);
 		if (attributeInstance == null) return;
 		if (livingEntity == null) {
 			this.targetChangeTime = 0;
-			attributeInstance.removeModifier(ATTACKING_SPEED_BOOST_ID);
+			attributeInstance.removeModifier(SPEED_MODIFIER_ATTACKING_ID);
 		} else {
 			this.targetChangeTime = this.tickCount;
-			if (!attributeInstance.hasModifier(ATTACKING_SPEED_BOOST)) {
-				attributeInstance.addTransientModifier(ATTACKING_SPEED_BOOST);
+			if (!attributeInstance.hasModifier(SPEED_MODIFIER_ATTACKING_ID)) {
+				attributeInstance.addTransientModifier(SPEED_MODIFIER_ATTACKING);
 			}
 		}
 
 		super.setTarget(livingEntity); //Forge: Moved down to allow event handlers to write data manager values.
 	}
 
+	@Override
 	public void aiStep() {
 		if (this.level().isClientSide) {
 			for (int i = 0; i < 2; ++i) {
@@ -128,24 +138,36 @@ public class EndMimicEntity extends AbstractMimicEntity {
 		super.aiStep();
 	}
 
+	@Override
 	public boolean hurt(DamageSource source, float amount) {
 		if (this.isInvulnerableTo(source)) {
 			return false;
-		} else if (!source.isIndirect()) {
-			boolean flag = super.hurt(source, amount);
-			if (!source.is(DamageTypeTags.BYPASSES_ARMOR) && this.random.nextInt(10) != 0) {
-				this.teleportRandomly();
-			}
-
-			return flag;
 		} else {
-			for (int i = 0; i < 64; ++i) {
-				if (this.teleportRandomly()) {
-					return true;
+			boolean flag = source.getDirectEntity() instanceof ThrownPotion;
+			if (!source.is(DamageTypeTags.IS_PROJECTILE) && !flag) {
+				boolean flag2 = super.hurt(source, amount);
+				if (!this.level().isClientSide() && !(source.getEntity() instanceof LivingEntity) && this.random.nextInt(10) != 0) {
+					this.teleport();
 				}
-			}
 
-			return false;
+				return flag2;
+			} else {
+				boolean flag1 = flag && this.hurtWithCleanWater(source, (ThrownPotion) source.getDirectEntity(), amount);
+
+				for (int i = 0; i < 64; i++) {
+					if (this.teleport()) {
+						return true;
+					}
+				}
+
+				return flag1;
+			}
 		}
+	}
+
+	private boolean hurtWithCleanWater(DamageSource source, ThrownPotion potion, float amount) {
+		ItemStack itemstack = potion.getItem();
+		PotionContents potioncontents = itemstack.getOrDefault(DataComponents.POTION_CONTENTS, PotionContents.EMPTY);
+		return potioncontents.is(Potions.WATER) ? super.hurt(source, amount) : false;
 	}
 }
