@@ -14,12 +14,12 @@ public class SFLConfig {
 		public final ModConfigSpec.ConfigValue<List<? extends String>> dimension_blacklist;
 
 		Spawn(ModConfigSpec.Builder builder) {
-			builder.push("General settings")
-					.comment("Configure General Mimic settings");
+			builder.comment("Configure General Mimic settings")
+					.push("general");
 
 			dimension_blacklist = builder
 					.comment("Dimensions in which the mimic's can't spawn")
-					.defineListAllowEmpty(List.of("dimensionBlacklist"), () -> List.of(""), o -> (o instanceof String));
+					.defineListAllowEmpty("dimensionBlacklist", List::of, String::new, o -> (o instanceof String));
 
 			builder.pop();
 		}
