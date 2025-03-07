@@ -6,5 +6,9 @@
   "item.sfl.end_mimic_spawn_egg": "End Mimic Spawn Egg",
   "item.sfl.mimic_spawn_egg": "Mimic Spawn Egg",
   "item.sfl.nether_mimic_spawn_egg": "Nether Mimic Spawn Egg",
-  "item.sfl.water_mimic_spawn_egg": "Water Mimic Spawn Egg"
+  "item.sfl.water_mimic_spawn_egg": "Water Mimic Spawn Egg",
+  "sfl.configuration.dimensionBlacklist": "Dimension Blacklist",
+  "sfl.configuration.dimensionBlacklist.tooltip": "Dimensions in which the mimic's can't spawn",
+  "sfl.configuration.general": "General",
+  "sfl.configuration.general.tooltip": "Configure General Mimic settings"
 }

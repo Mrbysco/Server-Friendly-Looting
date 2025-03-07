@@ -17,6 +17,7 @@ import net.neoforged.neoforge.common.data.DatapackBuiltinEntriesProvider;
 import net.neoforged.neoforge.common.data.LanguageProvider;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
@@ -52,6 +53,9 @@ public class SFLDatagen {
 			addEntityType(MimicRegistry.END_MIMIC, "End Mimic");
 			addEntityType(MimicRegistry.NETHER_MIMIC, "Nether Mimic");
 
+			addConfig("general", "General", "Configure General Mimic settings");
+			addConfig("dimensionBlacklist", "Dimension Blacklist", "Dimensions in which the mimic's can't spawn");
+
 			//TODO: Custom sounds
 //			addSubtitle(MimicSounds.MIMIC_AMBIENT, "Mimic noises");
 //			addSubtitle(MimicSounds.MIMIC_DEATH, "Mimic dies");
@@ -65,6 +69,12 @@ public class SFLDatagen {
 		public void addSubtitle(SoundEvent sound, String name) {
 			String path = ServerFriendlyLoot.MOD_ID + ".subtitle." + sound.getLocation().getPath();
 			this.add(path, name);
+		}
+
+		private void addConfig(String path, String name, @Nullable String description) {
+			this.add("sfl.configuration." + path, name);
+			if (description != null && !description.isEmpty())
+				this.add("sfl.configuration." + path + ".tooltip", description);
 		}
 	}
 
