@@ -86,7 +86,7 @@ public abstract class AbstractMimicEntity extends Monster {
 				}
 			}
 		} else {
-			int randNumber = random.nextInt(loot.size());
+			int randNumber = !loot.isEmpty() ? random.nextInt(loot.size()) : 1;
 			this.spawnAtLocation(loot.get(randNumber));
 		}
 	}
