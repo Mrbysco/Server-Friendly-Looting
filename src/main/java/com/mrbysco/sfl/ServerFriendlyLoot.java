@@ -15,6 +15,8 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
+import net.neoforged.neoforge.client.gui.ConfigurationScreen;
+import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import net.neoforged.neoforge.event.entity.living.FinalizeSpawnEvent;
@@ -42,6 +44,7 @@ public class ServerFriendlyLoot {
 		NeoForge.EVENT_BUS.addListener(this::onFinalizeSpawn);
 
 		if (dist.isClient()) {
+			container.registerExtensionPoint(IConfigScreenFactory.class, ConfigurationScreen::new);
 			eventBus.addListener(ClientHandler::registerEntityRenders);
 			eventBus.addListener(ClientHandler::registerLayerDefinitions);
 		}
@@ -60,8 +63,11 @@ public class ServerFriendlyLoot {
 			if (!blacklist.isEmpty()) {
 				ResourceLocation dimensionLocation = ((Level) event.getLevel()).dimension().location();
 				for (String dimension : blacklist) {
-					if (!dimension.isEmpty() && ResourceLocation.tryParse(dimension).equals(dimensionLocation))
-						event.setSpawnCancelled(true);
+					if (!dimension.isEmpty()) {
+						ResourceLocation dimLoc = ResourceLocation.tryParse(dimension);
+						if (dimLoc != null && dimLoc.equals(dimensionLocation))
+							event.setSpawnCancelled(true);
+					}
 				}
 			}
 		}
