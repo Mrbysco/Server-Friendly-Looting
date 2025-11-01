@@ -6,10 +6,9 @@ import com.mrbysco.sfl.client.model.MimicModel;
 import com.mrbysco.sfl.client.state.MimicRenderState;
 import com.mrbysco.sfl.entity.NetherMimicEntity;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
 
-public class NetherMimicRenderer extends MobRenderer<NetherMimicEntity, MimicRenderState, MimicModel> {
+public class NetherMimicRenderer extends AbstractMimicRenderer<NetherMimicEntity> {
 	private static final ResourceLocation NETHER1 = ResourceLocation.fromNamespaceAndPath(ServerFriendlyLoot.MOD_ID, "textures/entity/mimic_nether1.png");
 	private static final ResourceLocation NETHER2 = ResourceLocation.fromNamespaceAndPath(ServerFriendlyLoot.MOD_ID, "textures/entity/mimic_nether2.png");
 

@@ -9,7 +9,7 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
 
-public class EndMimicRenderer extends MobRenderer<EndMimicEntity, MimicRenderState, MimicModel> {
+public class EndMimicRenderer extends AbstractMimicRenderer<EndMimicEntity> {
 	private static final ResourceLocation TEXTURES = ResourceLocation.fromNamespaceAndPath(ServerFriendlyLoot.MOD_ID, "textures/entity/mimic_end.png");
 
 	public EndMimicRenderer(EntityRendererProvider.Context context) {

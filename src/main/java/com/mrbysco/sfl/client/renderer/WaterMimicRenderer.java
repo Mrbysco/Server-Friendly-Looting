@@ -6,10 +6,9 @@ import com.mrbysco.sfl.client.model.MimicModel;
 import com.mrbysco.sfl.client.state.MimicRenderState;
 import com.mrbysco.sfl.entity.WaterMimicEntity;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
 
-public class WaterMimicRenderer extends MobRenderer<WaterMimicEntity, MimicRenderState, MimicModel> {
+public class WaterMimicRenderer extends AbstractMimicRenderer<WaterMimicEntity> {
 	private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(ServerFriendlyLoot.MOD_ID, "textures/entity/mimic_water.png");
 
 	public WaterMimicRenderer(EntityRendererProvider.Context context) {

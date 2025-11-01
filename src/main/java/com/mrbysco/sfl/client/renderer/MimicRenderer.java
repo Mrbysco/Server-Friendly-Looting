@@ -6,10 +6,9 @@ import com.mrbysco.sfl.client.model.MimicModel;
 import com.mrbysco.sfl.client.state.MimicRenderState;
 import com.mrbysco.sfl.entity.MimicEntity;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
 
-public class MimicRenderer extends MobRenderer<MimicEntity, MimicRenderState, MimicModel> {
+public class MimicRenderer extends AbstractMimicRenderer<MimicEntity> {
 	private static final ResourceLocation OAK = ResourceLocation.fromNamespaceAndPath(ServerFriendlyLoot.MOD_ID, "textures/entity/mimic_oak.png");
 	private static final ResourceLocation SPRUCE = ResourceLocation.fromNamespaceAndPath(ServerFriendlyLoot.MOD_ID, "textures/entity/mimic_spruce.png");
 	private static final ResourceLocation BIRCH = ResourceLocation.fromNamespaceAndPath(ServerFriendlyLoot.MOD_ID, "textures/entity/mimic_birch.png");
