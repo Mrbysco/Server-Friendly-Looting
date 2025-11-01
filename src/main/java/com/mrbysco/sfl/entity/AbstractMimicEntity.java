@@ -28,6 +28,7 @@ import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
+import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.common.util.FakePlayer;
 import net.neoforged.neoforge.fluids.FluidType;
 
@@ -143,6 +144,8 @@ public abstract class AbstractMimicEntity extends Monster {
 
 	public static boolean spawnPredicate(EntityType<? extends AbstractMimicEntity> typeIn, LevelAccessor levelAccessor,
 	                                     MobSpawnType spawnType, BlockPos pos, RandomSource randomSource) {
-		return levelAccessor.getDifficulty() != Difficulty.PEACEFUL && checkMobSpawnRules(typeIn, levelAccessor, spawnType, pos, randomSource);
+		return levelAccessor.getDifficulty() != Difficulty.PEACEFUL &&
+				!levelAccessor.getBiome(pos).is(Tags.Biomes.NO_DEFAULT_MONSTERS) &&
+				checkMobSpawnRules(typeIn, levelAccessor, spawnType, pos, randomSource);
 	}
 }
