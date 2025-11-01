@@ -1,1 +1,1 @@
-* Port to 1.21.4
+* Fix variants not using different textures
