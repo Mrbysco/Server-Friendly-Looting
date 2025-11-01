@@ -1,16 +1,6 @@
 {
   "model": {
     "type": "minecraft:model",
-    "model": "minecraft:item/template_spawn_egg",
-    "tints": [
-      {
-        "type": "minecraft:constant",
-        "value": -11236996
-      },
-      {
-        "type": "minecraft:constant",
-        "value": -408474
-      }
-    ]
+    "model": "sfl:item/water_mimic_spawn_egg"
   }
 }

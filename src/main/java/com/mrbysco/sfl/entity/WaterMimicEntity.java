@@ -6,9 +6,9 @@ import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.Difficulty;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -199,7 +199,7 @@ public class WaterMimicEntity extends AbstractMimicEntity {
 
 		@Override
 		public boolean canUse() {
-			if (!this.level.isDay()) {
+			if (!this.level.isBrightOutside()) {
 				return false;
 			} else if (this.mob.isInWater()) {
 				return false;
@@ -256,7 +256,7 @@ public class WaterMimicEntity extends AbstractMimicEntity {
 
 		@Override
 		public boolean canUse() {
-			return !this.waterMimicEntity.level().isDay() && this.waterMimicEntity.isInWater() && this.waterMimicEntity.getY() < (double) (this.targetY - 2);
+			return !this.waterMimicEntity.level().isBrightOutside() && this.waterMimicEntity.isInWater() && this.waterMimicEntity.getY() < (double) (this.targetY - 2);
 		}
 
 		@Override

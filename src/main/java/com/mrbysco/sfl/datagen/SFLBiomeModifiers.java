@@ -8,6 +8,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.random.Weighted;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.MobSpawnSettings;
 import net.neoforged.neoforge.common.Tags;
@@ -35,18 +36,18 @@ public class SFLBiomeModifiers {
 
 		context.register(ADD_MIMIC, BiomeModifiers.AddSpawnsBiomeModifier.singleSpawn(
 				isOverworld,
-				new MobSpawnSettings.SpawnerData(MimicRegistry.MIMIC.get(), 1, 1, 1)));
+				new Weighted<>(new MobSpawnSettings.SpawnerData(MimicRegistry.MIMIC.get(), 1, 1), 1)));
 
 		context.register(ADD_NETHER_MIMIC, BiomeModifiers.AddSpawnsBiomeModifier.singleSpawn(
 				isNether,
-				new MobSpawnSettings.SpawnerData(MimicRegistry.NETHER_MIMIC.get(), 1, 1, 1)));
+				new Weighted<>(new MobSpawnSettings.SpawnerData(MimicRegistry.NETHER_MIMIC.get(), 1, 1), 1)));
 
 		context.register(ADD_END_MIMIC, BiomeModifiers.AddSpawnsBiomeModifier.singleSpawn(
 				isEnd,
-				new MobSpawnSettings.SpawnerData(MimicRegistry.END_MIMIC.get(), 1, 1, 1)));
+				new Weighted<>(new MobSpawnSettings.SpawnerData(MimicRegistry.END_MIMIC.get(), 1, 1), 1)));
 
 		context.register(ADD_WATER_MIMIC, BiomeModifiers.AddSpawnsBiomeModifier.singleSpawn(
 				isWater,
-				new MobSpawnSettings.SpawnerData(MimicRegistry.WATER_MIMIC.get(), 1, 1, 1)));
+				new Weighted<>(new MobSpawnSettings.SpawnerData(MimicRegistry.WATER_MIMIC.get(), 1, 1), 1)));
 	}
 }

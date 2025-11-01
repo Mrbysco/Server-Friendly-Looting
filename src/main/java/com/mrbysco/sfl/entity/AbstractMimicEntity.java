@@ -60,14 +60,15 @@ public abstract class AbstractMimicEntity extends Monster {
 				.withParameter(LootContextParams.THIS_ENTITY, this).withParameter(LootContextParams.ORIGIN, this.position())
 				.withParameter(LootContextParams.DAMAGE_SOURCE, source).withOptionalParameter(LootContextParams.ATTACKING_ENTITY, source.getEntity())
 				.withOptionalParameter(LootContextParams.DIRECT_ATTACKING_ENTITY, source.getDirectEntity());
-		if (recentlyHit && this.lastHurtByPlayer != null) {
-			lootcontext$builder = lootcontext$builder.withParameter(LootContextParams.LAST_DAMAGE_PLAYER, this.lastHurtByPlayer).withLuck(this.lastHurtByPlayer.getLuck());
+		Player player = this.getLastHurtByPlayer();
+		if (recentlyHit && player != null) {
+			lootcontext$builder = lootcontext$builder.withParameter(LootContextParams.LAST_DAMAGE_PLAYER, player).withLuck(player.getLuck());
 		}
 
 		List<ItemStack> loot = loottable.getRandomItems(lootcontext$builder.create(LootContextParamSets.ENTITY));
 		int stackAmount = 1;
 
-		if (source.getEntity() instanceof Player player && !(source.getEntity() instanceof FakePlayer)) {
+		if (!(player instanceof FakePlayer)) {
 			int looting = player.getMainHandItem().getEnchantmentLevel(level().holderOrThrow(Enchantments.LOOTING));
 			if (looting > 0) {
 				stackAmount = looting + 1;

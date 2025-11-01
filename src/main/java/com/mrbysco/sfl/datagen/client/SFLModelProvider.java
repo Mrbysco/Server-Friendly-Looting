@@ -5,6 +5,7 @@ import com.mrbysco.sfl.init.MimicRegistry;
 import net.minecraft.client.data.models.BlockModelGenerators;
 import net.minecraft.client.data.models.ItemModelGenerators;
 import net.minecraft.client.data.models.ModelProvider;
+import net.minecraft.client.data.models.model.ModelTemplates;
 import net.minecraft.data.PackOutput;
 
 public class SFLModelProvider extends ModelProvider {
@@ -14,9 +15,9 @@ public class SFLModelProvider extends ModelProvider {
 
 	@Override
 	protected void registerModels(BlockModelGenerators blockModels, ItemModelGenerators itemModels) {
-		itemModels.generateSpawnEgg(MimicRegistry.MIMIC_SPAWN_EGG.get(), 8282679, 16368742);
-		itemModels.generateSpawnEgg(MimicRegistry.END_MIMIC_SPAWN_EGG.get(), 1057581, 16368742);
-		itemModels.generateSpawnEgg(MimicRegistry.NETHER_MIMIC_SPAWN_EGG.get(), 3151900, 16368742);
-		itemModels.generateSpawnEgg(MimicRegistry.WATER_MIMIC_SPAWN_EGG.get(), 5540220, 16368742);
+		itemModels.generateFlatItem(MimicRegistry.MIMIC_SPAWN_EGG.get(), ModelTemplates.FLAT_ITEM);
+		itemModels.generateFlatItem(MimicRegistry.END_MIMIC_SPAWN_EGG.get(), ModelTemplates.FLAT_ITEM);
+		itemModels.generateFlatItem(MimicRegistry.NETHER_MIMIC_SPAWN_EGG.get(), ModelTemplates.FLAT_ITEM);
+		itemModels.generateFlatItem(MimicRegistry.WATER_MIMIC_SPAWN_EGG.get(), ModelTemplates.FLAT_ITEM);
 	}
 }

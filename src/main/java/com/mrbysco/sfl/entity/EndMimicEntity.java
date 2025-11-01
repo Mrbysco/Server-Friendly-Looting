@@ -23,7 +23,7 @@ import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.projectile.ThrownPotion;
+import net.minecraft.world.entity.projectile.AbstractThrownPotion;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.alchemy.Potions;
@@ -64,7 +64,7 @@ public class EndMimicEntity extends AbstractMimicEntity {
 
 	@Override
 	protected void customServerAiStep(ServerLevel serverLevel) {
-		if (this.level().isDay() && this.tickCount >= this.targetChangeTime + 600) {
+		if (this.level().isBrightOutside() && this.tickCount >= this.targetChangeTime + 600) {
 			float f = this.getLightLevelDependentMagicValue();
 			if (f > 0.5F && this.level().canSeeSky(blockPosition()) && this.random.nextFloat() * 30.0F < (f - 0.4F) * 2.0F) {
 				this.setTarget((LivingEntity) null);
@@ -144,16 +144,18 @@ public class EndMimicEntity extends AbstractMimicEntity {
 		if (this.isInvulnerableTo(serverLevel, source)) {
 			return false;
 		} else {
-			boolean flag = source.getDirectEntity() instanceof ThrownPotion;
-			if (!source.is(DamageTypeTags.IS_PROJECTILE) && !flag) {
+			AbstractThrownPotion abstractthrownpotion = source.getDirectEntity() instanceof AbstractThrownPotion abstractthrownpotion1
+					? abstractthrownpotion1
+					: null;
+			if (!source.is(DamageTypeTags.IS_PROJECTILE) && abstractthrownpotion == null) {
 				boolean flag2 = super.hurtServer(serverLevel, source, amount);
-				if (!this.level().isClientSide() && !(source.getEntity() instanceof LivingEntity) && this.random.nextInt(10) != 0) {
+				if (!(source.getEntity() instanceof LivingEntity) && this.random.nextInt(10) != 0) {
 					this.teleport();
 				}
 
 				return flag2;
 			} else {
-				boolean flag1 = flag && this.hurtWithCleanWater(serverLevel, source, (ThrownPotion) source.getDirectEntity(), amount);
+				boolean flag = abstractthrownpotion != null && this.hurtWithCleanWater(serverLevel, source, abstractthrownpotion, amount);
 
 				for (int i = 0; i < 64; i++) {
 					if (this.teleport()) {
@@ -161,14 +163,14 @@ public class EndMimicEntity extends AbstractMimicEntity {
 					}
 				}
 
-				return flag1;
+				return flag;
 			}
 		}
 	}
 
-	private boolean hurtWithCleanWater(ServerLevel serverLevel, DamageSource source, ThrownPotion potion, float amount) {
+	private boolean hurtWithCleanWater(ServerLevel level, DamageSource damageSource, AbstractThrownPotion potion, float damageAmount) {
 		ItemStack itemstack = potion.getItem();
 		PotionContents potioncontents = itemstack.getOrDefault(DataComponents.POTION_CONTENTS, PotionContents.EMPTY);
-		return potioncontents.is(Potions.WATER) ? super.hurtServer(serverLevel, source, amount) : false;
+		return potioncontents.is(Potions.WATER) ? super.hurtServer(level, damageSource, damageAmount) : false;
 	}
 }
