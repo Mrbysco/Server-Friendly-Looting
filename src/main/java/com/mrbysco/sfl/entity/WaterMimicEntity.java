@@ -8,7 +8,7 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -76,8 +76,8 @@ public class WaterMimicEntity extends AbstractMimicEntity {
 	}
 
 	public static boolean spawnPredicate(EntityType<? extends AbstractMimicEntity> typeIn, ServerLevelAccessor levelAccessor,
-	                                     MobSpawnType spawnType, BlockPos pos, RandomSource randomSource) {
-		boolean flag = levelAccessor.getDifficulty() != Difficulty.PEACEFUL && isDarkEnoughToSpawn(levelAccessor, pos, randomSource) && (spawnType == MobSpawnType.SPAWNER || levelAccessor.getFluidState(pos).is(FluidTags.WATER));
+	                                     EntitySpawnReason spawnType, BlockPos pos, RandomSource randomSource) {
+		boolean flag = levelAccessor.getDifficulty() != Difficulty.PEACEFUL && isDarkEnoughToSpawn(levelAccessor, pos, randomSource) && (spawnType == EntitySpawnReason.SPAWNER || levelAccessor.getFluidState(pos).is(FluidTags.WATER));
 		if (!levelAccessor.getBiome(pos).is(BiomeTags.IS_RIVER)) {
 			return randomSource.nextInt(40) == 0 && isUnderSeaLevel(levelAccessor, pos) && flag;
 		} else {

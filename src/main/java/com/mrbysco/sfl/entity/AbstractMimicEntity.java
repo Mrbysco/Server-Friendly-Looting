@@ -13,8 +13,8 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
@@ -35,9 +35,9 @@ import net.neoforged.neoforge.fluids.FluidType;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public abstract class AbstractMimicEntity extends Monster {
-	private ResourceKey<LootTable> defaultLootTable;
 
 	public AbstractMimicEntity(EntityType<? extends AbstractMimicEntity> type, Level level) {
 		super(type, level);
@@ -49,27 +49,25 @@ public abstract class AbstractMimicEntity extends Monster {
 	}
 
 	@Override
-	protected ResourceKey<LootTable> getDefaultLootTable() {
-		return this.defaultLootTable;
-	}
-
-	@Override
-	protected void dropFromLootTable(DamageSource damageSourceIn, boolean wasRecentlyHit) {
-		ResourceKey<LootTable> resourcelocation = this.getLootTable();
-		LootTable loottable = this.level().getServer().reloadableRegistries().getLootTable(resourcelocation);
+	protected void dropFromLootTable(ServerLevel serverLevel, DamageSource source, boolean recentlyHit) {
+		ResourceKey<LootTable> tableResourceKey = this.getLootTable().orElse(null);
+		if (tableResourceKey == null) {
+			return;
+		}
+		LootTable loottable = this.level().getServer().reloadableRegistries().getLootTable(tableResourceKey);
 
 		LootParams.Builder lootcontext$builder = (new LootParams.Builder((ServerLevel) this.level()))
 				.withParameter(LootContextParams.THIS_ENTITY, this).withParameter(LootContextParams.ORIGIN, this.position())
-				.withParameter(LootContextParams.DAMAGE_SOURCE, damageSourceIn).withOptionalParameter(LootContextParams.ATTACKING_ENTITY, damageSourceIn.getEntity())
-				.withOptionalParameter(LootContextParams.DIRECT_ATTACKING_ENTITY, damageSourceIn.getDirectEntity());
-		if (wasRecentlyHit && this.lastHurtByPlayer != null) {
+				.withParameter(LootContextParams.DAMAGE_SOURCE, source).withOptionalParameter(LootContextParams.ATTACKING_ENTITY, source.getEntity())
+				.withOptionalParameter(LootContextParams.DIRECT_ATTACKING_ENTITY, source.getDirectEntity());
+		if (recentlyHit && this.lastHurtByPlayer != null) {
 			lootcontext$builder = lootcontext$builder.withParameter(LootContextParams.LAST_DAMAGE_PLAYER, this.lastHurtByPlayer).withLuck(this.lastHurtByPlayer.getLuck());
 		}
 
 		List<ItemStack> loot = loottable.getRandomItems(lootcontext$builder.create(LootContextParamSets.ENTITY));
 		int stackAmount = 1;
 
-		if (damageSourceIn.getEntity() instanceof Player player && !(damageSourceIn.getEntity() instanceof FakePlayer)) {
+		if (source.getEntity() instanceof Player player && !(source.getEntity() instanceof FakePlayer)) {
 			int looting = player.getMainHandItem().getEnchantmentLevel(level().holderOrThrow(Enchantments.LOOTING));
 			if (looting > 0) {
 				stackAmount = looting + 1;
@@ -79,31 +77,27 @@ public abstract class AbstractMimicEntity extends Monster {
 		if (stackAmount > 1) {
 			if (stackAmount > loot.size()) {
 				for (ItemStack stack : loot) {
-					this.spawnAtLocation(stack);
+					this.spawnAtLocation(serverLevel, stack);
 				}
 			} else {
 				for (int i = 0; i < stackAmount; i++) {
-					this.spawnAtLocation(loot.get(i));
+					this.spawnAtLocation(serverLevel, loot.get(i));
 				}
 			}
 		} else {
 			int randNumber = !loot.isEmpty() ? random.nextInt(loot.size()) : 1;
-			this.spawnAtLocation(loot.get(randNumber));
+			this.spawnAtLocation(serverLevel, loot.get(randNumber));
 		}
 	}
 
 	@Override
 	public void addAdditionalSaveData(CompoundTag compound) {
 		super.addAdditionalSaveData(compound);
-
-		compound.putString("DefaultLootTable", this.defaultLootTable.toString());
 	}
 
 	@Override
 	public void readAdditionalSaveData(CompoundTag compound) {
 		super.readAdditionalSaveData(compound);
-
-		this.defaultLootTable = getLootKey(ResourceLocation.tryParse(compound.getString("DefaultLootTable")));
 	}
 
 	private ResourceKey<LootTable> getLootKey(ResourceLocation location) {
@@ -113,15 +107,15 @@ public abstract class AbstractMimicEntity extends Monster {
 	@Nullable
 	@Override
 	public SpawnGroupData finalizeSpawn(ServerLevelAccessor levelAccessor, DifficultyInstance difficultyInstance,
-	                                    MobSpawnType spawnType, @Nullable SpawnGroupData groupData) {
+	                                    EntitySpawnReason spawnType, @Nullable SpawnGroupData groupData) {
 		SpawnGroupData data = super.finalizeSpawn(levelAccessor, difficultyInstance, spawnType, groupData);
 
 		ArrayList<ResourceLocation> tables = MimicLootHandler.getDimensionTables(this.level().dimension());
 		if (tables.isEmpty()) {
-			this.defaultLootTable = BuiltInLootTables.VILLAGE_FISHER;
+			this.lootTable = Optional.of(BuiltInLootTables.VILLAGE_FISHER);
 		} else {
 			int idx = random.nextInt(tables.size());
-			this.defaultLootTable = getLootKey(tables.get(idx));
+			this.lootTable = Optional.of(getLootKey(tables.get(idx)));
 		}
 
 		return data;
@@ -142,8 +136,12 @@ public abstract class AbstractMimicEntity extends Monster {
 		return SoundEvents.CHEST_CLOSE;
 	}
 
+	public int getMimicType() {
+		return 0;
+	}
+
 	public static boolean spawnPredicate(EntityType<? extends AbstractMimicEntity> typeIn, LevelAccessor levelAccessor,
-	                                     MobSpawnType spawnType, BlockPos pos, RandomSource randomSource) {
+	                                     EntitySpawnReason spawnType, BlockPos pos, RandomSource randomSource) {
 		return levelAccessor.getDifficulty() != Difficulty.PEACEFUL &&
 				!levelAccessor.getBiome(pos).is(Tags.Biomes.NO_DEFAULT_MONSTERS) &&
 				checkMobSpawnRules(typeIn, levelAccessor, spawnType, pos, randomSource);

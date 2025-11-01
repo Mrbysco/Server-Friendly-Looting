@@ -1,8 +1,6 @@
 package com.mrbysco.sfl.client.model;
 
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mrbysco.sfl.entity.AbstractMimicEntity;
+import com.mrbysco.sfl.client.state.MimicRenderState;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
@@ -12,7 +10,7 @@ import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.util.Mth;
 
-public class MimicModel<T extends AbstractMimicEntity> extends EntityModel<T> {
+public class MimicModel extends EntityModel<MimicRenderState> {
 	private final ModelPart mimic;
 	private final ModelPart topHalf;
 	private final ModelPart bottomHalf;
@@ -23,6 +21,7 @@ public class MimicModel<T extends AbstractMimicEntity> extends EntityModel<T> {
 	private final ModelPart rightFeet2;
 
 	public MimicModel(ModelPart root) {
+		super(root);
 		this.mimic = root.getChild("mimic");
 
 		this.topHalf = mimic.getChild("top_half");
@@ -156,17 +155,15 @@ public class MimicModel<T extends AbstractMimicEntity> extends EntityModel<T> {
 	}
 
 	@Override
-	public void setupAnim(T entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+	public void setupAnim(MimicRenderState renderState) {
+		final float limbSwingAmount = renderState.walkAnimationSpeed;
+		final float limbSwing = renderState.walkAnimationPos;
+
 		this.topHalf.xRot = Math.min(0, Mth.cos(limbSwing * 0.6662F) * 1.4F * limbSwingAmount);
 
 		this.leftFeet.xRot = Mth.cos(limbSwing * 0.6662F) * 1.4F * limbSwingAmount;
 		this.rightFeet.xRot = Mth.cos(limbSwing * 0.6662F + 3.1415927F) * 1.4F * limbSwingAmount;
 		this.leftFeet2.xRot = Mth.cos(limbSwing * 0.6662F + 3.1415927F) * 1.4F * limbSwingAmount;
 		this.rightFeet2.xRot = Mth.cos(limbSwing * 0.6662F) * 1.4F * limbSwingAmount;
-	}
-
-	@Override
-	public void renderToBuffer(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, int color) {
-		mimic.render(poseStack, buffer, packedLight, packedOverlay, color);
 	}
 }

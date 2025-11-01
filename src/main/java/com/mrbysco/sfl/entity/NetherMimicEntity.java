@@ -9,7 +9,7 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -68,7 +68,7 @@ public class NetherMimicEntity extends AbstractMimicEntity {
 	@Nullable
 	@Override
 	public SpawnGroupData finalizeSpawn(ServerLevelAccessor levelAccessor, DifficultyInstance difficultyInstance,
-	                                    MobSpawnType spawnType, @Nullable SpawnGroupData groupData) {
+	                                    EntitySpawnReason spawnType, @Nullable SpawnGroupData groupData) {
 		SpawnGroupData data = super.finalizeSpawn(levelAccessor, difficultyInstance, spawnType, groupData);
 		int i = this.getRandomMimicType(levelAccessor);
 		this.setMimicType(i);
@@ -82,6 +82,7 @@ public class NetherMimicEntity extends AbstractMimicEntity {
 		builder.define(MIMIC_TYPE, 0);
 	}
 
+	@Override
 	public int getMimicType() {
 		return this.entityData.get(MIMIC_TYPE);
 	}
@@ -99,7 +100,7 @@ public class NetherMimicEntity extends AbstractMimicEntity {
 	}
 
 	public static boolean spawnPredicate(EntityType<? extends AbstractMimicEntity> typeIn, LevelAccessor levelAccessor,
-	                                     MobSpawnType spawnType, BlockPos pos, RandomSource randomSource) {
+	                                     EntitySpawnReason spawnType, BlockPos pos, RandomSource randomSource) {
 		return levelAccessor.getDifficulty() != Difficulty.PEACEFUL;
 	}
 }

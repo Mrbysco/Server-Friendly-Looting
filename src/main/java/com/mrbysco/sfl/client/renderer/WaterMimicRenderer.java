@@ -3,20 +3,26 @@ package com.mrbysco.sfl.client.renderer;
 import com.mrbysco.sfl.ServerFriendlyLoot;
 import com.mrbysco.sfl.client.ClientHandler;
 import com.mrbysco.sfl.client.model.MimicModel;
+import com.mrbysco.sfl.client.state.MimicRenderState;
 import com.mrbysco.sfl.entity.WaterMimicEntity;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
 
-public class WaterMimicRenderer extends MobRenderer<WaterMimicEntity, MimicModel<WaterMimicEntity>> {
+public class WaterMimicRenderer extends MobRenderer<WaterMimicEntity, MimicRenderState, MimicModel> {
 	private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(ServerFriendlyLoot.MOD_ID, "textures/entity/mimic_water.png");
 
 	public WaterMimicRenderer(EntityRendererProvider.Context context) {
-		super(context, new MimicModel<>(context.bakeLayer(ClientHandler.MIMIC)), 0.25F);
+		super(context, new MimicModel(context.bakeLayer(ClientHandler.MIMIC)), 0.25F);
 	}
 
 	@Override
-	public ResourceLocation getTextureLocation(WaterMimicEntity entity) {
+	public MimicRenderState createRenderState() {
+		return new MimicRenderState();
+	}
+
+	@Override
+	public ResourceLocation getTextureLocation(MimicRenderState renderState) {
 		return TEXTURE;
 	}
 }

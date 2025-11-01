@@ -6,10 +6,9 @@ import com.mrbysco.sfl.entity.AbstractMimicEntity;
 import com.mrbysco.sfl.init.MimicEntities;
 import com.mrbysco.sfl.init.MimicRegistry;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.Level;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
@@ -34,7 +33,7 @@ public class ServerFriendlyLoot {
 		container.registerConfig(ModConfig.Type.SERVER, SFLConfig.spawnSpec, "sfl_spawning.toml");
 		eventBus.register(SFLConfig.class);
 
-		MimicRegistry.ENTITY_TYPES.register(eventBus);
+		MimicRegistry.ENTITIES.register(eventBus);
 		MimicRegistry.ITEMS.register(eventBus);
 
 		eventBus.addListener(MimicEntities::registerSpawnPlacements);
@@ -58,10 +57,10 @@ public class ServerFriendlyLoot {
 	}
 
 	private void onFinalizeSpawn(final FinalizeSpawnEvent event) {
-		if (event.getSpawnType().equals(MobSpawnType.NATURAL) && event.getEntity() instanceof AbstractMimicEntity) {
+		if (event.getSpawnType().equals(EntitySpawnReason.NATURAL) && event.getEntity() instanceof AbstractMimicEntity) {
 			List<? extends String> blacklist = SFLConfig.SPAWN.dimension_blacklist.get();
 			if (!blacklist.isEmpty()) {
-				ResourceLocation dimensionLocation = ((Level) event.getLevel()).dimension().location();
+				ResourceLocation dimensionLocation = event.getLevel().getLevel().dimension().location();
 				for (String dimension : blacklist) {
 					if (!dimension.isEmpty()) {
 						ResourceLocation dimLoc = ResourceLocation.tryParse(dimension);

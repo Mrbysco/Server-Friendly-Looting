@@ -6,6 +6,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.damagesource.DamageSource;
@@ -62,7 +63,7 @@ public class EndMimicEntity extends AbstractMimicEntity {
 	}
 
 	@Override
-	protected void customServerAiStep() {
+	protected void customServerAiStep(ServerLevel serverLevel) {
 		if (this.level().isDay() && this.tickCount >= this.targetChangeTime + 600) {
 			float f = this.getLightLevelDependentMagicValue();
 			if (f > 0.5F && this.level().canSeeSky(blockPosition()) && this.random.nextFloat() * 30.0F < (f - 0.4F) * 2.0F) {
@@ -71,7 +72,7 @@ public class EndMimicEntity extends AbstractMimicEntity {
 			}
 		}
 
-		super.customServerAiStep();
+		super.customServerAiStep(serverLevel);
 	}
 
 	protected boolean teleport() {
@@ -139,20 +140,20 @@ public class EndMimicEntity extends AbstractMimicEntity {
 	}
 
 	@Override
-	public boolean hurt(DamageSource source, float amount) {
-		if (this.isInvulnerableTo(source)) {
+	public boolean hurtServer(ServerLevel serverLevel, DamageSource source, float amount) {
+		if (this.isInvulnerableTo(serverLevel, source)) {
 			return false;
 		} else {
 			boolean flag = source.getDirectEntity() instanceof ThrownPotion;
 			if (!source.is(DamageTypeTags.IS_PROJECTILE) && !flag) {
-				boolean flag2 = super.hurt(source, amount);
+				boolean flag2 = super.hurtServer(serverLevel, source, amount);
 				if (!this.level().isClientSide() && !(source.getEntity() instanceof LivingEntity) && this.random.nextInt(10) != 0) {
 					this.teleport();
 				}
 
 				return flag2;
 			} else {
-				boolean flag1 = flag && this.hurtWithCleanWater(source, (ThrownPotion) source.getDirectEntity(), amount);
+				boolean flag1 = flag && this.hurtWithCleanWater(serverLevel, source, (ThrownPotion) source.getDirectEntity(), amount);
 
 				for (int i = 0; i < 64; i++) {
 					if (this.teleport()) {
@@ -165,9 +166,9 @@ public class EndMimicEntity extends AbstractMimicEntity {
 		}
 	}
 
-	private boolean hurtWithCleanWater(DamageSource source, ThrownPotion potion, float amount) {
+	private boolean hurtWithCleanWater(ServerLevel serverLevel, DamageSource source, ThrownPotion potion, float amount) {
 		ItemStack itemstack = potion.getItem();
 		PotionContents potioncontents = itemstack.getOrDefault(DataComponents.POTION_CONTENTS, PotionContents.EMPTY);
-		return potioncontents.is(Potions.WATER) ? super.hurt(source, amount) : false;
+		return potioncontents.is(Potions.WATER) ? super.hurtServer(serverLevel, source, amount) : false;
 	}
 }
