@@ -124,7 +124,7 @@ public class EndMimicEntity extends AbstractMimicEntity {
 
 	@Override
 	public void aiStep() {
-		if (this.level().isClientSide) {
+		if (this.level().isClientSide()) {
 			for (int i = 0; i < 2; ++i) {
 				this.level().addParticle(ParticleTypes.PORTAL,
 						this.getX() + (this.random.nextDouble() - 0.5D) * (double) this.getBbWidth(),

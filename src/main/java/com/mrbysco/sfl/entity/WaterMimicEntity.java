@@ -91,7 +91,7 @@ public class WaterMimicEntity extends AbstractMimicEntity {
 
 	@Override
 	public void updateSwimming() {
-		if (!this.level().isClientSide) {
+		if (!this.level().isClientSide()) {
 			if (this.isEffectiveAi() && this.isInWater() && this.wantsToSwim()) {
 				this.navigation = this.waterNavigator;
 				this.setSwimming(true);

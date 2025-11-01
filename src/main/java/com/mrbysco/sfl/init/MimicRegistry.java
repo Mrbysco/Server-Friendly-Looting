@@ -50,8 +50,8 @@ public class MimicRegistry {
 					.clientTrackingRange(10)
 	);
 
-	public static final DeferredItem<SpawnEggItem> MIMIC_SPAWN_EGG = ITEMS.registerItem("mimic_spawn_egg", (properties) -> new SpawnEggItem(MIMIC.get(), properties));
-	public static final DeferredItem<SpawnEggItem> END_MIMIC_SPAWN_EGG = ITEMS.registerItem("end_mimic_spawn_egg", (properties) -> new SpawnEggItem(END_MIMIC.get(), properties));
-	public static final DeferredItem<SpawnEggItem> NETHER_MIMIC_SPAWN_EGG = ITEMS.registerItem("nether_mimic_spawn_egg", (properties) -> new SpawnEggItem(NETHER_MIMIC.get(), properties));
-	public static final DeferredItem<SpawnEggItem> WATER_MIMIC_SPAWN_EGG = ITEMS.registerItem("water_mimic_spawn_egg", (properties) -> new SpawnEggItem(WATER_MIMIC.get(), properties));
+	public static final DeferredItem<SpawnEggItem> MIMIC_SPAWN_EGG = ITEMS.registerItem("mimic_spawn_egg", SpawnEggItem::new, (properties) -> properties.spawnEgg(MIMIC.get()));
+	public static final DeferredItem<SpawnEggItem> END_MIMIC_SPAWN_EGG = ITEMS.registerItem("end_mimic_spawn_egg", SpawnEggItem::new, (properties) -> properties.spawnEgg(END_MIMIC.get()));
+	public static final DeferredItem<SpawnEggItem> NETHER_MIMIC_SPAWN_EGG = ITEMS.registerItem("nether_mimic_spawn_egg", SpawnEggItem::new, (properties) -> properties.spawnEgg(NETHER_MIMIC.get()));
+	public static final DeferredItem<SpawnEggItem> WATER_MIMIC_SPAWN_EGG = ITEMS.registerItem("water_mimic_spawn_egg", SpawnEggItem::new, (properties) -> properties.spawnEgg(WATER_MIMIC.get()));
 }
