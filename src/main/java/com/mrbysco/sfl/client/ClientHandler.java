@@ -8,11 +8,11 @@ import com.mrbysco.sfl.client.renderer.NetherMimicRenderer;
 import com.mrbysco.sfl.client.renderer.WaterMimicRenderer;
 import com.mrbysco.sfl.init.MimicRegistry;
 import net.minecraft.client.model.geom.ModelLayerLocation;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 
 public class ClientHandler {
-	public static final ModelLayerLocation MIMIC = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(ServerFriendlyLoot.MOD_ID, "main"), "mimic");
+	public static final ModelLayerLocation MIMIC = new ModelLayerLocation(Identifier.fromNamespaceAndPath(ServerFriendlyLoot.MOD_ID, "main"), "mimic");
 
 	public static void registerEntityRenders(EntityRenderersEvent.RegisterRenderers event) {
 		event.registerEntityRenderer(MimicRegistry.MIMIC.get(), MimicRenderer::new);

@@ -2,20 +2,20 @@
 //
 //import com.blamejared.crafttweaker.api.action.base.IUndoableAction;
 //import com.mrbysco.sfl.init.MimicLootHandler;
-//import net.minecraft.resources.ResourceLocation;
+//import net.minecraft.resources.Identifier;
 //
 //public class AddDimensionalTableAction implements IUndoableAction {
 //	public final String dimension;
-//	public final ResourceLocation lootTable;
+//	public final Identifier lootTable;
 //
 //	public AddDimensionalTableAction(String dim, String table) {
 //		this.dimension = dim;
-//		this.lootTable = ResourceLocation.tryParse(table);
+//		this.lootTable = Identifier.tryParse(table);
 //	}
 //
 //	@Override
 //	public void apply() {
-//		MimicLootHandler.addDimensionalTable(ResourceLocation.tryParse(dimension), lootTable);
+//		MimicLootHandler.addDimensionalTable(Identifier.tryParse(dimension), lootTable);
 //	}
 //
 //	@Override
@@ -25,7 +25,7 @@
 //
 //	@Override
 //	public void undo() {
-//		MimicLootHandler.removeDimensionalTable(ResourceLocation.tryParse(dimension), lootTable);
+//		MimicLootHandler.removeDimensionalTable(Identifier.tryParse(dimension), lootTable);
 //	}
 //
 //	@Override

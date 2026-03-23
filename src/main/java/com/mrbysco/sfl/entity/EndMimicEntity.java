@@ -5,7 +5,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.DamageTypeTags;
@@ -23,7 +23,7 @@ import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.projectile.AbstractThrownPotion;
+import net.minecraft.world.entity.projectile.throwableitemprojectile.AbstractThrownPotion;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.alchemy.Potions;
@@ -34,7 +34,7 @@ import net.neoforged.neoforge.event.entity.EntityTeleportEvent;
 import javax.annotation.Nullable;
 
 public class EndMimicEntity extends AbstractMimicEntity {
-	private static final ResourceLocation SPEED_MODIFIER_ATTACKING_ID = ResourceLocation.fromNamespaceAndPath(ServerFriendlyLoot.MOD_ID, "attacking");
+	private static final Identifier SPEED_MODIFIER_ATTACKING_ID = Identifier.fromNamespaceAndPath(ServerFriendlyLoot.MOD_ID, "attacking");
 	private static final AttributeModifier SPEED_MODIFIER_ATTACKING = new AttributeModifier(
 			SPEED_MODIFIER_ATTACKING_ID, 0.15F, AttributeModifier.Operation.ADD_VALUE
 	);

@@ -2,13 +2,13 @@
 //
 //import com.blamejared.crafttweaker.api.action.base.IUndoableAction;
 //import com.mrbysco.sfl.init.MimicLootHandler;
-//import net.minecraft.resources.ResourceLocation;
+//import net.minecraft.resources.Identifier;
 //
 //public class AddWaterTableAction implements IUndoableAction {
-//	public final ResourceLocation lootTable;
+//	public final Identifier lootTable;
 //
 //	public AddWaterTableAction(String table) {
-//		this.lootTable = ResourceLocation.tryParse(table);
+//		this.lootTable = Identifier.tryParse(table);
 //	}
 //
 //	@Override

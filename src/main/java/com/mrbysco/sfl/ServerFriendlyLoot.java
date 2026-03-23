@@ -5,7 +5,7 @@ import com.mrbysco.sfl.config.SFLConfig;
 import com.mrbysco.sfl.entity.AbstractMimicEntity;
 import com.mrbysco.sfl.init.MimicEntities;
 import com.mrbysco.sfl.init.MimicRegistry;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.ItemStack;
@@ -60,10 +60,10 @@ public class ServerFriendlyLoot {
 		if (event.getSpawnType().equals(EntitySpawnReason.NATURAL) && event.getEntity() instanceof AbstractMimicEntity) {
 			List<? extends String> blacklist = SFLConfig.SPAWN.dimension_blacklist.get();
 			if (!blacklist.isEmpty()) {
-				ResourceLocation dimensionLocation = event.getLevel().getLevel().dimension().location();
+				Identifier dimensionLocation = event.getLevel().getLevel().dimension().identifier();
 				for (String dimension : blacklist) {
 					if (!dimension.isEmpty()) {
-						ResourceLocation dimLoc = ResourceLocation.tryParse(dimension);
+						Identifier dimLoc = Identifier.tryParse(dimension);
 						if (dimLoc != null && dimLoc.equals(dimensionLocation))
 							event.setSpawnCancelled(true);
 					}

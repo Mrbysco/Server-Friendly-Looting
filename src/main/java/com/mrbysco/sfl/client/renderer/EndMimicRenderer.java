@@ -6,10 +6,10 @@ import com.mrbysco.sfl.client.model.MimicModel;
 import com.mrbysco.sfl.client.state.MimicRenderState;
 import com.mrbysco.sfl.entity.EndMimicEntity;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 public class EndMimicRenderer extends AbstractMimicRenderer<EndMimicEntity> {
-	private static final ResourceLocation TEXTURES = ResourceLocation.fromNamespaceAndPath(ServerFriendlyLoot.MOD_ID, "textures/entity/mimic_end.png");
+	private static final Identifier TEXTURES = Identifier.fromNamespaceAndPath(ServerFriendlyLoot.MOD_ID, "textures/entity/mimic_end.png");
 
 	public EndMimicRenderer(EntityRendererProvider.Context context) {
 		super(context, new MimicModel(context.bakeLayer(ClientHandler.MIMIC)), 0.25F);
@@ -21,7 +21,7 @@ public class EndMimicRenderer extends AbstractMimicRenderer<EndMimicEntity> {
 	}
 
 	@Override
-	public ResourceLocation getTextureLocation(MimicRenderState renderState) {
+	public Identifier getTextureLocation(MimicRenderState renderState) {
 		return TEXTURES;
 	}
 }

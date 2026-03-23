@@ -4,7 +4,7 @@ import com.mrbysco.sfl.init.MimicLootHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
@@ -102,7 +102,7 @@ public abstract class AbstractMimicEntity extends Monster {
 		super.readAdditionalSaveData(input);
 	}
 
-	private ResourceKey<LootTable> getLootKey(ResourceLocation location) {
+	private ResourceKey<LootTable> getLootKey(Identifier location) {
 		return ResourceKey.create(Registries.LOOT_TABLE, location);
 	}
 
@@ -112,7 +112,7 @@ public abstract class AbstractMimicEntity extends Monster {
 	                                    EntitySpawnReason spawnType, @Nullable SpawnGroupData groupData) {
 		SpawnGroupData data = super.finalizeSpawn(levelAccessor, difficultyInstance, spawnType, groupData);
 
-		ArrayList<ResourceLocation> tables = MimicLootHandler.getDimensionTables(this.level().dimension());
+		ArrayList<Identifier> tables = MimicLootHandler.getDimensionTables(this.level().dimension());
 		if (tables.isEmpty()) {
 			this.lootTable = Optional.of(BuiltInLootTables.VILLAGE_FISHER);
 		} else {

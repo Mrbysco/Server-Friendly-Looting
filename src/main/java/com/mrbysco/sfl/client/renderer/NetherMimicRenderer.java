@@ -6,11 +6,11 @@ import com.mrbysco.sfl.client.model.MimicModel;
 import com.mrbysco.sfl.client.state.MimicRenderState;
 import com.mrbysco.sfl.entity.NetherMimicEntity;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 public class NetherMimicRenderer extends AbstractMimicRenderer<NetherMimicEntity> {
-	private static final ResourceLocation NETHER1 = ResourceLocation.fromNamespaceAndPath(ServerFriendlyLoot.MOD_ID, "textures/entity/mimic_nether1.png");
-	private static final ResourceLocation NETHER2 = ResourceLocation.fromNamespaceAndPath(ServerFriendlyLoot.MOD_ID, "textures/entity/mimic_nether2.png");
+	private static final Identifier NETHER1 = Identifier.fromNamespaceAndPath(ServerFriendlyLoot.MOD_ID, "textures/entity/mimic_nether1.png");
+	private static final Identifier NETHER2 = Identifier.fromNamespaceAndPath(ServerFriendlyLoot.MOD_ID, "textures/entity/mimic_nether2.png");
 
 	public NetherMimicRenderer(EntityRendererProvider.Context context) {
 		super(context, new MimicModel(context.bakeLayer(ClientHandler.MIMIC)), 0.25F);
@@ -22,7 +22,7 @@ public class NetherMimicRenderer extends AbstractMimicRenderer<NetherMimicEntity
 	}
 
 	@Override
-	public ResourceLocation getTextureLocation(MimicRenderState renderState) {
+	public Identifier getTextureLocation(MimicRenderState renderState) {
 		return switch (renderState.mimicType) {
 			case 1 -> NETHER2;
 			default -> NETHER1;

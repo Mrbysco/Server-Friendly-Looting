@@ -2,7 +2,7 @@ package com.mrbysco.sfl.init;
 
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.loot.BuiltInLootTables;
 import net.minecraft.world.level.storage.loot.LootTable;
@@ -11,8 +11,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class MimicLootHandler {
-	private static final HashMap<ResourceKey<Level>, ArrayList<ResourceLocation>> DIMENSIONAL_TABLES = new HashMap<>();
-	private static final ArrayList<ResourceLocation> WATER_LOOT_TABLES = new ArrayList<>();
+	private static final HashMap<ResourceKey<Level>, ArrayList<Identifier>> DIMENSIONAL_TABLES = new HashMap<>();
+	private static final ArrayList<Identifier> WATER_LOOT_TABLES = new ArrayList<>();
 
 	static {
 		DIMENSIONAL_TABLES.put(Level.OVERWORLD, new ArrayList<>());
@@ -66,49 +66,49 @@ public class MimicLootHandler {
 		addWaterTable(BuiltInLootTables.PILLAGER_OUTPOST);
 	}
 
-	public static void addWaterTable(ResourceLocation lootTable) {
+	public static void addWaterTable(Identifier lootTable) {
 		if (!WATER_LOOT_TABLES.contains(lootTable)) {
 			WATER_LOOT_TABLES.add(lootTable);
 		}
 	}
 
 	public static void addWaterTable(ResourceKey<LootTable> resourceKey) {
-		addWaterTable(resourceKey.location());
+		addWaterTable(resourceKey.identifier());
 	}
 
-	public static void removeWaterTable(ResourceLocation lootTable) {
+	public static void removeWaterTable(Identifier lootTable) {
 		WATER_LOOT_TABLES.remove(lootTable);
 	}
 
 	public static void addDimensionalTable(ResourceKey<Level> dimType, ResourceKey<LootTable> resourceKey) {
-		addDimensionalTable(dimType, resourceKey.location());
+		addDimensionalTable(dimType, resourceKey.identifier());
 	}
 
-	public static void addDimensionalTable(ResourceKey<Level> dimType, ResourceLocation lootTable) {
+	public static void addDimensionalTable(ResourceKey<Level> dimType, Identifier lootTable) {
 		if (DIMENSIONAL_TABLES.containsKey(dimType)) {
-			ArrayList<ResourceLocation> tableList = DIMENSIONAL_TABLES.get(dimType);
+			ArrayList<Identifier> tableList = DIMENSIONAL_TABLES.get(dimType);
 			if (!tableList.contains(lootTable)) {
 				tableList.add(lootTable);
 				DIMENSIONAL_TABLES.put(dimType, tableList);
 			}
 		} else {
-			ArrayList<ResourceLocation> tableList = new ArrayList<>();
+			ArrayList<Identifier> tableList = new ArrayList<>();
 			tableList.add(lootTable);
 			DIMENSIONAL_TABLES.put(dimType, tableList);
 		}
 	}
 
-	public static ResourceKey<Level> getKeyFromLocation(ResourceLocation loc) {
+	public static ResourceKey<Level> getKeyFromLocation(Identifier loc) {
 		return ResourceKey.create(Registries.DIMENSION, loc);
 	}
 
-	public static void addDimensionalTable(ResourceLocation dimensionLocation, ResourceLocation lootTable) {
+	public static void addDimensionalTable(Identifier dimensionLocation, Identifier lootTable) {
 		addDimensionalTable(getKeyFromLocation(dimensionLocation), lootTable);
 	}
 
-	public static void removeDimensionalTable(ResourceKey<Level> dimType, ResourceLocation lootTable) {
+	public static void removeDimensionalTable(ResourceKey<Level> dimType, Identifier lootTable) {
 		if (DIMENSIONAL_TABLES.containsKey(dimType)) {
-			ArrayList<ResourceLocation> tableList = DIMENSIONAL_TABLES.get(dimType);
+			ArrayList<Identifier> tableList = DIMENSIONAL_TABLES.get(dimType);
 			if (tableList.contains(lootTable)) {
 				tableList.remove(lootTable);
 				DIMENSIONAL_TABLES.put(dimType, tableList);
@@ -116,15 +116,15 @@ public class MimicLootHandler {
 		}
 	}
 
-	public static void removeDimensionalTable(ResourceLocation dimensionID, ResourceLocation lootTable) {
+	public static void removeDimensionalTable(Identifier dimensionID, Identifier lootTable) {
 		removeDimensionalTable(getKeyFromLocation(dimensionID), lootTable);
 	}
 
-	public static HashMap<ResourceKey<Level>, ArrayList<ResourceLocation>> getDimensionalTables() {
+	public static HashMap<ResourceKey<Level>, ArrayList<Identifier>> getDimensionalTables() {
 		return DIMENSIONAL_TABLES;
 	}
 
-	public static ArrayList<ResourceLocation> getDimensionTables(ResourceKey<Level> type) {
+	public static ArrayList<Identifier> getDimensionTables(ResourceKey<Level> type) {
 		if (DIMENSIONAL_TABLES.containsKey(type)) {
 			return DIMENSIONAL_TABLES.get(type);
 		}
@@ -134,8 +134,8 @@ public class MimicLootHandler {
 	public static ArrayList<String> getStringDimensionTables(ResourceKey<Level> type) {
 		ArrayList<String> stringTables = new ArrayList<>();
 		if (DIMENSIONAL_TABLES.containsKey(type)) {
-			ArrayList<ResourceLocation> tables = new ArrayList<>(DIMENSIONAL_TABLES.get(type));
-			for (ResourceLocation table : tables) {
+			ArrayList<Identifier> tables = new ArrayList<>(DIMENSIONAL_TABLES.get(type));
+			for (Identifier table : tables) {
 				stringTables.add(table.toString());
 			}
 
@@ -144,15 +144,15 @@ public class MimicLootHandler {
 		return stringTables;
 	}
 
-	public static ArrayList<String> getStringDimensionTables(ResourceLocation dim) {
+	public static ArrayList<String> getStringDimensionTables(Identifier dim) {
 		return getStringDimensionTables(getKeyFromLocation(dim));
 	}
 
 
 	public static ArrayList<String> getStringWaterTables() {
 		ArrayList<String> stringTables = new ArrayList<>();
-		ArrayList<ResourceLocation> tables = new ArrayList<>(WATER_LOOT_TABLES);
-		for (ResourceLocation table : tables) {
+		ArrayList<Identifier> tables = new ArrayList<>(WATER_LOOT_TABLES);
+		for (Identifier table : tables) {
 			stringTables.add(table.toString());
 		}
 		return stringTables;

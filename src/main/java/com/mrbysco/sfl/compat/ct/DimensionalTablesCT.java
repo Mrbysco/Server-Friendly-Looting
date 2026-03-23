@@ -3,7 +3,7 @@
 //import com.blamejared.crafttweaker.api.CraftTweakerAPI;
 //import com.blamejared.crafttweaker.api.annotation.ZenRegister;
 //import com.mrbysco.sfl.init.MimicLootHandler;
-//import net.minecraft.resources.ResourceLocation;
+//import net.minecraft.resources.Identifier;
 //import org.openzen.zencode.java.ZenCodeType;
 //
 //import java.util.List;
@@ -33,7 +33,7 @@
 //
 //	@ZenCodeType.Getter("tables")
 //	public List<String> getTables(String dimension) {
-//		return MimicLootHandler.getStringDimensionTables(ResourceLocation.tryParse(dimension));
+//		return MimicLootHandler.getStringDimensionTables(Identifier.tryParse(dimension));
 //	}
 //
 //	@ZenCodeType.Getter("waterTables")

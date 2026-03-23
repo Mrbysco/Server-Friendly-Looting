@@ -7,7 +7,7 @@ import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.random.Weighted;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.MobSpawnSettings;
@@ -18,13 +18,13 @@ import net.neoforged.neoforge.registries.NeoForgeRegistries;
 
 public class SFLBiomeModifiers {
 	protected static final ResourceKey<BiomeModifier> ADD_MIMIC = ResourceKey.create(NeoForgeRegistries.Keys.BIOME_MODIFIERS,
-			ResourceLocation.fromNamespaceAndPath(ServerFriendlyLoot.MOD_ID, "add_mimic"));
+			Identifier.fromNamespaceAndPath(ServerFriendlyLoot.MOD_ID, "add_mimic"));
 	protected static final ResourceKey<BiomeModifier> ADD_NETHER_MIMIC = ResourceKey.create(NeoForgeRegistries.Keys.BIOME_MODIFIERS,
-			ResourceLocation.fromNamespaceAndPath(ServerFriendlyLoot.MOD_ID, "add_nether_mimic"));
+			Identifier.fromNamespaceAndPath(ServerFriendlyLoot.MOD_ID, "add_nether_mimic"));
 	protected static final ResourceKey<BiomeModifier> ADD_END_MIMIC = ResourceKey.create(NeoForgeRegistries.Keys.BIOME_MODIFIERS,
-			ResourceLocation.fromNamespaceAndPath(ServerFriendlyLoot.MOD_ID, "add_end_mimic"));
+			Identifier.fromNamespaceAndPath(ServerFriendlyLoot.MOD_ID, "add_end_mimic"));
 	protected static final ResourceKey<BiomeModifier> ADD_WATER_MIMIC = ResourceKey.create(NeoForgeRegistries.Keys.BIOME_MODIFIERS,
-			ResourceLocation.fromNamespaceAndPath(ServerFriendlyLoot.MOD_ID, "add_water_mimic"));
+			Identifier.fromNamespaceAndPath(ServerFriendlyLoot.MOD_ID, "add_water_mimic"));
 
 	public static void bootstrap(BootstrapContext<BiomeModifier> context) {
 		HolderGetter<Biome> biomeGetter = context.lookup(Registries.BIOME);
